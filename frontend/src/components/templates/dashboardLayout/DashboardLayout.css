@@ -1,126 +1,154 @@
 @reference "tailwindcss";
 
-/* DashboardLayout.css */
+/* DashboardLayout.css - Zyricon Style */
 .layoutRoot {
-    @apply flex h-screen bg-[#07080e] overflow-hidden;
+    @apply flex h-screen bg-[#09080e] overflow-hidden;
 }
 
 .sidebar {
-    @apply w-64 shrink-0 flex flex-col border-r border-white/[0.04] bg-[#08090f] relative z-20;
+    @apply w-64 shrink-0 flex flex-col border-r border-white/[0.05] bg-[#0b0a12]/90 backdrop-blur-xl transition-all duration-300 relative z-20 select-none;
+}
+
+.sidebarCollapsed {
+    @apply w-18;
 }
 
 .mainArea {
-    @apply flex-1 flex overflow-hidden;
+    @apply flex-1 flex overflow-hidden bg-transparent relative;
 }
 
-/* Brand */
+/* Brand Section */
 .brandSection {
-    @apply p-6 border-b border-white/[0.04] flex items-center gap-3;
+    @apply p-4 px-5 border-b border-white/[0.04] flex items-center justify-between gap-3 shrink-0;
+}
+
+.brandLeft {
+    @apply flex items-center gap-3 overflow-hidden;
 }
 
 .brandIcon {
-    @apply w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-500 to-purple-400 flex items-center justify-center shadow-lg shadow-violet-500/20;
+    @apply w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 via-purple-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/25 shrink-0;
 }
 
 .brandTitle {
-    @apply text-sm font-semibold uppercase leading-none text-zinc-200 tracking-widest;
+    @apply text-sm font-bold text-white tracking-wide truncate;
 }
 
-.brandSub {
-    @apply text-[9px] font-bold text-zinc-600 tracking-widest mt-1.5 block uppercase;
+.sidebarToggleBtn {
+    @apply text-zinc-500 hover:text-white p-1 rounded-lg hover:bg-white/[0.05] transition-colors cursor-pointer shrink-0;
 }
 
-/* Nav */
+/* Zyricon New Chat Pill Button */
+.newChatWrapper {
+    @apply p-3 px-4;
+}
+
+.zyriconNewChatBtn {
+    @apply w-full flex items-center justify-center gap-2.5 py-2.5 px-3.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-violet-500/30 text-zinc-200 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer shadow-sm;
+}
+
+.sidebarCollapsed .zyriconNewChatBtn {
+    @apply px-0 justify-center;
+}
+
+.zyriconNewChatIcon {
+    @apply w-5 h-5 rounded-full border border-white/20 flex items-center justify-center text-zinc-300;
+}
+
+/* Sidebar Groups */
+.sidebarGroup {
+    @apply px-4 py-2 flex flex-col gap-1;
+}
+
+.sidebarGroupLabel {
+    @apply px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-500 block;
+}
+
 .navSection {
-    @apply p-4 border-b border-white/[0.04] flex flex-col gap-1.5;
+    @apply flex flex-col gap-1;
 }
 
-.navBtnBase {
-    @apply w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-200 border;
+.zyriconNavBtn {
+    @apply w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer border border-transparent;
 }
 
-.navBtnActive {
-    @apply border-violet-500/20 text-violet-400 bg-violet-500/10;
+.sidebarCollapsed .zyriconNavBtn {
+    @apply px-0 justify-center;
 }
 
-.navBtnInactive {
-    @apply text-zinc-400 border-transparent hover:bg-white/[0.03] hover:text-zinc-200;
+.zyriconNavBtnActive {
+    @apply bg-white/[0.06] border-white/[0.08] text-white font-semibold shadow-inner shadow-white/[0.02];
 }
 
-/* Sessions */
-.sessionsSection {
-    @apply flex-1 flex flex-col overflow-hidden;
+.zyriconNavBtnInactive {
+    @apply text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03];
 }
 
-.sessionsHeader {
-    @apply px-6 py-4 flex items-center justify-between;
-}
-
-.sessionsLabel {
-    @apply text-[9px] font-bold uppercase text-zinc-500 tracking-widest;
-}
-
-.sessionsNewBtn {
-    @apply !p-1.5 !rounded-lg text-zinc-400 hover:text-white border border-white/5 bg-transparent;
-}
-
+/* Session List (Workspaces) */
 .sessionList {
-    @apply flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-1.5;
+    @apply flex-1 overflow-y-auto px-1 flex flex-col gap-0.5;
 }
 
 .sessionEmpty {
-    @apply text-center py-6 text-[10px] font-bold uppercase tracking-wider text-zinc-700;
+    @apply text-center py-4 text-[11px] text-zinc-600 font-medium;
 }
 
 .sessionItemBase {
-    @apply w-full flex items-center justify-between px-3.5 py-3 rounded-xl border text-[11px] font-medium cursor-pointer transition-all duration-200;
-}
-
-.sessionItemBase:hover .sessionDelBtn,
-.sessionItemBase:hover .sessionEditBtn {
-    @apply opacity-100;
+    @apply w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 border border-transparent;
 }
 
 .sessionItemActive {
-    @apply bg-white/[0.03] border-white/5 font-bold text-violet-400;
+    @apply bg-violet-500/10 border-violet-500/20 text-violet-300 font-semibold;
 }
 
 .sessionItemInactive {
-    @apply border-transparent text-zinc-500 hover:bg-white/[0.015] hover:text-zinc-300;
+    @apply text-zinc-400 hover:bg-white/[0.025] hover:text-zinc-200;
 }
 
 .sessionName {
-    @apply flex items-center gap-2 overflow-hidden pr-2;
+    @apply flex items-center gap-2 overflow-hidden;
 }
 
-.sessionIconActive {
-    @apply text-violet-400;
-}
-
-.sessionIconInactive {
-    @apply text-zinc-700;
+.sessionActions {
+    @apply flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity;
 }
 
 .sessionEditBtn {
-    @apply opacity-0 text-zinc-500 hover:text-violet-400 p-0.5 rounded transition-all duration-100 cursor-pointer;
+    @apply text-zinc-500 hover:text-violet-400 p-0.5 rounded transition-colors cursor-pointer;
 }
 
 .sessionDelBtn {
-    @apply opacity-0 text-zinc-500 hover:text-rose-500 p-0.5 rounded transition-all duration-100 cursor-pointer;
+    @apply text-zinc-500 hover:text-rose-400 p-0.5 rounded transition-colors cursor-pointer;
 }
 
-/* Footer Controls */
-.footerSection {
-    @apply p-3 border-t border-white/[0.04] flex items-center justify-between gap-1.5 shrink-0 relative z-30;
+/* Zyricon Bottom Upgrade / Status Card */
+.zyriconBottomCard {
+    @apply m-3 p-3.5 rounded-2xl border border-white/[0.06] bg-white/[0.02] flex flex-col gap-1.5 shrink-0;
 }
 
-/* Modals styling */
+.zyriconCardCrown {
+    @apply w-6 h-6 rounded-lg bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-0.5;
+}
+
+.zyriconCardTitle {
+    @apply text-xs font-bold text-zinc-200 leading-tight;
+}
+
+.zyriconCardDesc {
+    @apply text-[10px] text-zinc-500 leading-snug;
+}
+
+.zyriconCardBtn {
+    @apply mt-1 w-full py-1.5 px-3 rounded-lg border border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-[10px] font-bold uppercase tracking-wider text-zinc-300 hover:text-white transition-all cursor-pointer text-center;
+}
+
+/* Modals */
 .modalOverlay {
-    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300;
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm transition-all duration-300;
 }
 
 .modalContent {
-    @apply w-full max-w-sm border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5;
+    @apply w-full max-w-sm border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5 bg-[#0e0d17]/95 backdrop-blur-md;
     animation: modalFadeIn 0.25s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
@@ -129,7 +157,6 @@
         opacity: 0;
         transform: translateY(8px) scale(0.98);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -141,7 +168,7 @@
 }
 
 .modalTitle {
-    @apply text-[10px] font-bold uppercase tracking-widest text-zinc-200;
+    @apply text-xs font-bold uppercase tracking-wider text-zinc-200;
 }
 
 .modalCloseBtn {
@@ -157,7 +184,7 @@
 }
 
 .modalLabel {
-    @apply text-[9px] font-bold uppercase tracking-widest text-zinc-600;
+    @apply text-[10px] font-bold uppercase tracking-wider text-zinc-400;
 }
 
 .modalFooter {

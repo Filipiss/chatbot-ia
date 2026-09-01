@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import type { ChatSession } from '../../../api';
 import { Button } from '../../atoms/button/Button';
 import { Input } from '../../atoms/input/Input';
-import { MessageSquare, Cpu, BarChart3, Plus, Trash2, Pencil, X } from 'lucide-react';
+import {
+    MessageSquare, Cpu, BarChart3, Plus, Trash2, Pencil, X,
+    Sparkles, Folder, Crown, PanelLeftClose, PanelLeft, Compass
+} from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { FloatingControls } from '../../molecules/floatingControls/FloatingControls';
 import './DashboardLayout.css';
@@ -25,6 +28,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     onCreateSession, onDeleteSession, onUpdateSessionName, children,
 }) => {
     const { t } = useI18n();
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createSessionName, setCreateSessionName] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -33,10 +37,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingSession, setDeletingSession] = useState<{ id: number; name: string } | null>(null);
 
-    const navTabs = [
-        { id: 'chat' as const, label: t('tab_chat'), icon: <MessageSquare size={13} /> },
-        { id: 'integrations' as const, label: t('tab_integrations'), icon: <Cpu size={13} /> },
-        { id: 'analytics' as const, label: t('tab_analytics'), icon: <BarChart3 size={13} /> },
+    const featureTabs = [
+        { id: 'chat' as const, label: t('tab_chat'), icon: <MessageSquare size={14} /> },
+        { id: 'integrations' as const, label: t('tab_integrations'), icon: <Cpu size={14} /> },
+        { id: 'analytics' as const, label: t('tab_analytics'), icon: <BarChart3 size={14} /> },
     ];
 
     const handleCreateSubmit = (e: React.FormEvent) => {
@@ -68,67 +72,106 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
     return (
         <div className="layoutRoot">
-            <aside className="sidebar">
-                {/* Brand */}
+            {/* Zyricon Sidebar */}
+            <aside className={`sidebar ${isCollapsed ? 'sidebarCollapsed' : ''}`}>
+                {/* Brand Header */}
                 <div className="brandSection">
-                    <div className="brandIcon">
-                        <Cpu size={16} className="text-white" />
+                    <div className="brandLeft">
+                        <div className="brandIcon">
+                            <Compass size={17} className="text-white" />
+                        </div>
+                        {!isCollapsed && (
+                            <span className="brandTitle">{t('brand_title')}</span>
+                        )}
                     </div>
-                    <div>
-                        <h1 className="brandTitle">{t('brand_title')}</h1>
-                        <span className="brandSub">{t('brand_subtitle')}</span>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className="sidebarToggleBtn"
+                        title={t('collapse_sidebar')}
+                        aria-label={t('collapse_sidebar')}
+                    >
+                        {isCollapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
+                    </button>
                 </div>
 
-                {/* Nav Tabs */}
-                <nav className="navSection">
-                    {navTabs.map(({ id, label, icon }) => (
-                        <button
-                            key={id}
-                            onClick={() => setActiveTab(id)}
-                            className={`navBtnBase ${activeTab === id ? 'navBtnActive' : 'navBtnInactive'}`}
-                        >
-                            {icon}
-                            {label}
-                        </button>
-                    ))}
-                </nav>
+                {/* Zyricon New Chat Pill Button */}
+                <div className="newChatWrapper">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setCreateSessionName('');
+                            setIsCreateModalOpen(true);
+                        }}
+                        className="zyriconNewChatBtn"
+                        title={t('new_chat')}
+                    >
+                        <div className="zyriconNewChatIcon">
+                            <Plus size={14} />
+                        </div>
+                        {!isCollapsed && <span>{t('new_chat')}</span>}
+                    </button>
+                </div>
 
-                {/* Session List */}
-                {activeTab === 'chat' && (
-                    <div className="sessionsSection">
-                        <div className="sessionsHeader">
-                            <span className="sessionsLabel">{t('conversations')}</span>
-                            <Button
-                                variant="secondary"
-                                className="sessionsNewBtn"
-                                title={t('new_conversation')}
+                {/* Features Section */}
+                <div className="sidebarGroup">
+                    {!isCollapsed && <span className="sidebarGroupLabel">{t('features_section')}</span>}
+                    <nav className="navSection">
+                        {featureTabs.map(({ id, label, icon }) => (
+                            <button
+                                key={id}
+                                onClick={() => setActiveTab(id)}
+                                className={`zyriconNavBtn ${activeTab === id ? 'zyriconNavBtnActive' : 'zyriconNavBtnInactive'}`}
+                                title={label}
+                            >
+                                <span className="shrink-0">{icon}</span>
+                                {!isCollapsed && <span className="truncate">{label}</span>}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+
+                {/* Workspaces / Conversations Section */}
+                <div className="sidebarGroup flex-1 overflow-hidden flex flex-col">
+                    {!isCollapsed && (
+                        <div className="flex items-center justify-between px-3 mb-1">
+                            <span className="sidebarGroupLabel !mb-0">{t('workspaces_section')}</span>
+                            <button
+                                type="button"
                                 onClick={() => {
                                     setCreateSessionName('');
                                     setIsCreateModalOpen(true);
                                 }}
+                                className="text-zinc-500 hover:text-white transition-colors p-0.5"
+                                title={t('new_conversation')}
                             >
-                                <Plus size={13} />
-                            </Button>
+                                <Plus size={12} />
+                            </button>
                         </div>
-                        <div className="sessionList">
-                            {sessions.length === 0 ? (
-                                <div className="sessionEmpty">{t('no_conversations')}</div>
-                            ) : (
-                                sessions.map((s) => (
-                                    <div
-                                        key={s.id}
-                                        className={`sessionItemBase group ${activeSessionId === s.id ? 'sessionItemActive' : 'sessionItemInactive'}`}
-                                        onClick={() => setActiveSessionId(s.id)}
-                                    >
-                                        <div className="sessionName flex-1 overflow-hidden">
-                                            <MessageSquare
-                                                size={12}
-                                                className={`shrink-0 ${activeSessionId === s.id ? 'sessionIconActive' : 'sessionIconInactive'}`}
-                                            />
-                                            <span className="truncate">{s.name}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 shrink-0">
+                    )}
+                    <div className="sessionList">
+                        {sessions.length === 0 ? (
+                            !isCollapsed && <div className="sessionEmpty">{t('no_conversations')}</div>
+                        ) : (
+                            sessions.map((s) => (
+                                <div
+                                    key={s.id}
+                                    className={`sessionItemBase group ${activeSessionId === s.id && activeTab === 'chat' ? 'sessionItemActive' : 'sessionItemInactive'}`}
+                                    onClick={() => {
+                                        setActiveSessionId(s.id);
+                                        if (activeTab !== 'chat') setActiveTab('chat');
+                                    }}
+                                    title={s.name}
+                                >
+                                    <div className="sessionName flex-1 overflow-hidden">
+                                        <Folder
+                                            size={13}
+                                            className={`shrink-0 ${activeSessionId === s.id && activeTab === 'chat' ? 'text-violet-400' : 'text-zinc-500'}`}
+                                        />
+                                        {!isCollapsed && <span className="truncate">{s.name}</span>}
+                                    </div>
+                                    {!isCollapsed && (
+                                        <div className="sessionActions">
                                             <button
                                                 type="button"
                                                 className="sessionEditBtn"
@@ -155,14 +198,34 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                 <Trash2 size={11} />
                                             </button>
                                         </div>
-                                    </div>
-                                ))
-                            )}
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+
+                {/* Zyricon Bottom Status / Upgrade Card */}
+                {!isCollapsed && (
+                    <div className="zyriconBottomCard">
+                        <div className="zyriconCardCrown">
+                            <Crown size={13} className="text-amber-400" />
                         </div>
+                        <h4 className="zyriconCardTitle">{t('upgrade_title')}</h4>
+                        <p className="zyriconCardDesc">{t('upgrade_desc')}</p>
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab('integrations')}
+                            className="zyriconCardBtn"
+                        >
+                            <Sparkles size={11} className="inline mr-1 text-violet-400" />
+                            {t('upgrade_btn')}
+                        </button>
                     </div>
                 )}
             </aside>
 
+            {/* Main Area */}
             <main className="mainArea">{children}</main>
 
             {/* Floating Dock: Bottom Right Corner */}

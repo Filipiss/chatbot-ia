@@ -109,6 +109,7 @@ export const Dashboard: React.FC = () => {
                     activeSession={activeSession}
                     onSendMessageSuccess={handleSendMessageSuccess}
                     onDeleteSession={handleDeleteSession}
+                    onOpenIntegrations={() => setActiveTab('integrations')}
                 />
             )}
             {activeTab === 'integrations' && (

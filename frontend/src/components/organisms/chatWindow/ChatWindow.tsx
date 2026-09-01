@@ -1,18 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { type ChatSession, type ChatMessage, sendMessageStream, clearChatMessages } from '../../../api';
 import { ChatBubble } from '../../molecules/chatBubble/ChatBubble';
-import { Button } from '../../atoms/button/Button';
-import { Send, Sparkles, Download, Trash2, RotateCcw, X } from 'lucide-react';
+import {
+    Sparkles, Download, Trash2, RotateCcw, X, Paperclip,
+    SlidersHorizontal, ChevronDown, Mic, ArrowUp, Image as ImageIcon,
+    Lightbulb, FileText, Code2, Cpu, Settings
+} from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
+import { Button } from '../../atoms/button/Button';
 import './ChatWindow.css';
 
 interface ChatWindowProps {
     activeSession: ChatSession | null;
     onSendMessageSuccess: () => void;
     onDeleteSession?: (id: number) => void;
+    onOpenIntegrations?: () => void;
 }
 
-export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMessageSuccess, onDeleteSession }) => {
+export const ChatWindow: React.FC<ChatWindowProps> = ({
+    activeSession,
+    onSendMessageSuccess,
+    onDeleteSession,
+    onOpenIntegrations,
+}) => {
     const { t } = useI18n();
     const [inputText, setInputText] = useState('');
     const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
@@ -20,49 +30,67 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMes
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollToBottom(); }, [activeSession?.messages, streamingMessage]);
 
+    // Auto-adjust textarea height
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 180)}px`;
+        }
+    }, [inputText]);
+
     if (!activeSession) {
         return (
             <div className="emptyState">
-                <div className="emptyIcon">
-                    <Sparkles size={26} className="animate-pulse" />
-                </div>
+                <div className="zyriconOrbSmall" />
                 <h3 className="emptyTitle">{t('no_chat_selected')}</h3>
                 <p className="emptyDesc">{t('select_or_create_chat')}</p>
             </div>
         );
     }
 
-    const handleSend = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSend = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
         if (!inputText.trim() || isSending) return;
-        const userText = inputText;
+        const userText = inputText.trim();
         setInputText('');
+        if (textareaRef.current) textareaRef.current.style.height = 'auto';
         setIsSending(true);
 
         const tempUserMsg: ChatMessage = {
-            id: Date.now(), session_id: activeSession.id, role: 'user',
-            content: userText, created_at: new Date().toISOString(),
+            id: Date.now(),
+            session_id: activeSession.id,
+            role: 'user',
+            content: userText,
+            created_at: new Date().toISOString(),
         };
         activeSession.messages.push(tempUserMsg);
 
         setStreamingMessage({
-            id: Date.now() + 1, session_id: activeSession.id, role: 'assistant',
-            content: '', created_at: new Date().toISOString(),
+            id: Date.now() + 1,
+            session_id: activeSession.id,
+            role: 'assistant',
+            content: '',
+            created_at: new Date().toISOString(),
         });
 
         try {
             await sendMessageStream(
-                activeSession.id, userText,
+                activeSession.id,
+                userText,
                 (chunk) => setStreamingMessage((prev) => {
                     if (prev) return { ...prev, content: prev.content + chunk };
                     return {
-                        id: Date.now() + 1, session_id: activeSession.id, role: 'assistant',
-                        content: chunk, created_at: new Date().toISOString(),
+                        id: Date.now() + 1,
+                        session_id: activeSession.id,
+                        role: 'assistant',
+                        content: chunk,
+                        created_at: new Date().toISOString(),
                     };
                 }),
                 (doneData) => {
@@ -75,8 +103,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMes
                     setStreamingMessage((prev) => {
                         if (prev) return { ...prev, content: prev.content + `\n[Error: ${err.message}]` };
                         return {
-                            id: Date.now() + 1, session_id: activeSession.id, role: 'assistant',
-                            content: `\n[Error: ${err.message}]`, created_at: new Date().toISOString(),
+                            id: Date.now() + 1,
+                            session_id: activeSession.id,
+                            role: 'assistant',
+                            content: `\n[Error: ${err.message}]`,
+                            created_at: new Date().toISOString(),
                         };
                     });
                     setIsSending(false);
@@ -85,6 +116,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMes
         } catch (err: any) {
             console.error(err);
             setIsSending(false);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
         }
     };
 
@@ -137,139 +175,252 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMes
         document.body.removeChild(link);
     };
 
+    const hasMessages = activeSession.messages.length > 0;
+
     return (
-        <div className="windowOuter">
-            <div className="windowContainer">
-                <div className="windowHeader">
-                    <div>
-                        <h2 className="windowTitle">{activeSession.name}</h2>
-                        <p className="windowSubtitle">{t('conversation_number', { id: activeSession.id })}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {activeSession.messages.length > 0 && (
-                            <>
-                                <button
-                                    type="button"
-                                    onClick={handleExportChat}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.04] bg-white/[0.02] text-[10px] font-bold uppercase tracking-wider text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
-                                    title={t('export_title')}
-                                >
-                                    <Download size={12} />
-                                    <span>{t('export')}</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsClearModalOpen(true)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.04] bg-white/[0.02] text-[10px] font-bold uppercase tracking-wider text-zinc-400 hover:text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/20 transition-all cursor-pointer"
-                                    title={t('clear_title')}
-                                >
-                                    <RotateCcw size={12} />
-                                    <span>{t('clear')}</span>
-                                </button>
-                            </>
-                        )}
-                        {onDeleteSession && (
-                            <button
-                                type="button"
-                                onClick={() => setIsDeleteModalOpen(true)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 text-[10px] font-bold uppercase tracking-wider text-rose-400 hover:text-white hover:bg-rose-500 hover:border-rose-500 transition-all cursor-pointer"
-                                title={t('delete_title')}
-                            >
-                                <Trash2 size={12} />
-                                <span>{t('delete')}</span>
-                            </button>
-                        )}
-                    </div>
+        <div className="zyriconWindow">
+            {/* Top Bar Header */}
+            <div className="zyriconTopBar">
+                {/* Model Selector Dropdown Pill */}
+                <div className="zyriconModelPill" title={t('active_model')}>
+                    <span className="zyriconModelDot" />
+                    <span className="zyriconModelName">Ozlo / Multi-LLM v4.0</span>
+                    <ChevronDown size={13} className="text-zinc-400" />
                 </div>
 
-                <div className="feedContainer">
-                    <div className="feedInner">
-                        <div className="welcomeWrapper">
-                            <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="welcomeSvg">
-                                <circle cx="85" cy="75" r="60" fill="#a78bfa" fillOpacity="0.03" />
-                                <path d="M 45,170 C 50,150, 60,140, 79,140 L 91,140 C 110,140, 120,150, 125,170" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" fill="#07080e" fillOpacity="0.6" />
-                                <rect x="77" y="118" width="16" height="24" rx="4" fill="#07080e" stroke="#38bdf8" strokeWidth="2.5" />
-                                <line x1="77" y1="126" x2="93" y2="126" stroke="#38bdf8" strokeWidth="2" />
-                                <line x1="77" y1="134" x2="93" y2="134" stroke="#38bdf8" strokeWidth="2" />
-                                <path d="M 35,70 C 35,35, 135,35, 135,70 C 135,100, 110,122, 85,122 C 60,122, 35,100, 35,70 Z" fill="#07080e" stroke="#38bdf8" strokeWidth="3" />
-                                <path d="M 35,70 C 35,35, 135,35, 135,70 C 135,100, 110,122, 85,122 C 60,122, 35,100, 35,70 Z" fill="#38bdf8" fillOpacity="0.08" />
-                                <ellipse cx="65" cy="74" rx="15" ry="8" fill="#38bdf8" fillOpacity="0.2" transform="rotate(-18, 65, 74)" />
-                                <ellipse cx="65" cy="74" rx="11" ry="5" fill="#38bdf8" transform="rotate(-18, 65, 74)" />
-                                <ellipse cx="63" cy="72" rx="4" ry="2" fill="#ffffff" transform="rotate(-18, 63, 72)" />
-                                <ellipse cx="105" cy="74" rx="15" ry="8" fill="#38bdf8" fillOpacity="0.2" transform="rotate(18, 105, 74)" />
-                                <ellipse cx="105" cy="74" rx="11" ry="5" fill="#38bdf8" transform="rotate(18, 105, 74)" />
-                                <ellipse cx="107" cy="72" rx="4" ry="2" fill="#ffffff" transform="rotate(18, 107, 72)" />
-                                <line x1="85" y1="36" x2="85" y2="18" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
-                                <circle cx="85" cy="18" r="5" fill="#a78bfa" className="animate-pulse" />
-                                <circle cx="85" cy="18" r="2" fill="#ffffff" />
-                                <path d="M 165,185 C 160,165, 155,155, 148,145" stroke="#38bdf8" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-                                <rect x="141" y="141" width="12" height="5" rx="1.5" fill="#38bdf8" transform="rotate(-10, 147, 143)" />
-                                <path d="M 136,141 Q 128,135 131,123 L 157,125 Q 162,137 155,143 Z" fill="#07080e" stroke="#38bdf8" strokeWidth="2.5" fillOpacity="0.8" />
-                                <path d="M 132,133 L 118,127 L 110,124" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                <circle cx="110" cy="124" r="1.5" fill="#ffffff" />
-                                <path d="M 136,123 L 133,105 L 131,90" stroke="#38bdf8" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                <circle cx="131" cy="90" r="1.5" fill="#ffffff" />
-                                <path d="M 142,123 L 140,102 L 138,85" stroke="#38bdf8" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                <circle cx="138" cy="85" r="1.5" fill="#ffffff" />
-                                <path d="M 152,124 L 153,103 L 154,86" stroke="#38bdf8" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                <circle cx="154" cy="86" r="1.5" fill="#ffffff" />
-                                <path d="M 157,125 L 159,107 L 161,92" stroke="#38bdf8" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                <circle cx="161" cy="92" r="1.5" fill="#ffffff" />
-                                <circle cx="146" cy="74" r="5" fill="#a78bfa" fillOpacity="0.4" className="animate-pulse" />
-                                <circle cx="146" cy="74" r="2" fill="#ffffff" />
-                            </svg>
-                            {activeSession.messages.length === 0 && (
-                                <div className="welcomeContent animate-fade-in">
-                                    <h3 className="welcomeTitle">{t('welcome_title')}</h3>
-                                    <p className="welcomeDesc">{t('welcome_desc')}</p>
-                                </div>
-                            )}
+                {/* Right Action Pills */}
+                <div className="flex items-center gap-2">
+                    {onOpenIntegrations && (
+                        <button
+                            type="button"
+                            onClick={onOpenIntegrations}
+                            className="zyriconTopBtn"
+                            title={t('tab_integrations')}
+                        >
+                            <Settings size={12} />
+                            <span>{t('tab_integrations')}</span>
+                        </button>
+                    )}
+
+                    {hasMessages && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={handleExportChat}
+                                className="zyriconTopBtn"
+                                title={t('export_title')}
+                            >
+                                <Download size={12} />
+                                <span>{t('export')}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsClearModalOpen(true)}
+                                className="zyriconTopBtn hover:!text-amber-400 hover:!border-amber-400/30"
+                                title={t('clear_title')}
+                            >
+                                <RotateCcw size={12} />
+                                <span>{t('clear')}</span>
+                            </button>
+                        </>
+                    )}
+
+                    {onDeleteSession && (
+                        <button
+                            type="button"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            className="zyriconTopBtn hover:!text-rose-400 hover:!border-rose-500/30"
+                            title={t('delete_title')}
+                        >
+                            <Trash2 size={12} />
+                            <span>{t('delete')}</span>
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Main Area: Welcome Hero OR Chat Messages Feed */}
+            <div className="zyriconFeedContainer">
+                {!hasMessages ? (
+                    <div className="zyriconHeroSection">
+                        {/* 3D Glowing Cosmic Orb */}
+                        <div className="zyriconOrbContainer">
+                            <div className="zyriconOrbHalo" />
+                            <div className="zyriconOrbCore" />
+                            <div className="zyriconOrbHighlight" />
                         </div>
 
-                        {activeSession.messages.map((msg) => <ChatBubble key={msg.id} message={msg} />)}
+                        {/* Hero Headline */}
+                        <h2 className="zyriconHeroHeadline">{t('hero_headline')}</h2>
+
+                        {/* Suggestion Action Chips */}
+                        <div className="zyriconChipsWrapper">
+                            <button
+                                type="button"
+                                className="zyriconChip"
+                                onClick={() => setInputText("Crie uma imagem de uma cidade futurista neon com IA")}
+                            >
+                                <span>{t('chip_create_image')}</span>
+                                <ImageIcon size={13} className="text-zinc-400" />
+                            </button>
+                            <button
+                                type="button"
+                                className="zyriconChip"
+                                onClick={() => setInputText("Faça um brainstorm de 5 ideias inovadoras para automação com IA")}
+                            >
+                                <span>{t('chip_brainstorm')}</span>
+                                <Lightbulb size={13} className="text-amber-400" />
+                            </button>
+                            <button
+                                type="button"
+                                className="zyriconChip"
+                                onClick={() => setInputText("Crie um plano detalhado para implementar um chatbot de atendimento")}
+                            >
+                                <span>{t('chip_make_plan')}</span>
+                                <FileText size={13} className="text-sky-400" />
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="zyriconMessagesList">
+                        {activeSession.messages.map((msg) => (
+                            <ChatBubble key={msg.id} message={msg} />
+                        ))}
                         {streamingMessage && <ChatBubble message={streamingMessage} />}
                         <div ref={messagesEndRef} />
                     </div>
-                </div>
+                )}
+            </div>
 
-                <div className="inputSection">
-                    <div className="inputWrapper">
-                        <div className="avatarBtn">
-                            <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="22" y="25" width="56" height="50" rx="18" fill="#38bdf8" fillOpacity="0.15" stroke="#38bdf8" strokeWidth="3.5" />
-                                <rect x="32" y="37" width="36" height="22" rx="8" fill="#07080e" />
-                                <circle cx="43" cy="48" r="3.5" fill="#38bdf8" />
-                                <circle cx="57" cy="48" r="3.5" fill="#38bdf8" />
-                                <path d="M15 50 H22" stroke="#38bdf8" strokeWidth="3" />
-                                <path d="M78 50 H85" stroke="#38bdf8" strokeWidth="3" />
-                            </svg>
+            {/* Bottom Interactive Area: Zyricon Input Card & Bottom Feature Cards */}
+            <div className="zyriconBottomArea">
+                {/* Zyricon Input Card */}
+                <div className="zyriconInputCard">
+                    {/* Top Row: Sparkle Icon + Expandable Textarea */}
+                    <div className="zyriconInputTopRow">
+                        <Sparkles size={16} className="text-violet-400 shrink-0 mt-1" />
+                        <textarea
+                            ref={textareaRef}
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder={t('ask_anything')}
+                            disabled={isSending}
+                            rows={1}
+                            className="zyriconTextarea"
+                        />
+                    </div>
+
+                    {/* Bottom Toolbar: Attach / Settings / Options + Voice & Circular Send Button */}
+                    <div className="zyriconInputBottomRow">
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                className="zyriconToolBtn"
+                                title={t('attach_btn')}
+                                onClick={() => setInputText((prev) => prev + " [Arquivo] ")}
+                            >
+                                <Paperclip size={13} />
+                                <span>{t('attach_btn')}</span>
+                            </button>
+
+                            {onOpenIntegrations && (
+                                <button
+                                    type="button"
+                                    className="zyriconToolBtn"
+                                    title={t('system_settings_btn')}
+                                    onClick={onOpenIntegrations}
+                                >
+                                    <SlidersHorizontal size={13} />
+                                    <span>{t('system_settings_btn')}</span>
+                                </button>
+                            )}
+
+                            <button
+                                type="button"
+                                className="zyriconToolBtn"
+                                title={t('options_btn')}
+                                onClick={() => {
+                                    if (onOpenIntegrations) onOpenIntegrations();
+                                }}
+                            >
+                                <Cpu size={13} />
+                                <span>{t('options_btn')}</span>
+                            </button>
                         </div>
-                        <form onSubmit={handleSend} className="formWrapper">
-                            <div className="fieldContainer">
-                                <input
-                                    id="message-input-field"
-                                    type="text"
-                                    value={inputText}
-                                    onChange={(e) => setInputText(e.target.value)}
-                                    placeholder={t('send_placeholder')}
-                                    disabled={isSending}
-                                    className="textInput"
-                                />
-                                <Button type="submit" variant="primary" disabled={!inputText.trim() || isSending} className="submitBtn">
-                                    <Send size={15} />
-                                </Button>
-                            </div>
-                        </form>
-                        <button
-                            type="button"
-                            onClick={() => setIsClearModalOpen(true)}
-                            className="reloadBtn"
-                            title={t('clear_history_title')}
-                        >
-                            <Sparkles size={16} />
-                        </button>
+
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                className="zyriconMicBtn"
+                                title="Microfone"
+                            >
+                                <Mic size={15} />
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => handleSend()}
+                                disabled={!inputText.trim() || isSending}
+                                className="zyriconSendBtn"
+                                title="Enviar"
+                            >
+                                <ArrowUp size={16} />
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                {/* Bottom 3 Feature Cards (Displayed on Hero / Welcome View) */}
+                {!hasMessages && (
+                    <div className="zyriconFeatureGrid">
+                        {/* Card 1: Ozlo Orgânico */}
+                        <div
+                            className="zyriconFeatureCard group"
+                            onClick={() => setInputText("Olá Ozlo, me explique como você funciona de maneira orgânica.")}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="zyriconFeatureIconBox">
+                                    <ImageIcon size={15} className="text-violet-400" />
+                                </div>
+                                <span className="zyriconFeatureBadge">{t('card_ozlo_badge')}</span>
+                            </div>
+                            <h4 className="zyriconFeatureTitle">{t('card_ozlo_title')}</h4>
+                            <p className="zyriconFeatureDesc">{t('card_ozlo_desc')}</p>
+                        </div>
+
+                        {/* Card 2: Google Gemini */}
+                        <div
+                            className="zyriconFeatureCard group"
+                            onClick={() => setInputText("Analise as principais tendências de tecnologia para 2026 com o Gemini.")}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="zyriconFeatureIconBox">
+                                    <FileText size={15} className="text-sky-400" />
+                                </div>
+                                <span className="zyriconFeatureBadge">{t('card_gemini_badge')}</span>
+                            </div>
+                            <h4 className="zyriconFeatureTitle">{t('card_gemini_title')}</h4>
+                            <p className="zyriconFeatureDesc">{t('card_gemini_desc')}</p>
+                        </div>
+
+                        {/* Card 3: OpenAI & Groq */}
+                        <div
+                            className="zyriconFeatureCard group"
+                            onClick={() => setInputText("Gere uma função assíncrona em TypeScript para processar requisições em paralelo.")}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="zyriconFeatureIconBox">
+                                    <Code2 size={15} className="text-emerald-400" />
+                                </div>
+                                <span className="zyriconFeatureBadge">{t('card_openai_badge')}</span>
+                            </div>
+                            <h4 className="zyriconFeatureTitle">{t('card_openai_title')}</h4>
+                            <p className="zyriconFeatureDesc">{t('card_openai_desc')}</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Modal de Limpeza de Mensagens */}
@@ -311,7 +462,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ activeSession, onSendMes
                 </div>
             )}
 
-            {/* Modal de Exclusão de Conversa (Direto da Janela) */}
+            {/* Modal de Exclusão de Conversa */}
             {isDeleteModalOpen && onDeleteSession && (
                 <div className="modalOverlay" onClick={() => setIsDeleteModalOpen(false)}>
                     <div className="modalContent border-rose-500/30" onClick={(e) => e.stopPropagation()}>

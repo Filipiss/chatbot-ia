@@ -1,103 +1,153 @@
 @reference "tailwindcss";
 
-/* ChatWindow.css */
+/* ChatWindow.css - Zyricon Aesthetic */
+.zyriconWindow {
+    @apply flex-1 flex flex-col h-full bg-transparent overflow-hidden relative;
+}
+
+/* Top Bar */
+.zyriconTopBar {
+    @apply p-4 px-8 border-b border-white/[0.04] flex items-center justify-between gap-4 shrink-0 bg-[#09080e]/40 backdrop-blur-sm z-10;
+}
+
+.zyriconModelPill {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] text-xs font-medium text-zinc-200 transition-all cursor-pointer select-none shadow-sm;
+}
+
+.zyriconModelDot {
+    @apply w-2 h-2 rounded-full bg-violet-400 shadow-sm shadow-violet-400/50;
+}
+
+.zyriconModelName {
+    @apply tracking-wide;
+}
+
+.zyriconTopBtn {
+    @apply flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] text-xs font-medium text-zinc-300 hover:text-white transition-all cursor-pointer select-none;
+}
+
+/* Main Area Container */
+.zyriconFeedContainer {
+    @apply flex-1 overflow-y-auto p-6 md:p-8 flex flex-col justify-start relative;
+}
+
+/* Welcome Hero Section */
+.zyriconHeroSection {
+    @apply flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto py-6 gap-6;
+}
+
+/* 3D Glowing Cosmic Orb */
+.zyriconOrbContainer {
+    @apply relative w-24 h-24 my-2 flex items-center justify-center;
+}
+
+.zyriconOrbHalo {
+    @apply absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600/30 via-fuchsia-500/25 to-indigo-500/30 blur-xl animate-pulse;
+}
+
+.zyriconOrbCore {
+    @apply w-16 h-16 rounded-full relative z-10 shadow-2xl;
+    background: radial-gradient(circle at 35% 30%, #d8b4fe 0%, #a855f7 35%, #6b21a8 70%, #1e1b4b 100%);
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.6), inset 0 -4px 10px rgba(0, 0, 0, 0.8);
+    animation: orbPulse 4s ease-in-out infinite alternate;
+}
+
+.zyriconOrbHighlight {
+    @apply absolute top-5 left-6 w-4 h-3 rounded-full bg-white/40 blur-[1px] transform -rotate-45 z-20 pointer-events-none;
+}
+
+.zyriconOrbSmall {
+    @apply w-12 h-12 rounded-full mb-3;
+    background: radial-gradient(circle at 35% 30%, #d8b4fe 0%, #a855f7 40%, #581c87 100%);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+}
+
+.zyriconHeroHeadline {
+    @apply text-2xl md:text-3xl font-medium tracking-tight text-white;
+}
+
+/* Suggestion Action Chips */
+.zyriconChipsWrapper {
+    @apply flex flex-wrap items-center justify-center gap-2.5 mt-2;
+}
+
+.zyriconChip {
+    @apply flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-purple-500/30 text-xs font-medium text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer shadow-sm;
+}
+
+/* Messages List */
+.zyriconMessagesList {
+    @apply max-w-4xl w-full mx-auto flex flex-col gap-4 pb-4;
+}
+
+/* Bottom Interactive Area */
+.zyriconBottomArea {
+    @apply p-4 md:p-6 max-w-4xl w-full mx-auto flex flex-col gap-4 shrink-0;
+}
+
+/* Zyricon Input Card */
+.zyriconInputCard {
+    @apply w-full rounded-2xl border border-white/[0.08] bg-[#0e0d17]/80 backdrop-blur-xl p-4 flex flex-col gap-3 shadow-2xl transition-all duration-300 hover:border-purple-500/25;
+}
+
+.zyriconInputTopRow {
+    @apply flex items-start gap-3;
+}
+
+.zyriconTextarea {
+    @apply w-full bg-transparent border-0 text-zinc-100 text-sm placeholder-zinc-500 focus:outline-none resize-none min-h-[24px] max-h-[180px] leading-relaxed;
+}
+
+.zyriconInputBottomRow {
+    @apply flex items-center justify-between gap-3 pt-2 border-t border-white/[0.03];
+}
+
+.zyriconToolBtn {
+    @apply flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] transition-all cursor-pointer;
+}
+
+.zyriconMicBtn {
+    @apply p-2 rounded-full text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.05] transition-all cursor-pointer flex items-center justify-center;
+}
+
+.zyriconSendBtn {
+    @apply w-8 h-8 rounded-full bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center shadow-lg shadow-violet-600/30 transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105;
+}
+
+/* Bottom 3 Feature Cards Grid */
+.zyriconFeatureGrid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-3.5;
+}
+
+.zyriconFeatureCard {
+    @apply p-4 rounded-2xl border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.035] hover:border-purple-500/20 transition-all duration-200 cursor-pointer flex flex-col gap-2 shadow-sm;
+}
+
+.zyriconFeatureIconBox {
+    @apply w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center;
+}
+
+.zyriconFeatureBadge {
+    @apply px-2 py-0.5 rounded-md bg-white/[0.04] text-[10px] font-semibold text-zinc-400 uppercase tracking-wider;
+}
+
+.zyriconFeatureTitle {
+    @apply text-xs font-bold text-zinc-200 tracking-wide mt-1;
+}
+
+.zyriconFeatureDesc {
+    @apply text-[11px] text-zinc-500 leading-snug;
+}
+
+/* Empty State */
 .emptyState {
     @apply flex-1 flex flex-col items-center justify-center text-center p-8 gap-3;
 }
 
-.emptyIcon {
-    @apply w-16 h-16 rounded-full bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20 mb-2;
-}
-
 .emptyTitle {
-    @apply text-lg font-bold text-zinc-300;
+    @apply text-base font-bold text-zinc-300;
 }
 
 .emptyDesc {
-    @apply text-sm text-zinc-500 max-w-sm;
-}
-
-.windowOuter {
-    @apply flex-1 flex justify-center bg-transparent;
-}
-
-.windowContainer {
-    @apply max-w-4xl w-full flex flex-col h-full border-x border-white/[0.04] bg-[#0b0c16]/30 backdrop-blur-xl relative;
-}
-
-.windowHeader {
-    @apply px-8 py-5 border-b border-white/[0.04] bg-white/[0.01] backdrop-blur-md flex items-center justify-between;
-}
-
-.windowTitle {
-    @apply text-sm font-semibold leading-none text-zinc-200;
-}
-
-.windowSubtitle {
-    @apply text-[10px] text-zinc-500 font-bold tracking-wider mt-1.5;
-}
-
-.feedContainer {
-    @apply flex-1 overflow-y-auto px-8 py-8;
-}
-
-.feedInner {
-    @apply max-w-3xl mx-auto w-full flex flex-col gap-8;
-}
-
-.welcomeWrapper {
-    @apply flex flex-col items-center justify-center p-6 text-center select-none;
-}
-
-.welcomeSvg {
-    @apply w-[130px] h-[130px];
-}
-
-.welcomeContent {
-    @apply mt-4;
-}
-
-.welcomeTitle {
-    @apply text-xs font-bold uppercase tracking-widest text-zinc-200;
-}
-
-.welcomeDesc {
-    @apply text-[10px] text-zinc-500 font-bold uppercase tracking-wider max-w-xs mx-auto mt-2 leading-relaxed;
-}
-
-.inputSection {
-    @apply px-8 pb-8 pt-3 bg-transparent;
-}
-
-.inputWrapper {
-    @apply max-w-3xl mx-auto w-full flex items-center gap-4;
-}
-
-.avatarBtn {
-    @apply w-12 h-12 rounded-full border border-white/[0.04] bg-white/[0.02] flex items-center justify-center shrink-0;
-}
-
-.formWrapper {
-    @apply flex-1;
-}
-
-.fieldContainer {
-    @apply relative flex items-center bg-[#07080e]/40 border border-white/5 rounded-2xl p-1.5 backdrop-blur-xl transition-all duration-300;
-}
-
-.fieldContainer:focus-within {
-    @apply border-violet-400/50;
-    box-shadow: 0 0 20px rgba(129, 140, 248, 0.1);
-}
-
-.textInput {
-    @apply bg-transparent border-0 focus:outline-none py-3.5 px-5 text-sm text-zinc-100 w-full leading-normal placeholder-zinc-600;
-}
-
-.submitBtn {
-    @apply !p-3 rounded-xl bg-gradient-to-tr from-violet-400 to-purple-400 hover:from-sky-400 hover:to-purple-400 text-white transition-all duration-200;
-}
-
-.reloadBtn {
-    @apply w-12 h-12 rounded-full border border-white/[0.04] bg-white/[0.02] text-zinc-400 hover:bg-white/[0.06] hover:text-white flex items-center justify-center shrink-0 transition-all duration-200;
+    @apply text-xs text-zinc-500 max-w-sm;
 }
