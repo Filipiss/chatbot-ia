@@ -1,0 +1,102 @@
+@reference "tailwindcss";
+
+.a11yModalContent {
+    @apply max-w-md w-full;
+}
+
+.a11yBody {
+    @apply flex flex-col gap-3 py-1 max-h-[70vh] overflow-y-auto pr-1;
+}
+
+.a11ySection {
+    @apply flex flex-col gap-2 p-3 rounded-xl border border-white/[0.04] bg-white/[0.015];
+}
+
+[data-theme="light"] .a11ySection {
+    @apply border-black/[0.06] bg-black/[0.02];
+}
+
+.a11ySectionHeader {
+    @apply flex items-center gap-2;
+}
+
+.a11ySectionTitle {
+    @apply text-xs font-bold text-zinc-200 uppercase tracking-wider;
+}
+
+[data-theme="light"] .a11ySectionTitle {
+    @apply text-zinc-800;
+}
+
+.a11yGrid3 {
+    @apply grid grid-cols-3 gap-2 mt-1;
+}
+
+.a11yPillBtn {
+    @apply flex items-center justify-between px-2.5 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 text-[11px] font-semibold transition-all duration-150 cursor-pointer;
+}
+
+[data-theme="light"] .a11yPillBtn {
+    @apply border-black/[0.08] bg-black/[0.02] text-zinc-700 hover:bg-black/[0.05];
+}
+
+.a11yPillBtnActive {
+    @apply border-violet-500/40 bg-violet-500/15 text-violet-300 font-bold shadow-sm shadow-violet-500/20;
+}
+
+[data-theme="light"] .a11yPillBtnActive {
+    @apply border-violet-400 bg-violet-50 text-violet-700;
+}
+
+.a11yRow {
+    @apply flex items-center justify-between gap-4 p-3 rounded-xl border border-white/[0.04] bg-white/[0.015] transition-all;
+}
+
+[data-theme="light"] .a11yRow {
+    @apply border-black/[0.06] bg-black/[0.02];
+}
+
+.a11yRowInfo {
+    @apply flex flex-col gap-0.5;
+}
+
+.a11yRowTitle {
+    @apply text-xs font-bold text-zinc-200;
+}
+
+[data-theme="light"] .a11yRowTitle {
+    @apply text-zinc-800;
+}
+
+.a11yRowDesc {
+    @apply text-[10px] text-zinc-500 leading-tight;
+}
+
+[data-theme="light"] .a11yRowDesc {
+    @apply text-zinc-500;
+}
+
+/* Custom Switch */
+.a11ySwitch {
+    @apply w-10 h-6 rounded-full bg-zinc-800 border border-white/10 p-0.5 transition-all duration-200 cursor-pointer shrink-0 relative;
+}
+
+[data-theme="light"] .a11ySwitch {
+    @apply bg-zinc-300 border-black/10;
+}
+
+.a11ySwitchActive {
+    @apply bg-violet-600 border-violet-500;
+}
+
+[data-theme="light"] .a11ySwitchActive {
+    @apply bg-violet-600 border-violet-600;
+}
+
+.a11ySwitchHandle {
+    @apply w-4.5 h-4.5 rounded-full bg-white block transition-transform duration-200 shadow-md;
+}
+
+.a11ySwitchActive .a11ySwitchHandle {
+    @apply translate-x-4 bg-white;
+}

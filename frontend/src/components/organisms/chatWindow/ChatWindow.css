@@ -1,0 +1,103 @@
+@reference "tailwindcss";
+
+/* ChatWindow.css */
+.emptyState {
+    @apply flex-1 flex flex-col items-center justify-center text-center p-8 gap-3;
+}
+
+.emptyIcon {
+    @apply w-16 h-16 rounded-full bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20 mb-2;
+}
+
+.emptyTitle {
+    @apply text-lg font-bold text-zinc-300;
+}
+
+.emptyDesc {
+    @apply text-sm text-zinc-500 max-w-sm;
+}
+
+.windowOuter {
+    @apply flex-1 flex justify-center bg-transparent;
+}
+
+.windowContainer {
+    @apply max-w-4xl w-full flex flex-col h-full border-x border-white/[0.04] bg-[#0b0c16]/30 backdrop-blur-xl relative;
+}
+
+.windowHeader {
+    @apply px-8 py-5 border-b border-white/[0.04] bg-white/[0.01] backdrop-blur-md flex items-center justify-between;
+}
+
+.windowTitle {
+    @apply text-sm font-semibold leading-none text-zinc-200;
+}
+
+.windowSubtitle {
+    @apply text-[10px] text-zinc-500 font-bold tracking-wider mt-1.5;
+}
+
+.feedContainer {
+    @apply flex-1 overflow-y-auto px-8 py-8;
+}
+
+.feedInner {
+    @apply max-w-3xl mx-auto w-full flex flex-col gap-8;
+}
+
+.welcomeWrapper {
+    @apply flex flex-col items-center justify-center p-6 text-center select-none;
+}
+
+.welcomeSvg {
+    @apply w-[130px] h-[130px];
+}
+
+.welcomeContent {
+    @apply mt-4;
+}
+
+.welcomeTitle {
+    @apply text-xs font-bold uppercase tracking-widest text-zinc-200;
+}
+
+.welcomeDesc {
+    @apply text-[10px] text-zinc-500 font-bold uppercase tracking-wider max-w-xs mx-auto mt-2 leading-relaxed;
+}
+
+.inputSection {
+    @apply px-8 pb-8 pt-3 bg-transparent;
+}
+
+.inputWrapper {
+    @apply max-w-3xl mx-auto w-full flex items-center gap-4;
+}
+
+.avatarBtn {
+    @apply w-12 h-12 rounded-full border border-white/[0.04] bg-white/[0.02] flex items-center justify-center shrink-0;
+}
+
+.formWrapper {
+    @apply flex-1;
+}
+
+.fieldContainer {
+    @apply relative flex items-center bg-[#07080e]/40 border border-white/5 rounded-2xl p-1.5 backdrop-blur-xl transition-all duration-300;
+}
+
+.fieldContainer:focus-within {
+    @apply border-violet-400/50;
+    box-shadow: 0 0 20px rgba(129, 140, 248, 0.1);
+}
+
+.textInput {
+    @apply bg-transparent border-0 focus:outline-none py-3.5 px-5 text-sm text-zinc-100 w-full leading-normal placeholder-zinc-600;
+}
+
+.submitBtn {
+    @apply !p-3 rounded-xl bg-gradient-to-tr from-violet-400 to-purple-400 hover:from-sky-400 hover:to-purple-400 text-white transition-all duration-200;
+}
+
+.reloadBtn {
+    @apply w-12 h-12 rounded-full border border-white/[0.04] bg-white/[0.02] text-zinc-400 hover:bg-white/[0.06] hover:text-white flex items-center justify-center shrink-0 transition-all duration-200;
+}

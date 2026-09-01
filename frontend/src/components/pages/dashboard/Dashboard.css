@@ -1,0 +1,14 @@
+@reference "tailwindcss";
+
+/* Dashboard.css */
+.loadingWrapper {
+    @apply flex h-screen w-screen items-center justify-center flex-col gap-4 bg-[#07080e];
+}
+
+.loadingSpinner {
+    @apply w-8 h-8 rounded-full border-2 border-violet-500/20 border-t-violet-400 animate-spin;
+}
+
+.loadingLabel {
+    @apply text-[10px] font-bold uppercase tracking-widest text-zinc-600;
+}

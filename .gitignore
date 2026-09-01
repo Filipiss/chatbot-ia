@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+.pnp
+.pnp.js
+
+# Python Virtual Environment
+venv/
+backend/venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Cache & Bytecode
+__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Databases & SQLite
+*.db
+*.sqlite
+*.sqlite3
+database/chatbot.db
+database/database.db
+backend/chatbot.db
+backend/database.db
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+
+# Build outputs
+dist/
+frontend/dist/
+build/
+*.egg-info/
+.eggs/
+
+# Logs & Temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.tmp
+*.temp
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db

@@ -1,0 +1,26 @@
+@reference "tailwindcss";
+
+/* IntegrationHub.css */
+.hubWrapper {
+    @apply flex-1 overflow-y-auto p-8;
+}
+
+.hubHeader {
+    @apply flex items-center gap-4 mb-8 pb-6 border-b border-white/[0.04];
+}
+
+.hubIcon {
+    @apply w-10 h-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20;
+}
+
+.hubTitle {
+    @apply text-base font-bold text-zinc-200 leading-none;
+}
+
+.hubDesc {
+    @apply text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-1.5;
+}
+
+.hubGrid {
+    @apply grid grid-cols-1 gap-5;
+}

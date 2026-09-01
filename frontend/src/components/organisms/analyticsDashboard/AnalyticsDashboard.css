@@ -1,0 +1,98 @@
+@reference "tailwindcss";
+
+/* AnalyticsDashboard.css */
+.dashWrapper {
+    @apply flex-1 overflow-y-auto p-8;
+}
+
+.dashHeader {
+    @apply flex items-center gap-4 mb-8 pb-6 border-b border-white/[0.04];
+}
+
+.dashIcon {
+    @apply w-10 h-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20;
+}
+
+.dashTitle {
+    @apply text-base font-bold text-zinc-200 leading-none;
+}
+
+.dashDesc {
+    @apply text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-1.5;
+}
+
+.statsGrid {
+    @apply grid grid-cols-2 gap-4 mb-6;
+}
+
+.statCard {
+    @apply bg-white/[0.01] border border-white/[0.04] rounded-2xl p-5 flex items-center gap-4;
+}
+
+.statIconBase {
+    @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0;
+}
+
+.statIconBaseConvs {
+    @apply bg-violet-500/10 text-violet-400;
+}
+
+.statIconBaseMsgs {
+    @apply bg-sky-500/10 text-sky-400;
+}
+
+.statIconBaseLatency {
+    @apply bg-amber-500/10 text-amber-400;
+}
+
+.statIconBaseTokens {
+    @apply bg-emerald-500/10 text-emerald-400;
+}
+
+.statLabel {
+    @apply text-[9px] font-bold uppercase tracking-widest text-zinc-600;
+}
+
+.statVal {
+    @apply text-xl font-black text-zinc-200 mt-0.5;
+}
+
+.chartCard {
+    @apply bg-white/[0.01] border border-white/[0.04] rounded-2xl p-6;
+}
+
+.chartTitle {
+    @apply text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-5;
+}
+
+.chartEmpty {
+    @apply text-[11px] text-zinc-600 font-medium;
+}
+
+.chartList {
+    @apply flex flex-col gap-4;
+}
+
+.chartItem {
+    @apply flex flex-col gap-1.5;
+}
+
+.chartItemMeta {
+    @apply flex items-center justify-between;
+}
+
+.chartItemLabel {
+    @apply text-xs font-bold text-zinc-300 uppercase tracking-wider;
+}
+
+.chartItemVal {
+    @apply text-[10px] text-zinc-600 font-bold;
+}
+
+.chartBarTrack {
+    @apply h-2 rounded-full bg-white/[0.04] overflow-hidden;
+}
+
+.chartBarFill {
+    @apply h-full rounded-full transition-all duration-700;
+}

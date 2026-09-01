@@ -1,0 +1,41 @@
+@reference "tailwindcss";
+
+.floatingDock {
+    @apply fixed bottom-5 right-5 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl border border-white/10 bg-[#0c0e1a]/85 backdrop-blur-xl shadow-2xl shadow-violet-500/10 transition-all duration-300 hover:border-violet-500/30 hover:shadow-violet-500/20 hover:scale-[1.02];
+}
+
+[data-theme="light"] .floatingDock {
+    @apply border-black/10 bg-white/90 shadow-xl shadow-black/5 hover:border-black/20 hover:shadow-black/10;
+}
+
+.floatingBtn {
+    @apply flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-transparent text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer relative;
+}
+
+.themeBtn:hover {
+    @apply bg-amber-400/10 border-amber-400/20;
+}
+
+[data-theme="light"] .themeBtn:hover {
+    @apply bg-amber-100/50 border-amber-300/40;
+}
+
+.a11yBtn:hover {
+    @apply bg-violet-500/10 border-violet-500/20;
+}
+
+[data-theme="light"] .a11yBtn:hover {
+    @apply bg-violet-50 border-violet-200;
+}
+
+.floatingDivider {
+    @apply w-px h-5 bg-white/10 my-auto;
+}
+
+[data-theme="light"] .floatingDivider {
+    @apply bg-black/10;
+}
+
+.floatingLangBadge {
+    @apply text-xs leading-none select-none;
+}
