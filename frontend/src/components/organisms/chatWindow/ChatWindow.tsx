@@ -3,7 +3,7 @@ import { type ChatSession, type ChatMessage, sendMessageStream, clearChatMessage
 import { ChatBubble } from '../../molecules/chatBubble/ChatBubble';
 import {
     Sparkles, Download, Trash2, RotateCcw, X, Paperclip,
-    SlidersHorizontal, ChevronDown, Mic, ArrowUp, Image as ImageIcon,
+    SlidersHorizontal, ChevronDown, ArrowUp,
     Lightbulb, FileText, Code2, Cpu, Settings
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
@@ -32,6 +32,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const [actionLoading, setActionLoading] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollToBottom(); }, [activeSession?.messages, streamingMessage]);
@@ -126,6 +127,25 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     };
 
+    // Real working file attachment upload
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const content = event.target?.result as string;
+            if (content) {
+                const formatted = `\n\n--- Conteúdo do arquivo anexado (${file.name}) ---\n${content}\n---\n`;
+                setInputText((prev) => (prev ? prev + formatted : formatted));
+                if (textareaRef.current) textareaRef.current.focus();
+            }
+        };
+        reader.readAsText(file);
+        // Reset file input so same file can be re-selected if desired
+        e.target.value = '';
+    };
+
     const handleConfirmClearChat = async () => {
         if (!activeSession || isSending) return;
         setActionLoading(true);
@@ -179,12 +199,27 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
     return (
         <div className="zyriconWindow">
+            {/* Hidden File Input for Real Attachments */}
+            <input
+                type="file"
+                ref={fileInputRef}
+                accept=".txt,.md,.json,.js,.ts,.tsx,.py,.csv,.html,.css,.sql,.yaml,.yml"
+                onChange={handleFileUpload}
+                className="hidden"
+            />
+
             {/* Top Bar Header */}
             <div className="zyriconTopBar">
                 {/* Model Selector Dropdown Pill */}
-                <div className="zyriconModelPill" title={t('active_model')}>
+                <div
+                    className="zyriconModelPill"
+                    title="Clique para configurar provedores de IA"
+                    onClick={() => {
+                        if (onOpenIntegrations) onOpenIntegrations();
+                    }}
+                >
                     <span className="zyriconModelDot" />
-                    <span className="zyriconModelName">Ozlo / Multi-LLM v4.0</span>
+                    <span className="zyriconModelName">Ozlo & Multi-LLM</span>
                     <ChevronDown size={13} className="text-zinc-400" />
                 </div>
 
@@ -259,15 +294,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <button
                                 type="button"
                                 className="zyriconChip"
-                                onClick={() => setInputText("Crie uma imagem de uma cidade futurista neon com IA")}
-                            >
-                                <span>{t('chip_create_image')}</span>
-                                <ImageIcon size={13} className="text-zinc-400" />
-                            </button>
-                            <button
-                                type="button"
-                                className="zyriconChip"
-                                onClick={() => setInputText("Faça um brainstorm de 5 ideias inovadoras para automação com IA")}
+                                onClick={() => {
+                                    setInputText("Me dê ideias inovadoras e práticas para desenvolver um chatbot inteligente.");
+                                    if (textareaRef.current) textareaRef.current.focus();
+                                }}
                             >
                                 <span>{t('chip_brainstorm')}</span>
                                 <Lightbulb size={13} className="text-amber-400" />
@@ -275,10 +305,24 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <button
                                 type="button"
                                 className="zyriconChip"
-                                onClick={() => setInputText("Crie um plano detalhado para implementar um chatbot de atendimento")}
+                                onClick={() => {
+                                    setInputText("Crie um plano passo a passo para estruturar a integração de múltiplos provedores de IA.");
+                                    if (textareaRef.current) textareaRef.current.focus();
+                                }}
                             >
                                 <span>{t('chip_make_plan')}</span>
                                 <FileText size={13} className="text-sky-400" />
+                            </button>
+                            <button
+                                type="button"
+                                className="zyriconChip"
+                                onClick={() => {
+                                    setInputText("Gere um exemplo de código assíncrono para consumir APIs de IA em tempo real.");
+                                    if (textareaRef.current) textareaRef.current.focus();
+                                }}
+                            >
+                                <span>{t('chip_generate_code')}</span>
+                                <Code2 size={13} className="text-emerald-400" />
                             </button>
                         </div>
                     </div>
@@ -312,14 +356,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         />
                     </div>
 
-                    {/* Bottom Toolbar: Attach / Settings / Options + Voice & Circular Send Button */}
+                    {/* Bottom Toolbar: Real File Attachment + Settings + Provider + Circular Send Button */}
                     <div className="zyriconInputBottomRow">
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
                                 className="zyriconToolBtn"
-                                title={t('attach_btn')}
-                                onClick={() => setInputText((prev) => prev + " [Arquivo] ")}
+                                title="Anexar arquivo de texto ou código (.txt, .md, .json, .py, .ts...)"
+                                onClick={() => fileInputRef.current?.click()}
                             >
                                 <Paperclip size={13} />
                                 <span>{t('attach_btn')}</span>
@@ -329,7 +373,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 <button
                                     type="button"
                                     className="zyriconToolBtn"
-                                    title={t('system_settings_btn')}
+                                    title="Configurar Instruções de Sistema e Provedores"
                                     onClick={onOpenIntegrations}
                                 >
                                     <SlidersHorizontal size={13} />
@@ -337,34 +381,26 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 </button>
                             )}
 
-                            <button
-                                type="button"
-                                className="zyriconToolBtn"
-                                title={t('options_btn')}
-                                onClick={() => {
-                                    if (onOpenIntegrations) onOpenIntegrations();
-                                }}
-                            >
-                                <Cpu size={13} />
-                                <span>{t('options_btn')}</span>
-                            </button>
+                            {onOpenIntegrations && (
+                                <button
+                                    type="button"
+                                    className="zyriconToolBtn"
+                                    title="Gerenciar Provedores de IA"
+                                    onClick={onOpenIntegrations}
+                                >
+                                    <Cpu size={13} />
+                                    <span>{t('options_btn')}</span>
+                                </button>
+                            )}
                         </div>
 
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
-                                className="zyriconMicBtn"
-                                title="Microfone"
-                            >
-                                <Mic size={15} />
-                            </button>
-
-                            <button
-                                type="button"
                                 onClick={() => handleSend()}
                                 disabled={!inputText.trim() || isSending}
                                 className="zyriconSendBtn"
-                                title="Enviar"
+                                title="Enviar mensagem"
                             >
                                 <ArrowUp size={16} />
                             </button>
@@ -378,11 +414,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         {/* Card 1: Ozlo Orgânico */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => setInputText("Olá Ozlo, me explique como você funciona de maneira orgânica.")}
+                            onClick={() => {
+                                setInputText("Olá Ozlo, me apresente suas capacidades como assistente inteligente orgânico.");
+                                if (textareaRef.current) textareaRef.current.focus();
+                            }}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
-                                    <ImageIcon size={15} className="text-violet-400" />
+                                    <Sparkles size={15} className="text-violet-400" />
                                 </div>
                                 <span className="zyriconFeatureBadge">{t('card_ozlo_badge')}</span>
                             </div>
@@ -393,7 +432,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         {/* Card 2: Google Gemini */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => setInputText("Analise as principais tendências de tecnologia para 2026 com o Gemini.")}
+                            onClick={() => {
+                                setInputText("Explique como a arquitetura do Google Gemini processa grandes janelas de contexto.");
+                                if (textareaRef.current) textareaRef.current.focus();
+                            }}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -408,7 +450,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         {/* Card 3: OpenAI & Groq */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => setInputText("Gere uma função assíncrona em TypeScript para processar requisições em paralelo.")}
+                            onClick={() => {
+                                setInputText("Gere um script em Python para consumir endpoints da API da OpenAI com tratamento de erros.");
+                                if (textareaRef.current) textareaRef.current.focus();
+                            }}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">

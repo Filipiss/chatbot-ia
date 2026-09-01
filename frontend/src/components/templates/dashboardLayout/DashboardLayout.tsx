@@ -4,7 +4,7 @@ import { Button } from '../../atoms/button/Button';
 import { Input } from '../../atoms/input/Input';
 import {
     MessageSquare, Cpu, BarChart3, Plus, Trash2, Pencil, X,
-    Sparkles, Folder, Crown, PanelLeftClose, PanelLeft, Compass
+    Folder, PanelLeftClose, PanelLeft, Compass
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { FloatingControls } from '../../molecules/floatingControls/FloatingControls';
@@ -204,25 +204,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         )}
                     </div>
                 </div>
-
-                {/* Zyricon Bottom Status / Upgrade Card */}
-                {!isCollapsed && (
-                    <div className="zyriconBottomCard">
-                        <div className="zyriconCardCrown">
-                            <Crown size={13} className="text-amber-400" />
-                        </div>
-                        <h4 className="zyriconCardTitle">{t('upgrade_title')}</h4>
-                        <p className="zyriconCardDesc">{t('upgrade_desc')}</p>
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('integrations')}
-                            className="zyriconCardBtn"
-                        >
-                            <Sparkles size={11} className="inline mr-1 text-violet-400" />
-                            {t('upgrade_btn')}
-                        </button>
-                    </div>
-                )}
             </aside>
 
             {/* Main Area */}

@@ -1,59 +1,52 @@
 @reference "tailwindcss";
 
-/* StatusIndicator.css */
-.container {
-    @apply flex items-center gap-1.5 px-2 py-1 rounded-lg border;
+/* StatusIndicator.css - Zyricon Pill Badges */
+.statusContainer {
+    @apply flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold select-none transition-all duration-200;
 }
 
-.dot {
+.statusDot {
     @apply w-1.5 h-1.5 rounded-full shrink-0;
 }
 
-.labelStyle {
-    @apply text-[9px] font-bold uppercase tracking-wider leading-none;
+.statusLabel {
+    @apply text-[10px] font-bold uppercase tracking-wider leading-none;
 }
 
-/* Variants */
-.containerActive {
-    @apply bg-emerald-500/10 border-emerald-500/20 text-emerald-400;
+/* Active / Connected */
+.statusActive, .statusSuccess {
+    @apply bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-sm;
 }
 
-.dotActive {
-    @apply bg-emerald-400 animate-pulse;
-    box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+.dotActive, .dotSuccess {
+    @apply bg-emerald-400;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
 }
 
-.containerInactive {
-    @apply bg-zinc-500/10 border-zinc-500/20 text-zinc-500;
+/* Inactive */
+.statusInactive {
+    @apply bg-white/[0.02] border-white/[0.06] text-zinc-500;
 }
 
 .dotInactive {
     @apply bg-zinc-600;
 }
 
-.containerTesting {
-    @apply bg-amber-500/10 border-amber-500/20 text-amber-400;
+/* Testing */
+.statusTesting {
+    @apply bg-violet-500/10 border-violet-500/20 text-violet-400;
 }
 
 .dotTesting {
-    @apply bg-amber-400 animate-pulse;
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    @apply bg-violet-400 animate-ping;
 }
 
-.containerSuccess {
-    @apply bg-emerald-500/10 border-emerald-500/20 text-emerald-400;
-}
-
-.dotSuccess {
-    @apply bg-emerald-400;
-    box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
-}
-
-.containerError {
+/* Error */
+.statusError {
     @apply bg-rose-500/10 border-rose-500/20 text-rose-400;
 }
 
 .dotError {
     @apply bg-rose-400;
-    box-shadow: 0 0 8px rgba(251, 113, 133, 0.5);
+    box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
 }

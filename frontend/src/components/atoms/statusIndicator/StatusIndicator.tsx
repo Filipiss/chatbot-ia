@@ -18,9 +18,9 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status }) => {
     const statusCap = status.charAt(0).toUpperCase() + status.slice(1);
 
     return (
-        <span className={`container container${statusCap}`}>
-            <span className={`dot dot${statusCap}`} />
-            <span className="labelStyle">{label}</span>
+        <span className={`statusContainer status${statusCap}`}>
+            <span className={`statusDot dot${statusCap}`} />
+            <span className="statusLabel">{label}</span>
         </span>
     );
 };
