@@ -1,6 +1,6 @@
 @reference "tailwindcss";
 
-/* IntegrationHub.css - Zyricon Design */
+/* IntegrationHub.css - Blue Identity */
 .hubWrapper {
     @apply flex-1 overflow-y-auto p-6 md:p-10 max-w-5xl mx-auto w-full flex flex-col gap-6;
 }
@@ -10,7 +10,7 @@
 }
 
 .hubIcon {
-    @apply w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-purple-500 text-white flex items-center justify-center shadow-lg shadow-violet-500/25 shrink-0;
+    @apply w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 text-white flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0;
 }
 
 .hubTitle {

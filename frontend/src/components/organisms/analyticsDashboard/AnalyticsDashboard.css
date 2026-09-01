@@ -1,72 +1,72 @@
 @reference "tailwindcss";
 
-/* AnalyticsDashboard.css */
+/* AnalyticsDashboard.css - Blue Identity */
 .dashWrapper {
-    @apply flex-1 overflow-y-auto p-8;
+    @apply flex-1 overflow-y-auto p-6 md:p-10 max-w-5xl mx-auto w-full flex flex-col gap-6;
 }
 
 .dashHeader {
-    @apply flex items-center gap-4 mb-8 pb-6 border-b border-white/[0.04];
+    @apply flex items-center gap-4 pb-6 border-b border-white/[0.04];
 }
 
 .dashIcon {
-    @apply w-10 h-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20;
+    @apply w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 text-white flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0;
 }
 
 .dashTitle {
-    @apply text-base font-bold text-zinc-200 leading-none;
+    @apply text-xl font-bold text-white tracking-tight;
 }
 
 .dashDesc {
-    @apply text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-1.5;
+    @apply text-xs text-zinc-400 mt-1;
 }
 
 .statsGrid {
-    @apply grid grid-cols-2 gap-4 mb-6;
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2;
 }
 
 .statCard {
-    @apply bg-white/[0.01] border border-white/[0.04] rounded-2xl p-5 flex items-center gap-4;
+    @apply bg-[#0a0e22]/80 border border-white/[0.06] rounded-2xl p-5 flex items-center gap-4 shadow-sm;
 }
 
 .statIconBase {
-    @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0;
+    @apply w-10 h-10 rounded-xl flex items-center justify-center shrink-0;
 }
 
 .statIconBaseConvs {
-    @apply bg-violet-500/10 text-violet-400;
+    @apply bg-blue-500/10 text-blue-400 border border-blue-500/20;
 }
 
 .statIconBaseMsgs {
-    @apply bg-sky-500/10 text-sky-400;
+    @apply bg-sky-500/10 text-sky-400 border border-sky-500/20;
 }
 
 .statIconBaseLatency {
-    @apply bg-amber-500/10 text-amber-400;
+    @apply bg-amber-500/10 text-amber-400 border border-amber-500/20;
 }
 
 .statIconBaseTokens {
-    @apply bg-emerald-500/10 text-emerald-400;
+    @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20;
 }
 
 .statLabel {
-    @apply text-[9px] font-bold uppercase tracking-widest text-zinc-600;
+    @apply text-[10px] font-bold uppercase tracking-wider text-zinc-400;
 }
 
 .statVal {
-    @apply text-xl font-black text-zinc-200 mt-0.5;
+    @apply text-2xl font-extrabold text-zinc-100 mt-0.5;
 }
 
 .chartCard {
-    @apply bg-white/[0.01] border border-white/[0.04] rounded-2xl p-6;
+    @apply bg-[#0a0e22]/80 border border-white/[0.06] rounded-2xl p-6 shadow-sm;
 }
 
 .chartTitle {
-    @apply text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-5;
+    @apply text-xs font-bold uppercase tracking-wider text-zinc-400 mb-5;
 }
 
 .chartEmpty {
-    @apply text-[11px] text-zinc-600 font-medium;
+    @apply text-xs text-zinc-500 font-medium;
 }
 
 .chartList {
@@ -86,13 +86,13 @@
 }
 
 .chartItemVal {
-    @apply text-[10px] text-zinc-600 font-bold;
+    @apply text-xs text-zinc-400 font-medium;
 }
 
 .chartBarTrack {
-    @apply h-2 rounded-full bg-white/[0.04] overflow-hidden;
+    @apply h-2.5 rounded-full bg-white/[0.05] overflow-hidden;
 }
 
 .chartBarFill {
-    @apply h-full rounded-full transition-all duration-700;
+    @apply h-full rounded-full transition-all duration-700 bg-gradient-to-r from-blue-600 to-cyan-400;
 }

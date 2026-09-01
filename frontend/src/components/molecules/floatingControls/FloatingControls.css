@@ -1,31 +1,36 @@
 @reference "tailwindcss";
 
+/* FloatingControls.css - Blue Identity */
 .floatingDock {
-    @apply fixed bottom-5 right-5 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl border border-white/10 bg-[#0c0e1a]/85 backdrop-blur-xl shadow-2xl shadow-violet-500/10 transition-all duration-300 hover:border-violet-500/30 hover:shadow-violet-500/20 hover:scale-[1.02];
+    @apply fixed bottom-5 right-5 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl border border-white/10 bg-[#0a0e22]/90 backdrop-blur-xl shadow-2xl shadow-blue-500/10 transition-all duration-300 hover:border-blue-500/40 hover:shadow-blue-500/25 hover:scale-[1.02];
 }
 
 [data-theme="light"] .floatingDock {
-    @apply border-black/10 bg-white/90 shadow-xl shadow-black/5 hover:border-black/20 hover:shadow-black/10;
+    @apply border-slate-300 bg-white/95 shadow-xl shadow-slate-900/5 hover:border-blue-400 hover:shadow-blue-500/10;
 }
 
 .floatingBtn {
     @apply flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-transparent text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer relative;
 }
 
+[data-theme="light"] .floatingBtn {
+    @apply text-slate-600 hover:text-slate-900;
+}
+
 .themeBtn:hover {
-    @apply bg-amber-400/10 border-amber-400/20;
+    @apply bg-amber-400/10 border-amber-400/20 text-amber-300;
 }
 
 [data-theme="light"] .themeBtn:hover {
-    @apply bg-amber-100/50 border-amber-300/40;
+    @apply bg-amber-50 border-amber-200 text-amber-700;
 }
 
 .a11yBtn:hover {
-    @apply bg-violet-500/10 border-violet-500/20;
+    @apply bg-blue-500/10 border-blue-500/20 text-sky-300;
 }
 
 [data-theme="light"] .a11yBtn:hover {
-    @apply bg-violet-50 border-violet-200;
+    @apply bg-blue-50 border-blue-200 text-blue-700;
 }
 
 .floatingDivider {
@@ -33,7 +38,7 @@
 }
 
 [data-theme="light"] .floatingDivider {
-    @apply bg-black/10;
+    @apply bg-slate-200;
 }
 
 .floatingLangBadge {

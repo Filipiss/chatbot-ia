@@ -1,5 +1,6 @@
 @reference "tailwindcss";
 
+/* AccessibilityMenu.css - Blue Identity */
 .a11yModalContent {
     @apply max-w-md w-full;
 }
@@ -13,7 +14,7 @@
 }
 
 [data-theme="light"] .a11ySection {
-    @apply border-black/[0.06] bg-black/[0.02];
+    @apply border-slate-200 bg-slate-50;
 }
 
 .a11ySectionHeader {
@@ -25,7 +26,7 @@
 }
 
 [data-theme="light"] .a11ySectionTitle {
-    @apply text-zinc-800;
+    @apply text-slate-900;
 }
 
 .a11yGrid3 {
@@ -37,15 +38,15 @@
 }
 
 [data-theme="light"] .a11yPillBtn {
-    @apply border-black/[0.08] bg-black/[0.02] text-zinc-700 hover:bg-black/[0.05];
+    @apply border-slate-300 bg-white text-slate-700 hover:bg-slate-100;
 }
 
 .a11yPillBtnActive {
-    @apply border-violet-500/40 bg-violet-500/15 text-violet-300 font-bold shadow-sm shadow-violet-500/20;
+    @apply border-blue-500/40 bg-blue-500/15 text-sky-300 font-bold shadow-sm shadow-blue-500/20;
 }
 
 [data-theme="light"] .a11yPillBtnActive {
-    @apply border-violet-400 bg-violet-50 text-violet-700;
+    @apply border-blue-500 bg-blue-50 text-blue-700 font-bold;
 }
 
 .a11yRow {
@@ -53,7 +54,7 @@
 }
 
 [data-theme="light"] .a11yRow {
-    @apply border-black/[0.06] bg-black/[0.02];
+    @apply border-slate-200 bg-slate-50;
 }
 
 .a11yRowInfo {
@@ -65,15 +66,15 @@
 }
 
 [data-theme="light"] .a11yRowTitle {
-    @apply text-zinc-800;
+    @apply text-slate-900;
 }
 
 .a11yRowDesc {
-    @apply text-[10px] text-zinc-500 leading-tight;
+    @apply text-[10px] text-zinc-400 leading-tight;
 }
 
 [data-theme="light"] .a11yRowDesc {
-    @apply text-zinc-500;
+    @apply text-slate-500;
 }
 
 /* Custom Switch */
@@ -82,15 +83,15 @@
 }
 
 [data-theme="light"] .a11ySwitch {
-    @apply bg-zinc-300 border-black/10;
+    @apply bg-slate-300 border-slate-400;
 }
 
 .a11ySwitchActive {
-    @apply bg-violet-600 border-violet-500;
+    @apply bg-blue-600 border-blue-500;
 }
 
 [data-theme="light"] .a11ySwitchActive {
-    @apply bg-violet-600 border-violet-600;
+    @apply bg-blue-600 border-blue-600;
 }
 
 .a11ySwitchHandle {

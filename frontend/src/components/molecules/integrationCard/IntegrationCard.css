@@ -1,12 +1,12 @@
 @reference "tailwindcss";
 
-/* IntegrationCard.css - Zyricon Design */
+/* IntegrationCard.css - Blue Identity */
 .zyriconProviderCard {
-    @apply rounded-2xl border border-white/[0.06] bg-[#0e0d17]/80 backdrop-blur-xl p-6 flex flex-col gap-5 transition-all duration-300 shadow-xl;
+    @apply rounded-2xl border border-white/[0.06] bg-[#0a0e22]/80 backdrop-blur-xl p-6 flex flex-col gap-5 transition-all duration-300 shadow-xl;
 }
 
 .cardActiveGlow {
-    @apply border-violet-500/20 shadow-violet-500/5;
+    @apply border-blue-500/30 shadow-blue-500/10;
 }
 
 .cardHeader {
@@ -26,7 +26,7 @@
 }
 
 .cardSubtitle {
-    @apply text-xs text-zinc-500 mt-0.5;
+    @apply text-xs text-zinc-400 mt-0.5;
 }
 
 .cardHeaderActions {
@@ -58,7 +58,7 @@
 }
 
 .zyriconFieldInput {
-    @apply w-full rounded-xl border border-white/[0.07] bg-[#07060b]/80 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-violet-500/50 transition-all duration-200;
+    @apply w-full rounded-xl border border-white/[0.07] bg-[#060814]/80 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-blue-500/60 transition-all duration-200;
 }
 
 .cardKeyContainer {
@@ -66,15 +66,15 @@
 }
 
 .cardEyeBtn {
-    @apply absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1 cursor-pointer;
+    @apply absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 transition-colors p-1 cursor-pointer;
 }
 
 .ozloNotice {
-    @apply flex items-center gap-2.5 p-3 rounded-xl bg-violet-500/5 border border-violet-500/15 text-xs text-violet-300 font-medium;
+    @apply flex items-center gap-2.5 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-sky-300 font-medium;
 }
 
 .zyriconTextareaField {
-    @apply w-full rounded-xl border border-white/[0.07] bg-[#07060b]/80 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-violet-500/50 transition-all duration-200 resize-none min-h-[70px] leading-relaxed;
+    @apply w-full rounded-xl border border-white/[0.07] bg-[#060814]/80 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-blue-500/60 transition-all duration-200 resize-none min-h-[70px] leading-relaxed;
 }
 
 .cardFooter {
@@ -94,7 +94,7 @@
 }
 
 .cardMessageInfo {
-    @apply bg-violet-500/10 text-violet-400 border border-violet-500/20;
+    @apply bg-blue-500/10 text-blue-400 border border-blue-500/20;
 }
 
 .zyriconActionBtn {
@@ -102,5 +102,5 @@
 }
 
 .zyriconPrimaryActionBtn {
-    @apply flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600 hover:bg-violet-500 text-xs font-semibold text-white transition-all cursor-pointer shadow-lg shadow-violet-600/25;
+    @apply flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-all cursor-pointer shadow-lg shadow-blue-600/30;
 }

@@ -1,17 +1,17 @@
 @reference "tailwindcss";
 
-/* ChatWindow.css - Zyricon Aesthetic */
+/* ChatWindow.css - Blue Identity Aesthetic */
 .zyriconWindow {
     @apply flex-1 flex flex-col h-full bg-transparent overflow-hidden relative;
 }
 
 /* Top Bar */
 .zyriconTopBar {
-    @apply p-4 px-8 border-b border-white/[0.04] flex items-center justify-between gap-4 shrink-0 bg-[#09080e]/40 backdrop-blur-sm z-30;
+    @apply p-4 px-8 border-b border-white/[0.04] flex items-center justify-between gap-4 shrink-0 bg-[#060814]/40 backdrop-blur-sm z-30;
 }
 
 .zyriconModelPill {
-    @apply flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-purple-500/30 text-xs font-medium text-zinc-200 transition-all cursor-pointer select-none shadow-sm;
+    @apply flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-blue-500/40 text-xs font-medium text-zinc-200 transition-all cursor-pointer select-none shadow-sm;
 }
 
 .zyriconModelDot {
@@ -24,7 +24,7 @@
 
 /* Model Dropdown Menu */
 .zyriconDropdownMenu {
-    @apply absolute left-0 top-full mt-2 w-72 rounded-2xl border border-white/[0.08] bg-[#0e0d17]/95 backdrop-blur-xl shadow-2xl p-1.5 flex flex-col gap-1 z-50;
+    @apply absolute left-0 top-full mt-2 w-72 rounded-2xl border border-white/[0.08] bg-[#0a0e22]/95 backdrop-blur-xl shadow-2xl p-1.5 flex flex-col gap-1 z-50;
     animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .zyriconDropdownItemActive {
-    @apply bg-violet-500/10 border-violet-500/20;
+    @apply bg-blue-500/10 border-blue-500/25;
 }
 
 .zyriconTopBtn {
@@ -65,30 +65,30 @@
     @apply flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto py-6 gap-6;
 }
 
-/* 3D Glowing Cosmic Orb */
+/* 3D Glowing Cosmic Orb (Sapphire & Cyan Glow) */
 .zyriconOrbContainer {
     @apply relative w-24 h-24 my-2 flex items-center justify-center;
 }
 
 .zyriconOrbHalo {
-    @apply absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600/30 via-fuchsia-500/25 to-indigo-500/30 blur-xl animate-pulse;
+    @apply absolute inset-0 rounded-full bg-gradient-to-tr from-blue-600/35 via-cyan-500/25 to-sky-400/35 blur-xl animate-pulse;
 }
 
 .zyriconOrbCore {
     @apply w-16 h-16 rounded-full relative z-10 shadow-2xl;
-    background: radial-gradient(circle at 35% 30%, #d8b4fe 0%, #a855f7 35%, #6b21a8 70%, #1e1b4b 100%);
-    box-shadow: 0 0 35px rgba(168, 85, 247, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.6), inset 0 -4px 10px rgba(0, 0, 0, 0.8);
+    background: radial-gradient(circle at 35% 30%, #bae6fd 0%, #38bdf8 30%, #2563eb 65%, #0f172a 100%);
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.7), inset 0 -4px 10px rgba(0, 0, 0, 0.8);
     animation: orbPulse 4s ease-in-out infinite alternate;
 }
 
 .zyriconOrbHighlight {
-    @apply absolute top-5 left-6 w-4 h-3 rounded-full bg-white/40 blur-[1px] transform -rotate-45 z-20 pointer-events-none;
+    @apply absolute top-5 left-6 w-4 h-3 rounded-full bg-white/50 blur-[1px] transform -rotate-45 z-20 pointer-events-none;
 }
 
 .zyriconOrbSmall {
     @apply w-12 h-12 rounded-full mb-3;
-    background: radial-gradient(circle at 35% 30%, #d8b4fe 0%, #a855f7 40%, #581c87 100%);
-    box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+    background: radial-gradient(circle at 35% 30%, #bae6fd 0%, #38bdf8 35%, #2563eb 100%);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
 }
 
 .zyriconHeroHeadline {
@@ -101,7 +101,7 @@
 }
 
 .zyriconChip {
-    @apply flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-purple-500/30 text-xs font-medium text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer shadow-sm;
+    @apply flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-blue-500/40 text-xs font-medium text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer shadow-sm;
 }
 
 /* Messages List */
@@ -116,7 +116,7 @@
 
 /* Zyricon Input Card */
 .zyriconInputCard {
-    @apply w-full rounded-2xl border border-white/[0.08] bg-[#0e0d17]/80 backdrop-blur-xl p-4 flex flex-col gap-3 shadow-2xl transition-all duration-300 hover:border-purple-500/25;
+    @apply w-full rounded-2xl border border-white/[0.08] bg-[#0a0e22]/80 backdrop-blur-xl p-4 flex flex-col gap-3 shadow-2xl transition-all duration-300 hover:border-blue-500/30;
 }
 
 .zyriconInputTopRow {
@@ -136,7 +136,7 @@
 }
 
 .zyriconSendBtn {
-    @apply w-8 h-8 rounded-full bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center shadow-lg shadow-violet-600/30 transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105;
+    @apply w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-600/35 transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105;
 }
 
 /* Bottom 3 Feature Cards Grid */
@@ -145,7 +145,7 @@
 }
 
 .zyriconFeatureCard {
-    @apply p-4 rounded-2xl border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.04] hover:border-purple-500/25 transition-all duration-200 cursor-pointer flex flex-col gap-2 shadow-sm;
+    @apply p-4 rounded-2xl border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.04] hover:border-blue-500/30 transition-all duration-200 cursor-pointer flex flex-col gap-2 shadow-sm;
 }
 
 .zyriconFeatureIconBox {

@@ -229,7 +229,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const getProviderDotColor = (provider: string) => {
         if (provider === 'gemini') return 'bg-sky-400 shadow-sky-400/50';
         if (provider === 'openai') return 'bg-emerald-400 shadow-emerald-400/50';
-        return 'bg-violet-400 shadow-violet-400/50';
+        return 'bg-blue-400 shadow-blue-400/50';
     };
 
     return (
@@ -265,7 +265,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <div className="zyriconDropdownMenu animate-fade-in">
                             <div className="zyriconDropdownHeader">
                                 <span>Modelos Disponíveis</span>
-                                <span className="text-[9px] text-violet-400">Clique para Ativar</span>
+                                <span className="text-[9px] text-sky-400">Clique para Ativar</span>
                             </div>
                             <div className="flex flex-col gap-1 p-1">
                                 {integrations.map((item) => (
@@ -288,7 +288,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                             </div>
                                         </div>
                                         {item.is_active ? (
-                                            <span className="flex items-center gap-1 text-[10px] font-bold text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full border border-violet-500/20">
+                                            <span className="flex items-center gap-1 text-[10px] font-bold text-sky-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
                                                 <Check size={10} /> Ativo
                                             </span>
                                         ) : (
@@ -423,7 +423,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 <div className="zyriconInputCard">
                     {/* Top Row: Sparkle Icon + Expandable Textarea */}
                     <div className="zyriconInputTopRow">
-                        <Sparkles size={16} className="text-violet-400 shrink-0 mt-1" />
+                        <Sparkles size={16} className="text-sky-400 shrink-0 mt-1" />
                         <textarea
                             ref={textareaRef}
                             value={inputText}
@@ -475,7 +475,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
-                                    <Sparkles size={15} className="text-violet-400" />
+                                    <Sparkles size={15} className="text-sky-400" />
                                 </div>
                                 <span className="zyriconFeatureBadge">{t('card_ozlo_badge')}</span>
                             </div>
@@ -525,7 +525,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <div className="modalHeader">
                             <div className="flex items-center gap-2.5">
                                 {selectedInfoProvider === 'ozlo' && (
-                                    <div className="w-8 h-8 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+                                    <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sky-400">
                                         <Sparkles size={16} />
                                     </div>
                                 )}
@@ -566,7 +566,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <div className="flex flex-wrap gap-1.5">
                                 {selectedInfoProvider === 'ozlo' && (
                                     <>
-                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
                                             <ShieldCheck size={12} /> 100% Gratuito
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
@@ -582,7 +582,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                         <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
                                             <Zap size={12} /> Janela de 1M+ Tokens
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
                                             Multimodalidade
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold">
@@ -595,7 +595,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
                                             <Zap size={12} /> Centenas de Tokens/s (Groq)
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
                                             Custom Endpoints
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
