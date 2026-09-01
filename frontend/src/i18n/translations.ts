@@ -77,6 +77,10 @@ export const translations = {
         card_openai_badge: 'Ultra Rápido',
         card_openai_title: 'OpenAI & Groq',
         card_openai_desc: 'Inferência de altíssima velocidade e suporte a endpoints customizados.',
+        modal_provider_info_title: 'Detalhes do Modelo de IA',
+        activate_this_model: 'Ativar Este Modelo',
+        model_currently_active: 'Modelo Atualmente Ativo',
+        configure_credentials: 'Configurar Credenciais',
 
         // Integrations / Settings
         integrations_hub_title: 'Integrador de Provedores',
@@ -206,6 +210,10 @@ export const translations = {
         card_openai_badge: 'High Speed',
         card_openai_title: 'OpenAI & Groq',
         card_openai_desc: 'Ultra-fast low latency inference with support for custom endpoints.',
+        modal_provider_info_title: 'AI Model Details',
+        activate_this_model: 'Activate This Model',
+        model_currently_active: 'Currently Active Model',
+        configure_credentials: 'Configure Credentials',
 
         // Integrations / Settings
         integrations_hub_title: 'Providers Hub',
@@ -335,6 +343,10 @@ export const translations = {
         card_openai_badge: 'Alta Velocidad',
         card_openai_title: 'OpenAI & Groq',
         card_openai_desc: 'Inferencia ultrarrápida con soporte para endpoints personalizados.',
+        modal_provider_info_title: 'Detalles del Modelo de IA',
+        activate_this_model: 'Activar Este Modelo',
+        model_currently_active: 'Modelo Actualmente Activo',
+        configure_credentials: 'Configurar Credenciales',
 
         // Integrations / Settings
         integrations_hub_title: 'Centro de Proveedores',

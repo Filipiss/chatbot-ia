@@ -84,6 +84,25 @@ export const Dashboard: React.FC = () => {
         await loadActiveSessionDetails();
     };
 
+    const handleSelectActiveModel = async (targetId: number) => {
+        try {
+            await Promise.all(
+                integrations.map((item) => {
+                    if (item.id === targetId && !item.is_active) {
+                        return updateIntegration(item.id, { is_active: true });
+                    }
+                    if (item.id !== targetId && item.is_active) {
+                        return updateIntegration(item.id, { is_active: false });
+                    }
+                    return Promise.resolve();
+                })
+            );
+            setIntegrations(await fetchIntegrations());
+        } catch (e) {
+            console.error('Erro ao selecionar modelo ativo:', e);
+        }
+    };
+
     if (loading) {
         return (
             <div className="loadingWrapper">
@@ -107,6 +126,8 @@ export const Dashboard: React.FC = () => {
             {activeTab === 'chat' && (
                 <ChatWindow
                     activeSession={activeSession}
+                    integrations={integrations}
+                    onSelectActiveModel={handleSelectActiveModel}
                     onSendMessageSuccess={handleSendMessageSuccess}
                     onDeleteSession={handleDeleteSession}
                     onOpenIntegrations={() => setActiveTab('integrations')}

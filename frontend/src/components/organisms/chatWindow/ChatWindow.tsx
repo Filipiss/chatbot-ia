@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { type ChatSession, type ChatMessage, sendMessageStream, clearChatMessages } from '../../../api';
+import {
+    type ChatSession, type ChatMessage, type Integration,
+    sendMessageStream, clearChatMessages
+} from '../../../api';
 import { ChatBubble } from '../../molecules/chatBubble/ChatBubble';
 import {
     Sparkles, Download, Trash2, RotateCcw, X, Paperclip,
-    SlidersHorizontal, ChevronDown, ArrowUp,
-    Lightbulb, FileText, Code2, Cpu, Settings
+    ChevronDown, ArrowUp, Lightbulb, FileText, Code2, Cpu,
+    Settings, Check, ShieldCheck, Zap
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { Button } from '../../atoms/button/Button';
@@ -12,6 +15,8 @@ import './ChatWindow.css';
 
 interface ChatWindowProps {
     activeSession: ChatSession | null;
+    integrations?: Integration[];
+    onSelectActiveModel?: (id: number) => Promise<void>;
     onSendMessageSuccess: () => void;
     onDeleteSession?: (id: number) => void;
     onOpenIntegrations?: () => void;
@@ -19,6 +24,8 @@ interface ChatWindowProps {
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
     activeSession,
+    integrations = [],
+    onSelectActiveModel,
     onSendMessageSuccess,
     onDeleteSession,
     onOpenIntegrations,
@@ -30,6 +37,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
+    const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
+    const [selectedInfoProvider, setSelectedInfoProvider] = useState<'ozlo' | 'gemini' | 'openai' | null>(null);
+
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,6 +56,17 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     }, [inputText]);
 
+    // Close dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setIsModelDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     if (!activeSession) {
         return (
             <div className="emptyState">
@@ -54,6 +76,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             </div>
         );
     }
+
+    const activeIntegration = integrations.find((i) => i.is_active) || integrations[0] || {
+        id: 1,
+        name: 'Ozlo Orgânico',
+        provider: 'ozlo',
+        model_name: 'ozlo-organic-v1',
+        is_active: true,
+    };
 
     const handleSend = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -142,7 +172,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             }
         };
         reader.readAsText(file);
-        // Reset file input so same file can be re-selected if desired
         e.target.value = '';
     };
 
@@ -197,6 +226,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
     const hasMessages = activeSession.messages.length > 0;
 
+    const getProviderDotColor = (provider: string) => {
+        if (provider === 'gemini') return 'bg-sky-400 shadow-sky-400/50';
+        if (provider === 'openai') return 'bg-emerald-400 shadow-emerald-400/50';
+        return 'bg-violet-400 shadow-violet-400/50';
+    };
+
     return (
         <div className="zyriconWindow">
             {/* Hidden File Input for Real Attachments */}
@@ -210,17 +245,62 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
             {/* Top Bar Header */}
             <div className="zyriconTopBar">
-                {/* Model Selector Dropdown Pill */}
-                <div
-                    className="zyriconModelPill"
-                    title="Clique para configurar provedores de IA"
-                    onClick={() => {
-                        if (onOpenIntegrations) onOpenIntegrations();
-                    }}
-                >
-                    <span className="zyriconModelDot" />
-                    <span className="zyriconModelName">Ozlo & Multi-LLM</span>
-                    <ChevronDown size={13} className="text-zinc-400" />
+                {/* Active Model Selector Dropdown Pill */}
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        type="button"
+                        className="zyriconModelPill"
+                        onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+                        title="Clique para selecionar e ativar um modelo"
+                    >
+                        <span className={`zyriconModelDot ${getProviderDotColor(activeIntegration.provider)}`} />
+                        <span className="zyriconModelName">
+                            {activeIntegration.name || activeIntegration.model_name}
+                        </span>
+                        <ChevronDown size={13} className={`text-zinc-400 transition-transform duration-200 ${isModelDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {/* Model Dropdown Menu */}
+                    {isModelDropdownOpen && (
+                        <div className="zyriconDropdownMenu animate-fade-in">
+                            <div className="zyriconDropdownHeader">
+                                <span>Modelos Disponíveis</span>
+                                <span className="text-[9px] text-violet-400">Clique para Ativar</span>
+                            </div>
+                            <div className="flex flex-col gap-1 p-1">
+                                {integrations.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        type="button"
+                                        className={`zyriconDropdownItem ${item.is_active ? 'zyriconDropdownItemActive' : ''}`}
+                                        onClick={async () => {
+                                            if (onSelectActiveModel) {
+                                                await onSelectActiveModel(item.id);
+                                            }
+                                            setIsModelDropdownOpen(false);
+                                        }}
+                                    >
+                                        <div className="flex items-center gap-2.5">
+                                            <span className={`w-2 h-2 rounded-full shrink-0 ${getProviderDotColor(item.provider)}`} />
+                                            <div className="flex flex-col text-left">
+                                                <span className="font-semibold text-xs text-white leading-none">{item.name}</span>
+                                                <span className="text-[10px] text-zinc-400 mt-0.5">{item.model_name || item.provider}</span>
+                                            </div>
+                                        </div>
+                                        {item.is_active ? (
+                                            <span className="flex items-center gap-1 text-[10px] font-bold text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full border border-violet-500/20">
+                                                <Check size={10} /> Ativo
+                                            </span>
+                                        ) : (
+                                            <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300">
+                                                Ativar
+                                            </span>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Right Action Pills */}
@@ -337,7 +417,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 )}
             </div>
 
-            {/* Bottom Interactive Area: Zyricon Input Card & Bottom Feature Cards */}
+            {/* Bottom Interactive Area: Clean Zyricon Input Card & 3 Bottom Feature Cards */}
             <div className="zyriconBottomArea">
                 {/* Zyricon Input Card */}
                 <div className="zyriconInputCard">
@@ -356,7 +436,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         />
                     </div>
 
-                    {/* Bottom Toolbar: Real File Attachment + Settings + Provider + Circular Send Button */}
+                    {/* Bottom Toolbar: Attach Button (Left) & Circular Send Button (Right) */}
                     <div className="zyriconInputBottomRow">
                         <div className="flex items-center gap-2">
                             <button
@@ -368,30 +448,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 <Paperclip size={13} />
                                 <span>{t('attach_btn')}</span>
                             </button>
-
-                            {onOpenIntegrations && (
-                                <button
-                                    type="button"
-                                    className="zyriconToolBtn"
-                                    title="Configurar Instruções de Sistema e Provedores"
-                                    onClick={onOpenIntegrations}
-                                >
-                                    <SlidersHorizontal size={13} />
-                                    <span>{t('system_settings_btn')}</span>
-                                </button>
-                            )}
-
-                            {onOpenIntegrations && (
-                                <button
-                                    type="button"
-                                    className="zyriconToolBtn"
-                                    title="Gerenciar Provedores de IA"
-                                    onClick={onOpenIntegrations}
-                                >
-                                    <Cpu size={13} />
-                                    <span>{t('options_btn')}</span>
-                                </button>
-                            )}
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -408,16 +464,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     </div>
                 </div>
 
-                {/* Bottom 3 Feature Cards (Displayed on Hero / Welcome View) */}
+                {/* Bottom 3 Feature Cards (Open Explanatory Modal on Click) */}
                 {!hasMessages && (
                     <div className="zyriconFeatureGrid">
                         {/* Card 1: Ozlo Orgânico */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => {
-                                setInputText("Olá Ozlo, me apresente suas capacidades como assistente inteligente orgânico.");
-                                if (textareaRef.current) textareaRef.current.focus();
-                            }}
+                            onClick={() => setSelectedInfoProvider('ozlo')}
+                            title="Clique para saber mais sobre o Ozlo Orgânico"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -432,10 +486,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         {/* Card 2: Google Gemini */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => {
-                                setInputText("Explique como a arquitetura do Google Gemini processa grandes janelas de contexto.");
-                                if (textareaRef.current) textareaRef.current.focus();
-                            }}
+                            onClick={() => setSelectedInfoProvider('gemini')}
+                            title="Clique para saber mais sobre o Google Gemini"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -450,10 +502,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         {/* Card 3: OpenAI & Groq */}
                         <div
                             className="zyriconFeatureCard group"
-                            onClick={() => {
-                                setInputText("Gere um script em Python para consumir endpoints da API da OpenAI com tratamento de erros.");
-                                if (textareaRef.current) textareaRef.current.focus();
-                            }}
+                            onClick={() => setSelectedInfoProvider('openai')}
+                            title="Clique para saber mais sobre OpenAI e Groq"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -467,6 +517,153 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     </div>
                 )}
             </div>
+
+            {/* Modal Explicativo dos Provedores / Modelos */}
+            {selectedInfoProvider && (
+                <div className="modalOverlay" onClick={() => setSelectedInfoProvider(null)}>
+                    <div className="modalContent max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
+                        <div className="modalHeader">
+                            <div className="flex items-center gap-2.5">
+                                {selectedInfoProvider === 'ozlo' && (
+                                    <div className="w-8 h-8 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+                                        <Sparkles size={16} />
+                                    </div>
+                                )}
+                                {selectedInfoProvider === 'gemini' && (
+                                    <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                                        <FileText size={16} />
+                                    </div>
+                                )}
+                                {selectedInfoProvider === 'openai' && (
+                                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                        <Cpu size={16} />
+                                    </div>
+                                )}
+                                <div>
+                                    <h2 className="modalTitle !text-sm">
+                                        {selectedInfoProvider === 'ozlo'
+                                            ? 'Ozlo Orgânico'
+                                            : selectedInfoProvider === 'gemini'
+                                            ? 'Google Gemini AI'
+                                            : 'OpenAI & Groq Cloud'}
+                                    </h2>
+                                    <span className="text-[10px] text-zinc-500 font-medium">
+                                        {selectedInfoProvider === 'ozlo'
+                                            ? 'Simulador Inteligente Residente'
+                                            : selectedInfoProvider === 'gemini'
+                                            ? 'Google Cloud Multimodal Foundation'
+                                            : 'Inferência de Alta Performance & Custom Endpoints'}
+                                    </span>
+                                </div>
+                            </div>
+                            <button className="modalCloseBtn" onClick={() => setSelectedInfoProvider(null)}>
+                                <X size={16} />
+                            </button>
+                        </div>
+
+                        <div className="modalBody gap-4 py-2">
+                            {/* Badges */}
+                            <div className="flex flex-wrap gap-1.5">
+                                {selectedInfoProvider === 'ozlo' && (
+                                    <>
+                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold flex items-center gap-1">
+                                            <ShieldCheck size={12} /> 100% Gratuito
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                                            <Zap size={12} /> Sem Gasto de Tokens
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
+                                            Zero API Keys
+                                        </span>
+                                    </>
+                                )}
+                                {selectedInfoProvider === 'gemini' && (
+                                    <>
+                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
+                                            <Zap size={12} /> Janela de 1M+ Tokens
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold">
+                                            Multimodalidade
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold">
+                                            Raciocínio Avançado
+                                        </span>
+                                    </>
+                                )}
+                                {selectedInfoProvider === 'openai' && (
+                                    <>
+                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                                            <Zap size={12} /> Centenas de Tokens/s (Groq)
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-semibold">
+                                            Custom Endpoints
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
+                                            Llama 3 & GPT-4o
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Description */}
+                            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-zinc-300 leading-relaxed">
+                                {selectedInfoProvider === 'ozlo' && (
+                                    <p>
+                                        O <strong>Ozlo Orgânico</strong> é o motor de simulação inteligente residente na aplicação. Ele foi arquitetado para permitir testes instantâneos e interações completas sem necessidade de chaves de API externas. Ele responde com conhecimento sobre a arquitetura do projeto, tecnologias e assistência conversacional imediata.
+                                    </p>
+                                )}
+                                {selectedInfoProvider === 'gemini' && (
+                                    <p>
+                                        O <strong>Google Gemini</strong> é a família de modelos fundacionais multimodais do Google. Ele se destaca por sua enorme janela de contexto e alta velocidade de processamento com o <code>gemini-1.5-flash</code> ou raciocínio profundo com o <code>gemini-1.5-pro</code>.
+                                    </p>
+                                )}
+                                {selectedInfoProvider === 'openai' && (
+                                    <p>
+                                        A integração <strong>OpenAI & Groq</strong> permite utilizar tanto os modelos da OpenAI quanto provedores de inferência ultra-rápida via LPU como a <strong>Groq Cloud</strong> (utilizando modelos abertos como Llama 3.3 70B com latência de milissegundos).
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="modalFooter justify-between">
+                            {onOpenIntegrations && selectedInfoProvider !== 'ozlo' ? (
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setSelectedInfoProvider(null);
+                                        onOpenIntegrations();
+                                    }}
+                                    className="!text-xs"
+                                >
+                                    <Settings size={12} className="mr-1 inline" />
+                                    {t('configure_credentials')}
+                                </Button>
+                            ) : (
+                                <div />
+                            )}
+
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    type="button"
+                                    variant="primary"
+                                    onClick={async () => {
+                                        const target = integrations.find((i) => i.provider === selectedInfoProvider);
+                                        if (target && onSelectActiveModel) {
+                                            await onSelectActiveModel(target.id);
+                                        }
+                                        setSelectedInfoProvider(null);
+                                    }}
+                                    className="!text-xs"
+                                >
+                                    <Check size={12} className="mr-1 inline" />
+                                    {t('activate_this_model')}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Modal de Limpeza de Mensagens */}
             {isClearModalOpen && (
