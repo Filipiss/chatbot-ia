@@ -9,7 +9,9 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Produção: PostgreSQL
+    # Produção: PostgreSQL (normaliza prefixo postgres:// para postgresql:// exigido pelo SQLAlchemy 2)
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     engine = create_engine(DATABASE_URL)
 else:
     # Desenvolvimento: SQLite local

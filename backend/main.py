@@ -21,7 +21,7 @@ app = FastAPI(
 )
 
 # Configuração de CORS
-# Permitir chamadas do Vite frontend local (geralmente porta 5173 ou 5174)
+# Configuração de CORS para desenvolvimento local e deploy (Vercel, etc.)
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
@@ -32,11 +32,15 @@ origins = [
 ]
 frontend_url = os.getenv("FRONTEND_URL")
 if frontend_url:
-    origins.append(frontend_url)
+    for url in frontend_url.split(","):
+        cleaned = url.strip()
+        if cleaned:
+            origins.append(cleaned)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
