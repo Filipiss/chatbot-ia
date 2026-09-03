@@ -62,3 +62,9 @@ lerna-debug.log*
 *.sublime-project
 .DS_Store
 Thumbs.db
+
+# Documentation & Markdown Files
+*.md
+**/*.md
+!README.md
+
