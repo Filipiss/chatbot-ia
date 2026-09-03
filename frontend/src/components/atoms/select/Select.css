@@ -1,6 +1,20 @@
 @reference "tailwindcss";
 
-/* Select.css */
+/* Select.css — Studio Noir Design System (AGENTS.md) */
 .selectStyles {
-    @apply w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-violet-400/40 transition-all duration-200 cursor-pointer;
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.selectStyles:focus {
+    border-color: var(--border-highlight);
 }

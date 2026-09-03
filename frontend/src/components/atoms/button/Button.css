@@ -1,18 +1,71 @@
 @reference "tailwindcss";
 
-/* Button.css - Blue Identity */
+/* Button.css — Studio Noir Design System (AGENTS.md) */
 .buttonBase {
-    @apply inline-flex items-center justify-center gap-2 font-semibold text-xs uppercase tracking-wider rounded-xl border cursor-pointer transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.buttonBase:active {
+    transform: scale(0.98);
+}
+
+.buttonBase:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .buttonPrimary {
-    @apply bg-gradient-to-tr from-blue-600 via-blue-500 to-sky-400 hover:from-blue-700 hover:via-blue-600 hover:to-sky-500 text-white border-white/10 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 hover:-translate-y-px px-5 py-2.5;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    padding: 0.55rem 1.15rem;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 0 22px rgba(59, 130, 246, 0.45);
 }
 
 .buttonSecondary {
-    @apply bg-white/[0.03] hover:bg-white/[0.07] border-white/10 hover:border-white/20 text-zinc-300 hover:text-white px-4 py-2;
+    background-color: var(--bg-surface);
+    border-color: var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+}
+
+.buttonSecondary:hover:not(:disabled) {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-highlight);
+    color: var(--text-primary);
+    transform: translateY(-1px);
 }
 
 .buttonDanger {
-    @apply bg-rose-500/10 hover:bg-rose-500 border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white hover:shadow-lg hover:shadow-rose-500/30 px-4 py-2;
+    background-color: rgba(244, 63, 94, 0.1);
+    border-color: rgba(244, 63, 94, 0.25);
+    color: #FB7185;
+    padding: 0.5rem 1rem;
+}
+
+.buttonDanger:hover:not(:disabled) {
+    background-color: #EF4444;
+    border-color: #EF4444;
+    color: #FFFFFF;
+    transform: translateY(-1px);
 }

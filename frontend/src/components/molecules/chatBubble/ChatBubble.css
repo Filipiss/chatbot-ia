@@ -1,39 +1,69 @@
 @reference "tailwindcss";
 
-/* ChatBubble.css - Blue Identity */
+/* ChatBubble.css — Studio Noir Design System (AGENTS.md) */
 .bubbleWrapper {
-    @apply flex gap-4 select-text;
-    animation: slideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    display: flex;
+    gap: 0.75rem;
+    user-select: text;
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .bubbleWrapperUser {
-    @apply justify-end;
+    justify-content: flex-end;
 }
 
 .bubbleWrapperAssistant {
-    @apply justify-start;
+    justify-content: flex-start;
 }
 
 .paraBase {
-    @apply text-xs md:text-sm leading-relaxed p-4 rounded-2xl max-w-2xl shadow-sm;
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    line-height: 1.65;
+    padding: 0.85rem 1.15rem;
+    border-radius: 8px;
+    max-width: 44rem;
+    box-shadow: var(--shadow-glass);
 }
 
 .paraUser {
-    @apply bg-blue-600/20 text-blue-100 border border-blue-500/30 rounded-tr-none;
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #F8FAFC;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-top-right-radius: 2px;
 }
 
 .paraAssistant {
-    @apply bg-[#0a0e22]/80 text-zinc-200 border border-white/[0.06] rounded-tl-none backdrop-blur-md;
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-top-left-radius: 2px;
 }
 
 .metaRow {
-    @apply flex items-center gap-3 mt-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    padding: 0 0.25rem;
 }
 
 .metaItem {
-    @apply flex items-center gap-1;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .metaTokens {
-    @apply text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20;
+    color: #34D399;
+    background-color: rgba(16, 185, 129, 0.1);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.25);
 }

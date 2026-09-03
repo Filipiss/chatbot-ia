@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ChatMessage } from '../../../api';
 import { Cpu, Clock, Check, Copy } from 'lucide-react';
+import { useI18n } from '../../../context/I18nContext';
 import './ChatBubble.css';
 
 interface ChatBubbleProps {
@@ -8,6 +9,7 @@ interface ChatBubbleProps {
 }
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
+    const { t } = useI18n();
     const isUser = message.role === 'user';
     const [copiedBlockIdx, setCopiedBlockIdx] = useState<number | null>(null);
 
@@ -53,12 +55,12 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
                                 {copiedBlockIdx === partIdx ? (
                                     <>
                                         <Check size={10} className="text-emerald-400" />
-                                        <span className="text-emerald-400">Copiado</span>
+                                        <span className="text-emerald-400">{t('copied')}</span>
                                     </>
                                 ) : (
                                     <>
                                         <Copy size={10} />
-                                        <span>Copiar</span>
+                                        <span>{t('copy')}</span>
                                     </>
                                 )}
                             </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { type Integration, testIntegration } from '../../../api';
 import { StatusIndicator } from '../../atoms/statusIndicator/StatusIndicator';
-import { Play, Eye, EyeOff, Save, Lock, Cpu, Sparkles, ShieldCheck, Check } from 'lucide-react';
+import { Play, Eye, EyeOff, Save, Lock, Sparkles, ShieldCheck, Check } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import './IntegrationCard.css';
 
@@ -24,6 +24,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
     );
     const [testMsg, setTestMsg] = useState('');
     const [saving, setSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     useEffect(() => {
         setApiKey(integration.api_key || '');
@@ -33,20 +34,32 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
         setTestStatus(integration.is_active ? 'active' : 'inactive');
     }, [integration]);
 
-    const handleSave = async () => {
+    const handleSave = async (e?: React.MouseEvent) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         setSaving(true);
         setTestMsg('');
+        setSaveSuccess(false);
         try {
             await onUpdate(integration.id, {
-                api_key: apiKey,
-                api_url: apiUrl || undefined,
-                model_name: modelName,
-                system_instruction: systemInstruction,
+                api_key: apiKey.trim() || undefined,
+                api_url: apiUrl.trim() || undefined,
+                model_name: modelName.trim(),
+                system_instruction: systemInstruction.trim(),
             });
+            setSaveSuccess(true);
+            setTestStatus('success');
             setTestMsg(t('settings_saved'));
-            setTimeout(() => setTestMsg(''), 3500);
+            setTimeout(() => {
+                setSaveSuccess(false);
+                setTestMsg('');
+            }, 3000);
         } catch (e: any) {
-            setTestMsg(`Erro: ${e.message}`);
+            console.error('Erro ao salvar integração:', e);
+            setTestStatus('error');
+            setTestMsg(`Erro ao salvar: ${e.message || 'Falha de comunicação'}`);
         } finally {
             setSaving(false);
         }
@@ -97,7 +110,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
         if (integration.provider === 'openai') {
             return (
                 <div className="providerBadgeIcon bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <Cpu size={16} />
+                    <Sparkles size={16} />
                 </div>
             );
         }
@@ -124,10 +137,10 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                         </div>
                         <p className="cardSubtitle">
                             {integration.provider === 'ozlo'
-                                ? 'Simulador inteligente local (sem chave de API)'
+                                ? t('card_sub_ozlo')
                                 : integration.provider === 'gemini'
-                                ? 'Google Gemini API Multimodal'
-                                : 'OpenAI SDK & Groq API Endpoint'}
+                                ? t('card_sub_gemini')
+                                : t('card_sub_openai')}
                         </p>
                     </div>
                 </div>
@@ -183,12 +196,12 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                             {isDev ? (
                                 <span className="text-[10px] text-violet-400 font-semibold flex items-center gap-1">
                                     <ShieldCheck size={11} />
-                                    Ambiente Dev (Visibilidade Habilitada)
+                                    {t('dev_env_notice')}
                                 </span>
                             ) : (
                                 <span className="text-[10px] text-zinc-500 flex items-center gap-1">
                                     <Lock size={11} />
-                                    Protegido em Produção
+                                    {t('prod_env_notice')}
                                 </span>
                             )}
                         </div>
@@ -207,7 +220,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                                     type="button"
                                     className="cardEyeBtn"
                                     onClick={() => setShowKey(!showKey)}
-                                    title={showKey ? 'Ocultar Chave' : 'Exibir Chave'}
+                                    title={showKey ? t('hide_key') : t('show_key')}
                                 >
                                     {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
                                 </button>
@@ -217,7 +230,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                 ) : (
                     <div className="ozloNotice">
                         <Sparkles size={14} className="text-violet-400 shrink-0" />
-                        <span>✦ Modelo residente em execução local. Nenhuma chave de API externa é necessária.</span>
+                        <span>{t('ozlo_resident_notice')}</span>
                     </div>
                 )}
 
@@ -255,14 +268,17 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                         type="button"
                         onClick={handleSave}
                         disabled={saving}
-                        className="zyriconPrimaryActionBtn"
+                        className={`zyriconPrimaryActionBtn ${saveSuccess ? 'zyriconPrimaryActionBtnSuccess' : ''}`}
+                        title={t('save_tooltip')}
                     >
                         {saving ? (
-                            <Save size={11} className="animate-spin text-white" />
+                            <Save size={12} className="animate-spin text-white" />
+                        ) : saveSuccess ? (
+                            <Check size={13} className="text-white" />
                         ) : (
-                            <Check size={12} className="text-white" />
+                            <Save size={12} className="text-white" />
                         )}
-                        <span>{saving ? t('saving') : t('save')}</span>
+                        <span>{saving ? t('saving') : saveSuccess ? t('saved') : t('save')}</span>
                     </button>
                 </div>
             </div>

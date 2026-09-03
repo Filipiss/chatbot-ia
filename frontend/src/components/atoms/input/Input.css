@@ -1,6 +1,24 @@
 @reference "tailwindcss";
 
-/* Input.css - Blue Identity */
+/* Input.css — Studio Noir Design System (AGENTS.md) */
 .inputStyles {
-    @apply w-full bg-[#060814]/80 border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-500/60 focus:bg-[#080c1d] transition-all duration-200;
+    width: 100%;
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    outline: none;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.inputStyles::placeholder {
+    color: var(--text-muted);
+}
+
+.inputStyles:focus {
+    border-color: var(--border-highlight);
+    background-color: var(--bg-surface);
 }

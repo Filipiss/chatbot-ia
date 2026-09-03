@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ChatSession } from '../../../api';
 import { Button } from '../../atoms/button/Button';
 import { Input } from '../../atoms/input/Input';
 import {
-    MessageSquare, Cpu, BarChart3, Plus, Trash2, Pencil, X,
-    Folder, PanelLeftClose, PanelLeft, Compass
+    MessageSquare, Settings, BarChart3, Plus, Trash2, Pencil, X,
+    Folder, PanelLeftClose, PanelLeft
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { FloatingControls } from '../../molecules/floatingControls/FloatingControls';
+import { RobotIntegrationLogo } from '../../atoms/robotIntegrationLogo/RobotIntegrationLogo';
 import './DashboardLayout.css';
 
 interface DashboardLayoutProps {
@@ -28,7 +29,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     onCreateSession, onDeleteSession, onUpdateSessionName, children,
 }) => {
     const { t } = useI18n();
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.innerWidth < 1024;
+        }
+        return false;
+    });
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 1024) {
+                setIsCollapsed(true);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createSessionName, setCreateSessionName] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -39,7 +55,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
     const featureTabs = [
         { id: 'chat' as const, label: t('tab_chat'), icon: <MessageSquare size={14} /> },
-        { id: 'integrations' as const, label: t('tab_integrations'), icon: <Cpu size={14} /> },
+        { id: 'integrations' as const, label: t('tab_integrations'), icon: <Settings size={14} /> },
         { id: 'analytics' as const, label: t('tab_analytics'), icon: <BarChart3 size={14} /> },
     ];
 
@@ -72,13 +88,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
     return (
         <div className="layoutRoot">
+            {/* Mobile Drawer Backdrop */}
+            {!isCollapsed && (
+                <div
+                    className="sidebarMobileBackdrop"
+                    onClick={() => setIsCollapsed(true)}
+                    aria-hidden="true"
+                />
+            )}
+
             {/* Zyricon Sidebar */}
             <aside className={`sidebar ${isCollapsed ? 'sidebarCollapsed' : ''}`}>
                 {/* Brand Header */}
                 <div className="brandSection">
                     <div className="brandLeft">
                         <div className="brandIcon">
-                            <Compass size={17} className="text-white" />
+                            <RobotIntegrationLogo size={22} />
                         </div>
                         {!isCollapsed && (
                             <span className="brandTitle">{t('brand_title')}</span>
@@ -120,7 +145,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         {featureTabs.map(({ id, label, icon }) => (
                             <button
                                 key={id}
-                                onClick={() => setActiveTab(id)}
+                                onClick={() => {
+                                    setActiveTab(id);
+                                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                                        setIsCollapsed(true);
+                                    }
+                                }}
                                 className={`zyriconNavBtn ${activeTab === id ? 'zyriconNavBtnActive' : 'zyriconNavBtnInactive'}`}
                                 title={label}
                             >
@@ -160,6 +190,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     onClick={() => {
                                         setActiveSessionId(s.id);
                                         if (activeTab !== 'chat') setActiveTab('chat');
+                                        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                                            setIsCollapsed(true);
+                                        }
                                     }}
                                     title={s.name}
                                 >
@@ -204,10 +237,40 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         )}
                     </div>
                 </div>
+
+                {/* Studio Signature Footer (AGENTS.md) */}
+                <div className="studioSidebarFooter">
+                    {!isCollapsed ? (
+                        <div className="studioAuthorBlock">
+                            <div className="studioAuthorInfo">
+                                <span className="studioAuthorPrefix">{t('author_prefix')}</span>
+                                <span className="studioAuthorName">Filipi Soares</span>
+                                <span className="studioAuthorRole">Full-Stack Developer</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex justify-center text-zinc-500 font-mono text-[10px]" title={`${t('author_prefix')} Filipi Soares`}>
+                            FS
+                        </div>
+                    )}
+                </div>
             </aside>
 
             {/* Main Area */}
-            <main className="mainArea">{children}</main>
+            <main className="mainArea">
+                {isCollapsed && (
+                    <button
+                        type="button"
+                        onClick={() => setIsCollapsed(false)}
+                        className="mobileSidebarTrigger"
+                        title={t('collapse_sidebar')}
+                        aria-label={t('collapse_sidebar')}
+                    >
+                        <PanelLeft size={16} />
+                    </button>
+                )}
+                {children}
+            </main>
 
             {/* Floating Dock: Bottom Right Corner */}
             <FloatingControls />

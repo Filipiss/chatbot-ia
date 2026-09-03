@@ -2,7 +2,7 @@ import React from 'react';
 import { useAccessibility, type FontSize } from '../../../context/AccessibilityContext';
 import { useI18n } from '../../../context/I18nContext';
 import type { Language } from '../../../i18n/translations';
-import { SlidersHorizontal, X, RotateCcw, Type, Contrast, ZapOff, BookOpen, Check, Globe } from 'lucide-react';
+import { X, RotateCcw, Type, Contrast, ZapOff, BookOpen, Check, Globe, Accessibility } from 'lucide-react';
 import { Button } from '../../atoms/button/Button';
 import './AccessibilityMenu.css';
 
@@ -41,8 +41,8 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ isOpen, on
             <div className="modalContent a11yModalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
                     <div className="flex items-center gap-2.5 text-violet-400">
-                        <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                            <SlidersHorizontal size={14} className="text-violet-400" />
+                        <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
+                            <Accessibility size={15} className="text-sky-400" />
                         </div>
                         <h2 className="modalTitle">{t('accessibility_panel_title')}</h2>
                     </div>

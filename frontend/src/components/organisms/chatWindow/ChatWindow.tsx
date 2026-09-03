@@ -6,11 +6,13 @@ import {
 import { ChatBubble } from '../../molecules/chatBubble/ChatBubble';
 import {
     Sparkles, Download, Trash2, RotateCcw, X, Paperclip,
-    ChevronDown, ArrowUp, Lightbulb, FileText, Code2, Cpu,
+    ChevronDown, ArrowUp, ArrowUpRight, Lightbulb, FileText, Code2, Cpu,
     Settings, Check, ShieldCheck, Zap
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { Button } from '../../atoms/button/Button';
+import { StudioClock } from '../../atoms/studioClock/StudioClock';
+import { AiOrchestratorHero } from '../../atoms/aiOrchestratorHero/AiOrchestratorHero';
 import './ChatWindow.css';
 
 interface ChatWindowProps {
@@ -251,7 +253,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         type="button"
                         className="zyriconModelPill"
                         onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                        title="Clique para selecionar e ativar um modelo"
+                        title={t('select_model_tooltip')}
                     >
                         <span className={`zyriconModelDot ${getProviderDotColor(activeIntegration.provider)}`} />
                         <span className="zyriconModelName">
@@ -264,8 +266,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     {isModelDropdownOpen && (
                         <div className="zyriconDropdownMenu animate-fade-in">
                             <div className="zyriconDropdownHeader">
-                                <span>Modelos Disponíveis</span>
-                                <span className="text-[9px] text-sky-400">Clique para Ativar</span>
+                                <span>{t('available_models')}</span>
+                                <span className="text-[9px] text-sky-400">{t('click_to_activate')}</span>
                             </div>
                             <div className="flex flex-col gap-1 p-1">
                                 {integrations.map((item) => (
@@ -289,11 +291,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                         </div>
                                         {item.is_active ? (
                                             <span className="flex items-center gap-1 text-[10px] font-bold text-sky-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
-                                                <Check size={10} /> Ativo
+                                                <Check size={10} /> {t('active')}
                                             </span>
                                         ) : (
                                             <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300">
-                                                Ativar
+                                                {t('activate')}
                                             </span>
                                         )}
                                     </button>
@@ -302,6 +304,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* Live Studio Clock Oficial (AGENTS.md) */}
+                <StudioClock />
 
                 {/* Right Action Pills */}
                 <div className="flex items-center gap-2">
@@ -359,50 +364,52 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             <div className="zyriconFeedContainer">
                 {!hasMessages ? (
                     <div className="zyriconHeroSection">
-                        {/* 3D Glowing Cosmic Orb */}
-                        <div className="zyriconOrbContainer">
-                            <div className="zyriconOrbHalo" />
-                            <div className="zyriconOrbCore" />
-                            <div className="zyriconOrbHighlight" />
-                        </div>
+                        {/* Architectural Multi-Model AI Orchestrator Emblem */}
+                        <AiOrchestratorHero />
 
-                        {/* Hero Headline */}
-                        <h2 className="zyriconHeroHeadline">{t('hero_headline')}</h2>
+                        {/* Hero Headline & Subtitle */}
+                        <div className="zyriconHeroTextWrapper">
+                            <h2 className="zyriconHeroHeadline">{t('hero_headline')}</h2>
+                            <p className="zyriconHeroSubheadline">{t('hero_subheadline')}</p>
+                        </div>
 
                         {/* Suggestion Action Chips */}
                         <div className="zyriconChipsWrapper">
                             <button
                                 type="button"
-                                className="zyriconChip"
+                                className="zyriconChip group"
                                 onClick={() => {
-                                    setInputText("Me dê ideias inovadoras e práticas para desenvolver um chatbot inteligente.");
+                                    setInputText(t('chip_brainstorm_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
                                 }}
                             >
-                                <span>{t('chip_brainstorm')}</span>
                                 <Lightbulb size={13} className="text-amber-400" />
+                                <span>{t('chip_brainstorm')}</span>
+                                <ArrowUpRight size={11} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </button>
                             <button
                                 type="button"
-                                className="zyriconChip"
+                                className="zyriconChip group"
                                 onClick={() => {
-                                    setInputText("Crie um plano passo a passo para estruturar a integração de múltiplos provedores de IA.");
+                                    setInputText(t('chip_make_plan_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
                                 }}
                             >
-                                <span>{t('chip_make_plan')}</span>
                                 <FileText size={13} className="text-sky-400" />
+                                <span>{t('chip_make_plan')}</span>
+                                <ArrowUpRight size={11} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </button>
                             <button
                                 type="button"
-                                className="zyriconChip"
+                                className="zyriconChip group"
                                 onClick={() => {
-                                    setInputText("Gere um exemplo de código assíncrono para consumir APIs de IA em tempo real.");
+                                    setInputText(t('chip_generate_code_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
                                 }}
                             >
-                                <span>{t('chip_generate_code')}</span>
                                 <Code2 size={13} className="text-emerald-400" />
+                                <span>{t('chip_generate_code')}</span>
+                                <ArrowUpRight size={11} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </button>
                         </div>
                     </div>
@@ -442,7 +449,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <button
                                 type="button"
                                 className="zyriconToolBtn"
-                                title="Anexar arquivo de texto ou código (.txt, .md, .json, .py, .ts...)"
+                                title={t('attach_tooltip')}
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 <Paperclip size={13} />
@@ -456,7 +463,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 onClick={() => handleSend()}
                                 disabled={!inputText.trim() || isSending}
                                 className="zyriconSendBtn"
-                                title="Enviar mensagem"
+                                title={t('send_tooltip')}
                             >
                                 <ArrowUp size={16} />
                             </button>
@@ -471,7 +478,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <div
                             className="zyriconFeatureCard group"
                             onClick={() => setSelectedInfoProvider('ozlo')}
-                            title="Clique para saber mais sobre o Ozlo Orgânico"
+                            title={t('card_ozlo_tooltip')}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -479,7 +486,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 </div>
                                 <span className="zyriconFeatureBadge">{t('card_ozlo_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">{t('card_ozlo_title')}</h4>
+                            <h4 className="zyriconFeatureTitle">
+                                <span>{t('card_ozlo_title')}</span>
+                                <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
+                            </h4>
                             <p className="zyriconFeatureDesc">{t('card_ozlo_desc')}</p>
                         </div>
 
@@ -487,7 +497,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <div
                             className="zyriconFeatureCard group"
                             onClick={() => setSelectedInfoProvider('gemini')}
-                            title="Clique para saber mais sobre o Google Gemini"
+                            title={t('card_gemini_tooltip')}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -495,7 +505,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 </div>
                                 <span className="zyriconFeatureBadge">{t('card_gemini_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">{t('card_gemini_title')}</h4>
+                            <h4 className="zyriconFeatureTitle">
+                                <span>{t('card_gemini_title')}</span>
+                                <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
+                            </h4>
                             <p className="zyriconFeatureDesc">{t('card_gemini_desc')}</p>
                         </div>
 
@@ -503,7 +516,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <div
                             className="zyriconFeatureCard group"
                             onClick={() => setSelectedInfoProvider('openai')}
-                            title="Clique para saber mais sobre OpenAI e Groq"
+                            title={t('card_openai_tooltip')}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="zyriconFeatureIconBox">
@@ -511,7 +524,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 </div>
                                 <span className="zyriconFeatureBadge">{t('card_openai_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">{t('card_openai_title')}</h4>
+                            <h4 className="zyriconFeatureTitle">
+                                <span>{t('card_openai_title')}</span>
+                                <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
+                            </h4>
                             <p className="zyriconFeatureDesc">{t('card_openai_desc')}</p>
                         </div>
                     </div>
@@ -549,10 +565,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                     </h2>
                                     <span className="text-[10px] text-zinc-500 font-medium">
                                         {selectedInfoProvider === 'ozlo'
-                                            ? 'Simulador Inteligente Residente'
+                                            ? t('modal_ozlo_sub')
                                             : selectedInfoProvider === 'gemini'
-                                            ? 'Google Cloud Multimodal Foundation'
-                                            : 'Inferência de Alta Performance & Custom Endpoints'}
+                                            ? t('modal_gemini_sub')
+                                            : t('modal_openai_sub')}
                                     </span>
                                 </div>
                             </div>
@@ -567,36 +583,36 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 {selectedInfoProvider === 'ozlo' && (
                                     <>
                                         <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
-                                            <ShieldCheck size={12} /> 100% Gratuito
+                                            <ShieldCheck size={12} /> {t('badge_free')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
-                                            <Zap size={12} /> Sem Gasto de Tokens
+                                            <Zap size={12} /> {t('badge_no_tokens')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
-                                            Zero API Keys
+                                            {t('badge_zero_keys')}
                                         </span>
                                     </>
                                 )}
                                 {selectedInfoProvider === 'gemini' && (
                                     <>
                                         <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
-                                            <Zap size={12} /> Janela de 1M+ Tokens
+                                            <Zap size={12} /> {t('badge_1m_tokens')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
-                                            Multimodalidade
+                                            {t('badge_multimodal')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold">
-                                            Raciocínio Avançado
+                                            {t('badge_advanced_reasoning')}
                                         </span>
                                     </>
                                 )}
                                 {selectedInfoProvider === 'openai' && (
                                     <>
                                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
-                                            <Zap size={12} /> Centenas de Tokens/s (Groq)
+                                            <Zap size={12} /> {t('badge_tokens_speed')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
-                                            Custom Endpoints
+                                            {t('badge_custom_endpoints')}
                                         </span>
                                         <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
                                             Llama 3 & GPT-4o
@@ -608,19 +624,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             {/* Description */}
                             <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-zinc-300 leading-relaxed">
                                 {selectedInfoProvider === 'ozlo' && (
-                                    <p>
-                                        O <strong>Ozlo Orgânico</strong> é o motor de simulação inteligente residente na aplicação. Ele foi arquitetado para permitir testes instantâneos e interações completas sem necessidade de chaves de API externas. Ele responde com conhecimento sobre a arquitetura do projeto, tecnologias e assistência conversacional imediata.
-                                    </p>
+                                    <p>{t('modal_ozlo_desc')}</p>
                                 )}
                                 {selectedInfoProvider === 'gemini' && (
-                                    <p>
-                                        O <strong>Google Gemini</strong> é a família de modelos fundacionais multimodais do Google. Ele se destaca por sua enorme janela de contexto e alta velocidade de processamento com o <code>gemini-1.5-flash</code> ou raciocínio profundo com o <code>gemini-1.5-pro</code>.
-                                    </p>
+                                    <p>{t('modal_gemini_desc')}</p>
                                 )}
                                 {selectedInfoProvider === 'openai' && (
-                                    <p>
-                                        A integração <strong>OpenAI & Groq</strong> permite utilizar tanto os modelos da OpenAI quanto provedores de inferência ultra-rápida via LPU como a <strong>Groq Cloud</strong> (utilizando modelos abertos como Llama 3.3 70B com latência de milissegundos).
-                                    </p>
+                                    <p>{t('modal_openai_desc')}</p>
                                 )}
                             </div>
                         </div>

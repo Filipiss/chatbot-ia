@@ -1,46 +1,102 @@
 @reference "tailwindcss";
 
-/* FloatingControls.css - Blue Identity */
+/* FloatingControls.css — Studio Noir Design System (AGENTS.md) */
 .floatingDock {
-    @apply fixed bottom-5 right-5 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl border border-white/10 bg-[#0a0e22]/90 backdrop-blur-xl shadow-2xl shadow-blue-500/10 transition-all duration-300 hover:border-blue-500/40 hover:shadow-blue-500/25 hover:scale-[1.02];
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    background-color: var(--bg-surface);
+    box-shadow: var(--shadow-glass);
+    transition: all var(--transition-fast);
+}
+
+.floatingDock:hover {
+    border-color: var(--border-highlight);
+    transform: translateY(-1px);
 }
 
 [data-theme="light"] .floatingDock {
-    @apply border-slate-300 bg-white/95 shadow-xl shadow-slate-900/5 hover:border-blue-400 hover:shadow-blue-500/10;
+    border-color: var(--border-default);
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .floatingBtn {
-    @apply flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-transparent text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.floatingBtn:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-card-hover);
 }
 
 [data-theme="light"] .floatingBtn {
-    @apply text-slate-600 hover:text-slate-900;
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .floatingBtn:hover {
+    color: var(--text-primary);
+    background-color: #F1F5F9;
 }
 
 .themeBtn:hover {
-    @apply bg-amber-400/10 border-amber-400/20 text-amber-300;
-}
-
-[data-theme="light"] .themeBtn:hover {
-    @apply bg-amber-50 border-amber-200 text-amber-700;
+    color: #FBBF24;
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
 }
 
 .a11yBtn:hover {
-    @apply bg-blue-500/10 border-blue-500/20 text-sky-300;
-}
-
-[data-theme="light"] .a11yBtn:hover {
-    @apply bg-blue-50 border-blue-200 text-blue-700;
+    color: #60A5FA;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.25);
 }
 
 .floatingDivider {
-    @apply w-px h-5 bg-white/10 my-auto;
-}
-
-[data-theme="light"] .floatingDivider {
-    @apply bg-slate-200;
+    width: 1px;
+    height: 1.25rem;
+    background-color: var(--border-subtle);
+    margin: auto 0.15rem;
 }
 
 .floatingLangBadge {
-    @apply text-xs leading-none select-none;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+    .floatingDock {
+        bottom: 0.75rem;
+        right: 0.75rem;
+        padding: 0.2rem;
+        gap: 0.2rem;
+    }
+
+    .floatingBtn {
+        padding: 0.4rem;
+    }
+
+    .floatingDivider {
+        height: 1rem;
+    }
 }
