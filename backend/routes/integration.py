@@ -40,23 +40,25 @@ def delete_integration(id: int, db: Session = Depends(get_db)):
 @router.post("/{id}/test")
 async def test_integration(id: int, db: Session = Depends(get_db)):
     """Testa se as configurações de conexão e chave da API funcionam."""
-    db_obj = IntegrationController.get_by_id(id, db)
+    db_obj = IntegrationController.get_db_model(id, db)
     if not db_obj:
         raise HTTPException(status_code=404, detail="Integração não encontrada.")
         
-    # Salva o estado atual do active toggle
-    active_bkp = db_obj.is_active
+    # Salva o estado atual dos toggles
+    active_integrations = [item.id for item in db.query(Integration).filter(Integration.is_active == True).all()]
     
     try:
-        # Ativa temporariamente na sessão local do DB para teste
+        # Ativa temporariamente este provedor no DB para o teste
+        db.query(Integration).update({Integration.is_active: False})
         db_obj.is_active = True
+        db.commit()
         
         # Faz uma chamada simples para o provedor
         test_history = []
         response_chunks = []
         
         # Chama o gerador asíncrono
-        async for chunk in LLMService.generate_response_stream("Olá, isso é um teste de conexão rápido de 1 frase.", test_history, db):
+        async for chunk in LLMService.generate_response_stream("Olá, confirme a conexão em uma frase curta.", test_history, db):
             if chunk["type"] == "content":
                 response_chunks.append(chunk["content"])
             elif chunk["type"] == "done":
@@ -70,6 +72,8 @@ async def test_integration(id: int, db: Session = Depends(get_db)):
     except Exception as e:
         return {"status": "error", "message": f"Erro de conexão: {str(e)}"}
     finally:
-        # Restaura o estado anterior
-        db_obj.is_active = active_bkp
+        # Restaura o estado anterior dos provedores
+        db.query(Integration).update({Integration.is_active: False})
+        if active_integrations:
+            db.query(Integration).filter(Integration.id.in_(active_integrations)).update({Integration.is_active: True}, synchronize_session=False)
         db.commit()

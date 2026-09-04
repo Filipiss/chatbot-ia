@@ -25,6 +25,8 @@ class IntegrationUpdate(BaseModel):
 
 class IntegrationResponse(IntegrationBase):
     id: int
+    has_api_key: bool = Field(False, description="Whether an active key exists (server environment or DB)")
+    is_server_managed: bool = Field(False, description="Whether the key is provided directly via server environment variables")
     created_at: datetime
     updated_at: datetime
 

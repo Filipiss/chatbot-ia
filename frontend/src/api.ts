@@ -4,6 +4,8 @@ export interface Integration {
   name: string;
   model_name: string;
   api_key?: string;
+  has_api_key?: boolean;
+  is_server_managed?: boolean;
   api_url?: string;
   is_active: boolean;
   system_instruction?: string;

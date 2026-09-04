@@ -6,6 +6,7 @@ import google.generativeai as genai
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from models.integration import Integration
+from services.crypto_service import CryptoService
 from typing import Optional, List, Dict, Any, Generator, AsyncGenerator
 
 class LLMService:
@@ -33,6 +34,22 @@ class LLMService:
         provider = integration.provider.lower()
         model_name = integration.model_name
         system_instruction = integration.system_instruction or "Você é um assistente útil e simpático."
+
+        # Obter chave real protegida (prioridade absoluta para variável de ambiente no servidor)
+        raw_api_key = None
+        if provider == "gemini":
+            raw_api_key = os.getenv("GEMINI_API_KEY")
+        elif provider == "openai":
+            raw_api_key = os.getenv("OPENAI_API_KEY")
+
+        # Se não houver variável de ambiente, busca no banco (descriptografando se necessário)
+        if not raw_api_key or not raw_api_key.strip():
+            db_key = integration.api_key
+            if db_key and not CryptoService.is_masked(db_key):
+                if CryptoService.is_encrypted(db_key):
+                    raw_api_key = CryptoService.decrypt_key(db_key)
+                else:
+                    raw_api_key = db_key
 
         content_yielded = ""
 
@@ -99,8 +116,8 @@ class LLMService:
                         "- *Qual a stack utilizada?*\n"
                         "- *Como funcionam os gráficos?*\n"
                         "- *Mostre um exemplo de código*\n\n"
-                        "Caso queira testar com modelos reais (como **Gemini 3.5 Flash** ou **OpenAI GPT-4o-mini**), basta ir em **Configurações**, "
-                        "inserir sua API Key e ativar o respectivo provedor!"
+                        "Caso queira testar com modelos reais (como **Gemini 3.6 Flash** ou **OpenAI GPT-4o-mini / Groq**), basta ir em **Configurações**, "
+                        "onde suas credenciais operam com proteção e criptografia de ponta a ponta!"
                     )
 
                 chunk_size = 8
@@ -111,19 +128,24 @@ class LLMService:
                     await asyncio.sleep(0.02)
 
             elif provider == "gemini":
-                if not integration.api_key or integration.api_key.strip() == "":
+                if not raw_api_key or raw_api_key.strip() == "":
                     yield {"type": "content", "content": "**[Aviso] Provedor Google Gemini Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key do Gemini e clique em **Salvar** para habilitar o chat orgânico."}
                     return
-                # Configurar Gemini
-                genai.configure(api_key=integration.api_key)
+                # Configurar Gemini com a chave segura
+                genai.configure(api_key=raw_api_key.strip())
+                
+                # Migração transparente de versões antigas do Gemini para 3.6-flash
+                actual_model = model_name
+                if actual_model in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-pro"]:
+                    actual_model = "gemini-3.6-flash"
+
                 # O SDK do Gemini recebe system_instruction na inicialização
                 model = genai.GenerativeModel(
-                    model_name=model_name,
+                    model_name=actual_model,
                     system_instruction=system_instruction
                 )
                 
                 # Formatar histórico para o Gemini
-                # Gemini usa: [{'role': 'user', 'parts': [...]}, {'role': 'model', 'parts': [...]}]
                 gemini_history = []
                 for msg in history:
                     role = "user" if msg["role"] == "user" else "model"
@@ -142,12 +164,12 @@ class LLMService:
                         pass
 
             elif provider == "openai":
-                if not integration.api_key or integration.api_key.strip() == "":
-                    yield {"type": "content", "content": "**[Aviso] Provedor OpenAI Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key da OpenAI e clique em **Salvar** para habilitar o chat orgânico."}
+                if not raw_api_key or raw_api_key.strip() == "":
+                    yield {"type": "content", "content": "**[Aviso] Provedor OpenAI/Groq Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key da OpenAI e clique em **Salvar** para habilitar o chat orgânico."}
                     return
-                # Configurar OpenAI (permite trocar a URL para Groq, DeepSeek, OpenRouter, etc.)
+                # Configurar OpenAI/Groq com a chave segura
                 client = OpenAI(
-                    api_key=integration.api_key,
+                    api_key=raw_api_key.strip(),
                     base_url=integration.api_url if (integration.api_url and integration.api_url.strip() != "") else None
                 )
                 

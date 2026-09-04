@@ -80,33 +80,42 @@ def seed_default_integrations():
                 ),
                 Integration(
                     provider="openai",
-                    name="OpenAI GPT-4o Mini",
-                    model_name="gpt-4o-mini",
+                    name="Groq Compound",
+                    model_name="groq/compound",
                     api_key="",
-                    api_url=None,
+                    api_url="https://api.groq.com/openai/v1",
                     is_active=False,
-                    system_instruction="Você é um assistente OpenAI GPT-4o Mini. Responda de forma sucinta e inteligente."
+                    system_instruction="Você é um assistente OpenAI GPT-4o Mini / Groq. Responda de forma sucinta e inteligente."
                 )
             ]
             db.add_all(defaults)
             db.commit()
             print("→ Integrações iniciadas por padrão no banco de dados com sucesso.")
         else:
+            # Atualiza modelos legados para as versões mais atuais
+            gemini_row = db.query(Integration).filter(Integration.provider == "gemini").first()
+            if gemini_row and gemini_row.model_name in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-pro"]:
+                gemini_row.model_name = "gemini-3.6-flash"
+
+            openai_row = db.query(Integration).filter(Integration.provider == "openai").first()
+            if openai_row and not openai_row.api_url:
+                openai_row.api_url = "https://api.groq.com/openai/v1"
+                openai_row.model_name = "groq/compound"
+
             ozlo_exists = db.query(Integration).filter(Integration.provider == "ozlo").first()
             if not ozlo_exists:
-                db.query(Integration).update({Integration.is_active: False})
                 ozlo = Integration(
                     provider="ozlo",
                     name="Ozlo Orgânico (Simulador Demo)",
                     model_name="ozlo-v1-sim",
                     api_key="demo-key",
                     api_url=None,
-                    is_active=True,
+                    is_active=False,
                     system_instruction="Você é o Ozlo, assistente inteligente do portfólio. Responda em português."
                 )
                 db.add(ozlo)
-                db.commit()
-                print("→ Integração do simulador 'ozlo' adicionada e ativada.")
+
+            db.commit()
     except Exception as e:
         print(f"Erro ao semear integrações: {e}")
         db.rollback()

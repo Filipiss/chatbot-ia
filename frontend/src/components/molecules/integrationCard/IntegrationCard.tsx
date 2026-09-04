@@ -12,9 +12,9 @@ interface IntegrationCardProps {
 
 export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, onUpdate }) => {
     const { t } = useI18n();
-    const isDev = import.meta.env.DEV; // Only allow unmasking in local dev mode
 
     const [apiKey, setApiKey] = useState(integration.api_key || '');
+    const [isDirtyKey, setIsDirtyKey] = useState(false);
     const [apiUrl, setApiUrl] = useState(integration.api_url || '');
     const [modelName, setModelName] = useState(integration.model_name || '');
     const [systemInstruction, setSystemInstruction] = useState(integration.system_instruction || '');
@@ -28,11 +28,25 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
 
     useEffect(() => {
         setApiKey(integration.api_key || '');
+        setIsDirtyKey(false);
         setApiUrl(integration.api_url || '');
         setModelName(integration.model_name || '');
         setSystemInstruction(integration.system_instruction || '');
         setTestStatus(integration.is_active ? 'active' : 'inactive');
     }, [integration]);
+
+    const buildPayload = (): Partial<Integration> => {
+        const payload: Partial<Integration> = {
+            api_url: apiUrl.trim() || undefined,
+            model_name: modelName.trim(),
+            system_instruction: systemInstruction.trim(),
+        };
+        // Envia api_key SOMENTE se o usuário digitou uma nova chave e não deixou a máscara
+        if (isDirtyKey && apiKey.trim() && !apiKey.trim().startsWith('*') && !apiKey.trim().startsWith('•')) {
+            payload.api_key = apiKey.trim();
+        }
+        return payload;
+    };
 
     const handleSave = async (e?: React.MouseEvent) => {
         if (e) {
@@ -43,12 +57,8 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
         setTestMsg('');
         setSaveSuccess(false);
         try {
-            await onUpdate(integration.id, {
-                api_key: apiKey.trim() || undefined,
-                api_url: apiUrl.trim() || undefined,
-                model_name: modelName.trim(),
-                system_instruction: systemInstruction.trim(),
-            });
+            await onUpdate(integration.id, buildPayload());
+            setIsDirtyKey(false);
             setSaveSuccess(true);
             setTestStatus('success');
             setTestMsg(t('settings_saved'));
@@ -79,12 +89,8 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
         setTestStatus('testing');
         setTestMsg(t('test_start'));
         try {
-            await onUpdate(integration.id, {
-                api_key: apiKey,
-                api_url: apiUrl || undefined,
-                model_name: modelName,
-                system_instruction: systemInstruction,
-            });
+            await onUpdate(integration.id, buildPayload());
+            setIsDirtyKey(false);
             const res = await testIntegration(integration.id);
             if (res.status === 'success') {
                 setTestStatus('success');
@@ -193,39 +199,44 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                                 <Lock size={11} className="text-zinc-500" />
                                 {t('api_key_label')}
                             </label>
-                            {isDev ? (
-                                <span className="text-[10px] text-violet-400 font-semibold flex items-center gap-1">
+                            {integration.has_api_key ? (
+                                <span className="text-[10px] text-emerald-400 font-mono font-medium flex items-center gap-1">
                                     <ShieldCheck size={11} />
-                                    {t('dev_env_notice')}
+                                    {t('key_encrypted_notice')}
                                 </span>
                             ) : (
-                                <span className="text-[10px] text-zinc-500 flex items-center gap-1">
+                                <span className="text-[10px] text-zinc-500 font-mono font-medium flex items-center gap-1">
                                     <Lock size={11} />
-                                    {t('prod_env_notice')}
+                                    {t('key_missing_notice')}
                                 </span>
                             )}
                         </div>
 
                         <div className="cardKeyContainer">
                             <input
-                                type={isDev && showKey ? 'text' : 'password'}
+                                type={showKey ? 'text' : 'password'}
                                 value={apiKey}
-                                onChange={(e) => setApiKey(e.target.value)}
+                                onChange={(e) => {
+                                    setApiKey(e.target.value);
+                                    setIsDirtyKey(true);
+                                }}
                                 placeholder={t('api_key_placeholder')}
                                 className="zyriconFieldInput !pr-10 font-mono text-xs"
                                 autoComplete="new-password"
                             />
-                            {isDev && (
-                                <button
-                                    type="button"
-                                    className="cardEyeBtn"
-                                    onClick={() => setShowKey(!showKey)}
-                                    title={showKey ? t('hide_key') : t('show_key')}
-                                >
-                                    {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
-                                </button>
-                            )}
+                            <button
+                                type="button"
+                                className="cardEyeBtn"
+                                onClick={() => setShowKey(!showKey)}
+                                title={showKey ? t('hide_key') : t('show_key')}
+                            >
+                                {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
+                            </button>
                         </div>
+                        <p className="text-[10.5px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 pt-0.5">
+                            <Lock size={10} className="text-emerald-500 shrink-0" />
+                            <span>{t('key_encrypted_subnotice')}</span>
+                        </p>
                     </div>
                 ) : (
                     <div className="ozloNotice">
