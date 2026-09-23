@@ -1,12 +1,10 @@
 import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from config.settings import settings
 
-load_dotenv()
-
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = settings.DATABASE_URL
 
 if DATABASE_URL:
     # Produção: PostgreSQL (normaliza prefixo postgres:// para postgresql:// exigido pelo SQLAlchemy 2)
@@ -14,7 +12,7 @@ if DATABASE_URL:
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     engine = create_engine(DATABASE_URL)
 else:
-    # Desenvolvimento: SQLite local
+    # Desenvolvimento: SQLite local persistido na pasta database/ raiz do projeto
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DB_DIR = os.path.join(BASE_DIR, "..", "..", "database")
     os.makedirs(DB_DIR, exist_ok=True)
@@ -27,14 +25,14 @@ Base = declarative_base()
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
-    """Ativa foreign keys no SQLite."""
+    """Garante integridade referencial ativando foreign keys no SQLite."""
     if type(dbapi_connection).__name__ in ("sqlite3.Connection", "Connection"):
         cursor = dbapi_connection.cursor()
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
 
 def get_db():
-    """Generates database session for dependencies."""
+    """Dependência FastAPI que provê uma sessão limpa do SQLAlchemy por requisição."""
     db = SessionLocal()
     try:
         yield db

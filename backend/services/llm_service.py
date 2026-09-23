@@ -3,17 +3,22 @@ import time
 import json
 import httpx
 import asyncio
+from typing import Optional, List, Dict, Any, AsyncGenerator
 import google.generativeai as genai
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from models.integration import Integration
-from services.crypto_service import CryptoService
-from typing import Optional, List, Dict, Any, Generator, AsyncGenerator
+from repositories.integration_repository import IntegrationRepository
+from utils.crypto import CryptoUtils
+from utils.helpers import estimate_tokens, calculate_latency
+from config.settings import settings
 
 class LLMService:
+    """Serviço de orquestração e streaming de múltiplos provedores de Large Language Models."""
+
     @staticmethod
     def get_active_integration(db: Session) -> Optional[Integration]:
-        return db.query(Integration).filter(Integration.is_active == True).first()
+        return IntegrationRepository.get_active(db)
 
     @classmethod
     async def generate_response_stream(
@@ -39,16 +44,16 @@ class LLMService:
         # Obter chave real protegida (prioridade absoluta para variável de ambiente no servidor)
         raw_api_key = None
         if provider == "gemini":
-            raw_api_key = os.getenv("GEMINI_API_KEY")
+            raw_api_key = settings.GEMINI_API_KEY
         elif provider == "openai":
-            raw_api_key = os.getenv("OPENAI_API_KEY")
+            raw_api_key = settings.OPENAI_API_KEY
 
         # Se não houver variável de ambiente, busca no banco (descriptografando se necessário)
         if not raw_api_key or not raw_api_key.strip():
             db_key = integration.api_key
-            if db_key and not CryptoService.is_masked(db_key):
-                if CryptoService.is_encrypted(db_key):
-                    raw_api_key = CryptoService.decrypt_key(db_key)
+            if db_key and not CryptoUtils.is_masked(db_key):
+                if CryptoUtils.is_encrypted(db_key):
+                    raw_api_key = CryptoUtils.decrypt_key(db_key)
                 else:
                     raw_api_key = db_key
 
@@ -59,94 +64,66 @@ class LLMService:
                 query = prompt.lower().strip()
                 if "projeto" in query or "portfolio" in query or "portfólio" in query:
                     reply = (
-                        "Este é o **Integrador de IA e Chatbot Orgânico**, um projeto completo de portfólio "
-                        "desenvolvido para demonstrar habilidades em engenharia de software Full Stack.\n\n"
-                        "### ✦ Tecnologias Utilizadas:\n"
-                        "- **Frontend:** React 19, TypeScript, Tailwind CSS v4, Lucide Icons.\n"
-                        "- **Backend:** FastAPI (Python), SQLAlchemy ORM, Uvicorn, SQLite/PostgreSQL.\n\n"
-                        "Ele gerencia sessões de chat, métricas analíticas e integrações com **Google Gemini e OpenAI** de forma integrada!"
+                        "Este é o **Integrador de IA e Chatbot Orgânico**, um ecossistema completo de engenharia de software "
+                        "desenvolvido para demonstrar habilidades avançadas em arquitetura Full Stack.\n\n"
+                        "### ✦ Pilares Técnicos:\n"
+                        "- **Frontend:** React 19, TypeScript, Tailwind CSS v4, Framer Motion e Atomic Design.\n"
+                        "- **Backend:** FastAPI assíncrono, SQLAlchemy ORM, Uvicorn, arquitetura em camadas e SQLite/PostgreSQL.\n\n"
+                        "Ele orquestra sessões de chat, métricas analíticas e integrações com **Google Gemini, OpenAI e Groq** sob um único contrato!"
                     )
                 elif "tecnologia" in query or "stack" in query:
                     reply = (
                         "A stack tecnológica deste projeto foi arquitetada seguindo as melhores práticas de mercado:\n\n"
-                        "1. **Frontend Moderno:** React 19 com compilação ultra-rápida via Vite. Uso do recém-lançado **Tailwind CSS v4** "
-                        "usando o padrão *CSS-First* com companheiros de estilização limpos.\n"
-                        "2. **Backend Concorrente:** **FastAPI** em Python, que suporta streams assíncronos nativos para as respostas em tempo real "
-                        "dos provedores de LLM.\n"
-                        "3. **Banco de Dados Relacional:** SQLAlchemy com migrações automáticas entre SQLite (ambiente local) e PostgreSQL (produção)."
+                        "1. **Frontend Moderno:** React 19 com compilação ultra-rápida via Vite. Uso do **Tailwind CSS v4** "
+                        "e Atomic Design (`atoms`, `molecules`, `organisms`, `templates`, `pages`).\n"
+                        "2. **Backend Concorrente:** **FastAPI** assíncrono em Python com suporte nativo a streaming via Server-Sent Events (SSE).\n"
+                        "3. **Banco de Dados Relacional:** SQLAlchemy 2.0 com suporte a SQLite local e PostgreSQL em produção."
                     )
                 elif "desenvolvedor" in query or "criador" in query or "quem é você" in query or "autor" in query:
                     reply = (
                         "Eu sou o **Ozlo**, o assistente inteligente residente desta plataforma!\n\n"
-                        "Fui criado pelo autor deste portfólio para servir como um guia interativo das funcionalidades do sistema. "
-                        "Você pode explorar as abas de **Integrações** (para ver as configurações de chaves de API) e **Analytics** (para ver os gráficos de consumo)."
+                        "Fui criado como parte do portfólio de engenharia de software de **Filipi Soares (@filipidios)**, "
+                        "um *Designer-Minded Developer* focado em unir arquitetura robusta a uma experiência visual de padrão internacional."
                     )
-                elif "metrica" in query or "métrica" in query or "analytics" in query or "gráfico" in query or "grafico" in query:
+                elif "ajuda" in query or "como funciona" in query:
                     reply = (
-                        "A aba **Analytics** exibe métricas reais calculadas a partir das conversas salvas no banco de dados SQLite/PostgreSQL.\n\n"
-                        "✦ **O que você pode analisar lá:**\n"
-                        "- Total de conversas e mensagens criadas.\n"
-                        "- **Latência Média** de resposta dos modelos de inteligência artificial.\n"
-                        "- **Estimador de Tokens** baseado no tamanho das requisições.\n"
-                        "- Distribuição percentual de requisições por provedor ativo."
-                    )
-                elif "codigo" in query or "código" in query or "code" in query:
-                    reply = (
-                        "Claro! Veja um exemplo de código Python do nosso controller de banco de dados:\n\n"
-                        "```python\n"
-                        "# Exemplo de CRUD com SQLAlchemy\n"
-                        "@staticmethod\n"
-                        "def clear_session_messages(session_id: int, db: Session) -> bool:\n"
-                        "    session = db.query(ChatSession).filter(ChatSession.id == session_id).first()\n"
-                        "    if not session:\n"
-                        "        return False\n"
-                        "    db.query(ChatMessage).filter(ChatMessage.session_id == session_id).delete()\n"
-                        "    db.commit()\n"
-                        "    return True\n"
-                        "```\n"
-                        "Este código é o que apaga o histórico do chat de forma otimizada!"
+                        "Você pode utilizar esta plataforma para:\n\n"
+                        "1. **Conversar em tempo real** com modelos de IA com streaming e telemetria.\n"
+                        "2. **Configurar múltiplos provedores** (Google Gemini, OpenAI, Groq) na aba Configurações.\n"
+                        "3. **Acompanhar métricas de execução** (latência e tokens) no painel de Estatísticas.\n"
+                        "4. **Acessibilidade total:** use o dock flutuante no canto inferior para ajustar fontes, alto contraste e modo de leitura."
                     )
                 else:
                     reply = (
-                        f"Olá! Sou o **Ozlo**, o assistente simulador do portfólio.\n\n"
-                        f"Recebi sua mensagem: *\"{prompt}\"*\n\n"
-                        "Como estou rodando no **Modo de Demonstração (Ozlo Simulador)**, não uso chaves de API externas! Isso permite que você "
-                        "teste a interface livremente.\n\n"
-                        "✦ **Perguntas sugeridas:**\n"
-                        "- *Fale sobre o projeto*\n"
-                        "- *Qual a stack utilizada?*\n"
-                        "- *Como funcionam os gráficos?*\n"
-                        "- *Mostre um exemplo de código*\n\n"
-                        "Caso queira testar com modelos reais (como **Gemini 3.6 Flash** ou **OpenAI GPT-4o-mini / Groq**), basta ir em **Configurações**, "
-                        "onde suas credenciais operam com proteção e criptografia de ponta a ponta!"
+                        f"Olá! Eu sou o assistente do simulador residente **Ozlo Orgânico**.\n\n"
+                        f"Recebi sua mensagem: *\"{prompt}\"*.\n\n"
+                        "Estou operando em modo de demonstração local offline, permitindo que você avalie o streaming "
+                        "em tempo real e a telemetria sem necessidade de nenhuma chave externa de API!"
                     )
 
-                chunk_size = 8
-                for idx in range(0, len(reply), chunk_size):
-                    chunk = reply[idx:idx+chunk_size]
+                # Simulação fluida de digitação humana em blocos de palavras
+                words = reply.split(" ")
+                for i, word in enumerate(words):
+                    chunk = word + (" " if i < len(words) - 1 else "")
                     content_yielded += chunk
                     yield {"type": "content", "content": chunk}
                     await asyncio.sleep(0.02)
 
             elif provider == "gemini":
                 if not raw_api_key or raw_api_key.strip() == "":
-                    yield {"type": "content", "content": "**[Aviso] Provedor Google Gemini Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key do Gemini e clique em **Salvar** para habilitar o chat orgânico."}
+                    yield {
+                        "type": "content", 
+                        "content": "**[Aviso] Provedor Google Gemini Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key do Google AI Studio e clique em **Salvar** para habilitar o chat."
+                    }
                     return
-                # Configurar Gemini com a chave segura
-                genai.configure(api_key=raw_api_key.strip())
                 
-                # Migração transparente de versões antigas do Gemini para 3.6-flash
-                actual_model = model_name
-                if actual_model in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-pro"]:
-                    actual_model = "gemini-3.6-flash"
-
-                # O SDK do Gemini recebe system_instruction na inicialização
+                genai.configure(api_key=raw_api_key.strip())
                 model = genai.GenerativeModel(
-                    model_name=actual_model,
+                    model_name=model_name,
                     system_instruction=system_instruction
                 )
                 
-                # Formatar histórico para o Gemini
+                # Montar histórico no padrão do Gemini
                 gemini_history = []
                 for msg in history:
                     role = "user" if msg["role"] == "user" else "model"
@@ -166,15 +143,17 @@ class LLMService:
 
             elif provider == "openai":
                 if not raw_api_key or raw_api_key.strip() == "":
-                    yield {"type": "content", "content": "**[Aviso] Provedor OpenAI/Groq Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key da OpenAI e clique em **Salvar** para habilitar o chat orgânico."}
+                    yield {
+                        "type": "content", 
+                        "content": "**[Aviso] Provedor OpenAI/Groq Ativo, mas a API Key está ausente!**\n\nPor favor, acesse a aba **Configurações** no painel esquerdo, preencha sua API Key da OpenAI ou Groq e clique em **Salvar** para habilitar o chat."
+                    }
                     return
-                # Configurar OpenAI/Groq com a chave segura
+
                 client = OpenAI(
                     api_key=raw_api_key.strip(),
                     base_url=integration.api_url if (integration.api_url and integration.api_url.strip() != "") else None
                 )
                 
-                # Formatar mensagens
                 messages = [{"role": "system", "content": system_instruction}]
                 for msg in history:
                     messages.append({"role": msg["role"], "content": msg["content"]})
@@ -201,17 +180,14 @@ class LLMService:
             yield {"type": "content", "content": f"Erro ao gerar resposta ({provider}): {error_hint}"}
             return
 
-        end_time = time.time()
-        latency = end_time - start_time
-        
-        # Calcular tokens estimados
-        estimated_tokens = len(prompt + content_yielded) // 4
+        latency = calculate_latency(start_time)
+        tokens = estimate_tokens(prompt + content_yielded)
 
         # Enviar metadados de encerramento do stream
         yield {
             "type": "done",
             "provider": provider,
             "model_used": model_name,
-            "latency": round(latency, 2),
-            "tokens_used": estimated_tokens
+            "latency": latency,
+            "tokens_used": tokens
         }

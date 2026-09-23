@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Float
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from database.connection import Base
+from config.database import Base
 
 class ChatSession(Base):
     __tablename__ = "chat_sessions"

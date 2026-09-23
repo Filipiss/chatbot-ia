@@ -67,4 +67,8 @@ Thumbs.db
 *.md
 **/*.md
 !README.md
+!README_EN.md
+!AGENTS.md
+
+
 

@@ -1,64 +1,50 @@
 import os
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-
-from database.connection import Base, engine, get_db
 from sqlalchemy.orm import Session
+
+from config.database import Base, engine, SessionLocal
+from config.settings import settings
+from docs.openapi import API_METADATA
 from models.integration import Integration
+from repositories.integration_repository import IntegrationRepository
 from routes.integration import router as integration_router
 from routes.chat import router as chat_router
 
-load_dotenv()
-
-# Cria as tabelas do banco de dados ao iniciar
+# Inicializa as tabelas do banco relacional
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Integrador de IA e Chatbot Orgânico API",
-    description="Backend para gerenciamento de múltiplos provedores de LLM e chats em tempo real.",
-    version="1.0.0"
+    title=API_METADATA["title"],
+    description=API_METADATA["description"],
+    version=API_METADATA["version"],
+    openapi_tags=API_METADATA["openapi_tags"],
+    contact=API_METADATA["contact"],
+    license_info=API_METADATA["license_info"],
 )
 
-# Configuração de CORS
-# Configuração de CORS para desenvolvimento local e deploy (Vercel, etc.)
-origins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-    "http://127.0.0.1:3000",
-]
-frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
-    for url in frontend_url.split(","):
-        cleaned = url.strip()
-        if cleaned:
-            origins.append(cleaned)
-
+# Configuração de CORS para desenvolvimento local e ambientes de nuvem (Vercel, Render)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.cors_origins,
     allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Inicializa as rotas
+# Registro de roteadores modulares
 app.include_router(integration_router)
 app.include_router(chat_router)
 
 def seed_default_integrations():
-    """Insere as configurações modelo padrão de IA no banco de dados se estiver vazio."""
-    db = Session(bind=engine)
+    """Garante a inicialização dos provedores padrão no banco relacional."""
+    db = SessionLocal()
     try:
-        # Remove qualquer integração remanescente do Ollama
-        db.query(Integration).filter(Integration.provider == "ollama").delete()
-        db.commit()
+        # Limpeza de provedores descontinuados
+        IntegrationRepository.delete_by_provider("ollama", db)
 
-        if db.query(Integration).count() == 0:
+        if IntegrationRepository.count(db) == 0:
             defaults = [
                 Integration(
                     provider="ozlo",
@@ -88,21 +74,20 @@ def seed_default_integrations():
                     system_instruction="Você é um assistente OpenAI GPT-4o Mini / Groq. Responda de forma sucinta e inteligente."
                 )
             ]
-            db.add_all(defaults)
-            db.commit()
-            print("→ Integrações iniciadas por padrão no banco de dados com sucesso.")
+            IntegrationRepository.add_all(defaults, db)
+            print("→ Provedores padrão inicializados com sucesso via IntegrationRepository.")
         else:
-            # Atualiza modelos legados para as versões mais atuais
-            gemini_row = db.query(Integration).filter(Integration.provider == "gemini").first()
+            # Atualiza modelos legados para as versões recomendadas
+            gemini_row = IntegrationRepository.filter_by_provider("gemini", db)
             if gemini_row and gemini_row.model_name in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-pro"]:
                 gemini_row.model_name = "gemini-3.6-flash"
 
-            openai_row = db.query(Integration).filter(Integration.provider == "openai").first()
+            openai_row = IntegrationRepository.filter_by_provider("openai", db)
             if openai_row and not openai_row.api_url:
                 openai_row.api_url = "https://api.groq.com/openai/v1"
                 openai_row.model_name = "groq/compound"
 
-            ozlo_exists = db.query(Integration).filter(Integration.provider == "ozlo").first()
+            ozlo_exists = IntegrationRepository.filter_by_provider("ozlo", db)
             if not ozlo_exists:
                 ozlo = Integration(
                     provider="ozlo",
@@ -117,19 +102,20 @@ def seed_default_integrations():
 
             db.commit()
     except Exception as e:
-        print(f"Erro ao semear integrações: {e}")
+        print(f"Erro ao executar seed de integrações: {e}")
         db.rollback()
     finally:
         db.close()
 
-# Executa o seed
+# Executa seed inicial
 seed_default_integrations()
 
-@app.get("/")
+@app.get("/", tags=["Health"])
 def read_root():
     return {
         "project": "Integrador de IA e Chatbot Orgânico",
         "status": "healthy",
+        "version": settings.VERSION,
         "api_docs": "/docs"
     }
 
