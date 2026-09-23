@@ -357,7 +357,3 @@ Engenheiro de software full stack focado na convergência entre **arquitetura de
 - **LinkedIn:** [linkedin.com/in/filipiss](https://www.linkedin.com/in/filipiss/)
 - **GitHub:** [@Filipiss](https://github.com/Filipiss)
 - **Repositório do Projeto:** [github.com/Filipiss/chatbot-ia](https://github.com/Filipiss/chatbot-ia)
-
----
-
-Licença MIT. Desenvolvido com foco em excelência técnica, código limpo e padrões de engenharia de software de nível corporativo.

@@ -357,7 +357,3 @@ Full stack software engineer focused on uniting **robust system architecture** w
 - **LinkedIn:** [linkedin.com/in/filipiss](https://www.linkedin.com/in/filipiss/)
 - **GitHub:** [@Filipiss](https://github.com/Filipiss)
 - **Project Repository:** [github.com/Filipiss/chatbot-ia](https://github.com/Filipiss/chatbot-ia)
-
----
-
-Distributed under the MIT License. Built with technical rigor, clean code principles, and enterprise-grade software standards.
