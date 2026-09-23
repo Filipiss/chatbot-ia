@@ -177,7 +177,7 @@ graph TD
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/filipidios/chatbot-ia.git
+git clone https://github.com/Filipiss/chatbot-ia.git
 cd chatbot-ia
 ```
 
@@ -354,9 +354,9 @@ The application is built on the **Studio Noir** design system, combining digital
 
 Full stack software engineer focused on uniting **robust system architecture** with **refined art direction and visual craft**. Experienced in developing high-throughput web applications, integrating generative AI systems, and creating scalable digital products.
 
-- **LinkedIn:** [linkedin.com/in/filipidios](https://linkedin.com/in/filipidios)
-- **GitHub:** [@filipidios](https://github.com/filipidios)
-- **Project Repository:** [github.com/filipidios/chatbot-ia](https://github.com/filipidios/chatbot-ia)
+- **LinkedIn:** [linkedin.com/in/filipiss](https://www.linkedin.com/in/filipiss/)
+- **GitHub:** [@Filipiss](https://github.com/Filipiss)
+- **Project Repository:** [github.com/Filipiss/chatbot-ia](https://github.com/Filipiss/chatbot-ia)
 
 ---
 

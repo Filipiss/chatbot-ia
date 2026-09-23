@@ -177,7 +177,7 @@ graph TD
 ### Passo 1: Clonar o Repositório
 
 ```bash
-git clone https://github.com/filipidios/chatbot-ia.git
+git clone https://github.com/Filipiss/chatbot-ia.git
 cd chatbot-ia
 ```
 
@@ -354,9 +354,9 @@ O projeto adota o design system autoral **Studio Noir**, aliando elegância est�
 
 Engenheiro de software full stack focado na convergência entre **arquitetura de sistemas robusta** e **direção de arte digital refinada**. Experiência sólida na construção de interfaces reativas, consumo de modelos generativos de IA e arquitetura distribuída.
 
-- **LinkedIn:** [linkedin.com/in/filipidios](https://linkedin.com/in/filipidios)
-- **GitHub:** [@filipidios](https://github.com/filipidios)
-- **Repositório do Projeto:** [github.com/filipidios/chatbot-ia](https://github.com/filipidios/chatbot-ia)
+- **LinkedIn:** [linkedin.com/in/filipiss](https://www.linkedin.com/in/filipiss/)
+- **GitHub:** [@Filipiss](https://github.com/Filipiss)
+- **Repositório do Projeto:** [github.com/Filipiss/chatbot-ia](https://github.com/Filipiss/chatbot-ia)
 
 ---
 

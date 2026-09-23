@@ -1,6 +1,6 @@
 # Filipi Soares — Project Guidelines & Visual Identity
 
-Este repositório segue o design system oficial do **Designer-Minded Developer** de **Filipi Soares (@filipidios)**.
+Este repositório segue o design system oficial do **Designer-Minded Developer** de **Filipi Soares (@Filipiss)**.
 
 ---
 

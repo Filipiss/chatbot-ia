@@ -27,7 +27,7 @@ API_METADATA = {
     "openapi_tags": TAGS_METADATA,
     "contact": {
         "name": "Filipi Soares",
-        "url": "https://github.com/filipidios",
+        "url": "https://github.com/Filipiss",
     },
     "license_info": {
         "name": "MIT License",
