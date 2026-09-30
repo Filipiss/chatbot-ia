@@ -14,8 +14,6 @@ from utils.helpers import estimate_tokens, calculate_latency
 from config.settings import settings
 
 class LLMService:
-    """Serviço de orquestração e streaming de múltiplos provedores de Large Language Models."""
-
     @staticmethod
     def get_active_integration(db: Session) -> Optional[Integration]:
         return IntegrationRepository.get_active(db)
@@ -27,10 +25,6 @@ class LLMService:
         history: List[Dict[str, str]], 
         db: Session
     ) -> AsyncGenerator[Dict[str, Any], None]:
-        """
-        Gera uma resposta em stream a partir do provedor de IA atualmente ativo.
-        Retorna dicionários contendo chunks de texto ou metadados de conclusão (tempo, tokens).
-        """
         integration = cls.get_active_integration(db)
         if not integration:
             yield {"type": "content", "content": "Erro: Nenhum integrador de IA ativo. Vá em Configurações para ativar."}
@@ -41,14 +35,12 @@ class LLMService:
         model_name = integration.model_name
         system_instruction = integration.system_instruction or "Você é um assistente útil e simpático."
 
-        # Obter chave real protegida (prioridade absoluta para variável de ambiente no servidor)
         raw_api_key = None
         if provider == "gemini":
             raw_api_key = settings.GEMINI_API_KEY
         elif provider == "openai":
             raw_api_key = settings.OPENAI_API_KEY
 
-        # Se não houver variável de ambiente, busca no banco (descriptografando se necessário)
         if not raw_api_key or not raw_api_key.strip():
             db_key = integration.api_key
             if db_key and not CryptoUtils.is_masked(db_key):
@@ -101,7 +93,6 @@ class LLMService:
                         "em tempo real e a telemetria sem necessidade de nenhuma chave externa de API!"
                     )
 
-                # Simulação fluida de digitação humana em blocos de palavras
                 words = reply.split(" ")
                 for i, word in enumerate(words):
                     chunk = word + (" " if i < len(words) - 1 else "")
@@ -123,7 +114,6 @@ class LLMService:
                     system_instruction=system_instruction
                 )
                 
-                # Montar histórico no padrão do Gemini
                 gemini_history = []
                 for msg in history:
                     role = "user" if msg["role"] == "user" else "model"
@@ -183,7 +173,6 @@ class LLMService:
         latency = calculate_latency(start_time)
         tokens = estimate_tokens(prompt + content_yielded)
 
-        # Enviar metadados de encerramento do stream
         yield {
             "type": "done",
             "provider": provider,

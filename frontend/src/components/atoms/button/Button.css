@@ -1,7 +1,6 @@
 @reference "tailwindcss";
 
-/* Button.css — Studio Noir Design System (AGENTS.md) */
-.buttonBase {
+.c-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -18,17 +17,17 @@
     user-select: none;
 }
 
-.buttonBase:active {
+.c-btn:active {
     transform: scale(0.98);
 }
 
-.buttonBase:disabled {
+.c-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     transform: none;
 }
 
-.buttonPrimary {
+.c-btn--primary {
     background-color: var(--color-primary);
     color: #FFFFFF;
     border-color: rgba(255, 255, 255, 0.15);
@@ -36,36 +35,59 @@
     padding: 0.55rem 1.15rem;
 }
 
-.buttonPrimary:hover:not(:disabled) {
+.c-btn--primary:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     transform: translateY(-1px);
     box-shadow: 0 0 22px rgba(59, 130, 246, 0.45);
 }
 
-.buttonSecondary {
+.c-btn--secondary {
     background-color: var(--bg-surface);
     border-color: var(--border-subtle);
     color: var(--text-secondary);
     padding: 0.5rem 1rem;
 }
 
-.buttonSecondary:hover:not(:disabled) {
+.c-btn--secondary:hover:not(:disabled) {
     background-color: var(--bg-card-hover);
     border-color: var(--border-highlight);
     color: var(--text-primary);
     transform: translateY(-1px);
 }
 
-.buttonDanger {
+.c-btn--danger {
     background-color: rgba(244, 63, 94, 0.1);
     border-color: rgba(244, 63, 94, 0.25);
     color: #FB7185;
     padding: 0.5rem 1rem;
 }
 
-.buttonDanger:hover:not(:disabled) {
+.c-btn--danger:hover:not(:disabled) {
     background-color: #EF4444;
     border-color: #EF4444;
     color: #FFFFFF;
     transform: translateY(-1px);
+}
+
+[data-theme="light"] .c-btn--secondary {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+}
+
+[data-theme="light"] .c-btn--secondary:hover:not(:disabled) {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+[data-theme="light"] .c-btn--danger {
+    background-color: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #e11d48;
+}
+
+[data-theme="light"] .c-btn--danger:hover:not(:disabled) {
+    background-color: #e11d48;
+    color: #ffffff;
 }

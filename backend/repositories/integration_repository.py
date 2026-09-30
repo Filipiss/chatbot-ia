@@ -3,8 +3,6 @@ from sqlalchemy.orm import Session
 from models.integration import Integration
 
 class IntegrationRepository:
-    """Repositório de acesso e persistência a provedores de IA."""
-
     @staticmethod
     def count(db: Session) -> int:
         return db.query(Integration).count()

@@ -45,6 +45,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createSessionName, setCreateSessionName] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -87,32 +88,29 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     };
 
     return (
-        <div className="layoutRoot">
-            {/* Mobile Drawer Backdrop */}
+        <div className="o-layout">
             {!isCollapsed && (
                 <div
-                    className="sidebarMobileBackdrop"
+                    className="c-sidebar__backdrop"
                     onClick={() => setIsCollapsed(true)}
                     aria-hidden="true"
                 />
             )}
 
-            {/* Zyricon Sidebar */}
-            <aside className={`sidebar ${isCollapsed ? 'sidebarCollapsed' : ''}`}>
-                {/* Brand Header */}
-                <div className="brandSection">
-                    <div className="brandLeft">
-                        <div className="brandIcon">
+            <aside className={`c-sidebar ${isCollapsed ? 'is-collapsed' : ''}`}>
+                <div className="c-sidebar__brand">
+                    <div className="c-sidebar__brand-left">
+                        <div className="c-sidebar__brand-icon">
                             <RobotIntegrationLogo size={22} />
                         </div>
                         {!isCollapsed && (
-                            <span className="brandTitle">{t('brand_title')}</span>
+                            <span className="c-sidebar__brand-title">{t('brand_title')}</span>
                         )}
                     </div>
                     <button
                         type="button"
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="sidebarToggleBtn"
+                        className="c-sidebar__toggle-btn"
                         title={t('collapse_sidebar')}
                         aria-label={t('collapse_sidebar')}
                     >
@@ -120,28 +118,26 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     </button>
                 </div>
 
-                {/* Zyricon New Chat Pill Button */}
-                <div className="newChatWrapper">
+                <div className="c-sidebar__new-chat">
                     <button
                         type="button"
                         onClick={() => {
                             setCreateSessionName('');
                             setIsCreateModalOpen(true);
                         }}
-                        className="zyriconNewChatBtn"
+                        className="c-sidebar__new-chat-btn"
                         title={t('new_chat')}
                     >
-                        <div className="zyriconNewChatIcon">
+                        <div className="c-sidebar__new-chat-icon">
                             <Plus size={14} />
                         </div>
                         {!isCollapsed && <span>{t('new_chat')}</span>}
                     </button>
                 </div>
 
-                {/* Features Section */}
-                <div className="sidebarGroup">
-                    {!isCollapsed && <span className="sidebarGroupLabel">{t('features_section')}</span>}
-                    <nav className="navSection">
+                <div className="c-sidebar__group">
+                    {!isCollapsed && <span className="c-sidebar__group-label">{t('features_section')}</span>}
+                    <nav className="c-sidebar__nav">
                         {featureTabs.map(({ id, label, icon }) => (
                             <button
                                 key={id}
@@ -151,7 +147,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         setIsCollapsed(true);
                                     }
                                 }}
-                                className={`zyriconNavBtn ${activeTab === id ? 'zyriconNavBtnActive' : 'zyriconNavBtnInactive'}`}
+                                className={`c-sidebar__nav-btn ${activeTab === id ? 'is-active' : ''}`}
                                 title={label}
                             >
                                 <span className="shrink-0">{icon}</span>
@@ -161,11 +157,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     </nav>
                 </div>
 
-                {/* Workspaces / Conversations Section */}
-                <div className="sidebarGroup flex-1 overflow-hidden flex flex-col">
+                <div className="c-sidebar__group flex-1 overflow-hidden flex flex-col">
                     {!isCollapsed && (
                         <div className="flex items-center justify-between px-3 mb-1">
-                            <span className="sidebarGroupLabel !mb-0">{t('workspaces_section')}</span>
+                            <span className="c-sidebar__group-label !mb-0">{t('workspaces_section')}</span>
                             <button
                                 type="button"
                                 onClick={() => {
@@ -179,14 +174,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             </button>
                         </div>
                     )}
-                    <div className="sessionList">
+                    <div className="c-sidebar__session-list">
                         {sessions.length === 0 ? (
-                            !isCollapsed && <div className="sessionEmpty">{t('no_conversations')}</div>
+                            !isCollapsed && <div className="c-sidebar__session-empty">{t('no_conversations')}</div>
                         ) : (
                             sessions.map((s) => (
                                 <div
                                     key={s.id}
-                                    className={`sessionItemBase group ${activeSessionId === s.id && activeTab === 'chat' ? 'sessionItemActive' : 'sessionItemInactive'}`}
+                                    className={`c-sidebar__session-item group ${activeSessionId === s.id && activeTab === 'chat' ? 'is-active' : ''}`}
                                     onClick={() => {
                                         setActiveSessionId(s.id);
                                         if (activeTab !== 'chat') setActiveTab('chat');
@@ -196,7 +191,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     }}
                                     title={s.name}
                                 >
-                                    <div className="sessionName flex-1 overflow-hidden">
+                                    <div className="c-sidebar__session-name flex-1 overflow-hidden">
                                         <Folder
                                             size={13}
                                             className={`shrink-0 ${activeSessionId === s.id && activeTab === 'chat' ? 'text-violet-400' : 'text-zinc-500'}`}
@@ -204,10 +199,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         {!isCollapsed && <span className="truncate">{s.name}</span>}
                                     </div>
                                     {!isCollapsed && (
-                                        <div className="sessionActions">
+                                        <div className="c-sidebar__session-actions">
                                             <button
                                                 type="button"
-                                                className="sessionEditBtn"
+                                                className="c-sidebar__session-edit-btn"
                                                 title={t('edit_conversation')}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -220,7 +215,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                             </button>
                                             <button
                                                 type="button"
-                                                className="sessionDelBtn"
+                                                className="c-sidebar__session-del-btn"
                                                 title={t('delete_conversation')}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -238,14 +233,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     </div>
                 </div>
 
-                {/* Studio Signature Footer (AGENTS.md) */}
-                <div className="studioSidebarFooter">
+                <div className="c-sidebar__footer">
                     {!isCollapsed ? (
-                        <div className="studioAuthorBlock">
-                            <div className="studioAuthorInfo">
-                                <span className="studioAuthorPrefix">{t('author_prefix')}</span>
-                                <span className="studioAuthorName">Filipi Soares</span>
-                                <span className="studioAuthorRole">Full-Stack Developer</span>
+                        <div className="c-sidebar__author-block">
+                            <div className="c-sidebar__author-info">
+                                <span className="c-sidebar__author-prefix">{t('author_prefix')}</span>
+                                <span className="c-sidebar__author-name">Filipi Soares</span>
+                                <span className="c-sidebar__author-role">Full-Stack Developer</span>
                             </div>
                         </div>
                     ) : (
@@ -256,13 +250,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </div>
             </aside>
 
-            {/* Main Area */}
-            <main className="mainArea">
+            <main className="o-layout__main">
                 {isCollapsed && (
                     <button
                         type="button"
                         onClick={() => setIsCollapsed(false)}
-                        className="mobileSidebarTrigger"
+                        className="c-sidebar__mobile-trigger"
                         title={t('collapse_sidebar')}
                         aria-label={t('collapse_sidebar')}
                     >
@@ -272,22 +265,20 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {children}
             </main>
 
-            {/* Floating Dock: Bottom Right Corner */}
             <FloatingControls />
 
-            {/* Modal de Criação de Conversa */}
             {isCreateModalOpen && (
-                <div className="modalOverlay" onClick={() => setIsCreateModalOpen(false)}>
-                    <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader">
-                            <h2 className="modalTitle">{t('new_conversation')}</h2>
-                            <button className="modalCloseBtn" onClick={() => setIsCreateModalOpen(false)}>
+                <div className="c-modal" onClick={() => setIsCreateModalOpen(false)}>
+                    <div className="c-modal__dialog" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header">
+                            <h2 className="c-modal__title">{t('new_conversation')}</h2>
+                            <button className="c-modal__close-btn" onClick={() => setIsCreateModalOpen(false)}>
                                 <X size={16} />
                             </button>
                         </div>
-                        <form onSubmit={handleCreateSubmit} className="modalForm">
-                            <div className="modalBody">
-                                <label className="modalLabel">{t('conversation_name')}</label>
+                        <form onSubmit={handleCreateSubmit} className="c-modal__form">
+                            <div className="c-modal__body">
+                                <label className="c-modal__label">{t('conversation_name')}</label>
                                 <Input
                                     value={createSessionName}
                                     onChange={(e) => setCreateSessionName(e.target.value)}
@@ -295,7 +286,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     autoFocus
                                 />
                             </div>
-                            <div className="modalFooter">
+                            <div className="c-modal__footer">
                                 <Button type="button" variant="secondary" onClick={() => setIsCreateModalOpen(false)}>
                                     {t('cancel')}
                                 </Button>
@@ -308,19 +299,18 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </div>
             )}
 
-            {/* Modal de Edição de Conversa */}
             {isEditModalOpen && (
-                <div className="modalOverlay" onClick={() => setIsEditModalOpen(false)}>
-                    <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader">
-                            <h2 className="modalTitle">{t('edit_conversation_title')}</h2>
-                            <button className="modalCloseBtn" onClick={() => setIsEditModalOpen(false)}>
+                <div className="c-modal" onClick={() => setIsEditModalOpen(false)}>
+                    <div className="c-modal__dialog" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header">
+                            <h2 className="c-modal__title">{t('edit_conversation_title')}</h2>
+                            <button className="c-modal__close-btn" onClick={() => setIsEditModalOpen(false)}>
                                 <X size={16} />
                             </button>
                         </div>
-                        <form onSubmit={handleEditSubmit} className="modalForm">
-                            <div className="modalBody">
-                                <label className="modalLabel">{t('conversation_name')}</label>
+                        <form onSubmit={handleEditSubmit} className="c-modal__form">
+                            <div className="c-modal__body">
+                                <label className="c-modal__label">{t('conversation_name')}</label>
                                 <Input
                                     value={editSessionName}
                                     onChange={(e) => setEditSessionName(e.target.value)}
@@ -328,7 +318,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     autoFocus
                                 />
                             </div>
-                            <div className="modalFooter">
+                            <div className="c-modal__footer">
                                 <Button type="button" variant="secondary" onClick={() => setIsEditModalOpen(false)}>
                                     {t('cancel')}
                                 </Button>
@@ -341,28 +331,27 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </div>
             )}
 
-            {/* Modal de Exclusão de Conversa */}
             {isDeleteModalOpen && deletingSession && (
-                <div className="modalOverlay" onClick={() => setIsDeleteModalOpen(false)}>
-                    <div className="modalContent border-rose-500/30" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader border-rose-500/20">
+                <div className="c-modal" onClick={() => setIsDeleteModalOpen(false)}>
+                    <div className="c-modal__dialog border-rose-500/30" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header border-rose-500/20">
                             <div className="flex items-center gap-2 text-rose-400">
                                 <Trash2 size={16} />
-                                <h2 className="modalTitle text-rose-400">{t('delete_conversation')}</h2>
+                                <h2 className="c-modal__title text-rose-400">{t('delete_conversation')}</h2>
                             </div>
-                            <button className="modalCloseBtn" onClick={() => setIsDeleteModalOpen(false)}>
+                            <button className="c-modal__close-btn" onClick={() => setIsDeleteModalOpen(false)}>
                                 <X size={16} />
                             </button>
                         </div>
-                        <div className="modalBody gap-3">
+                        <div className="c-modal__body gap-3">
                             <p className="text-xs text-zinc-300">
                                 {t('delete_question', { name: deletingSession.name })}
                             </p>
-                            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300">
+                            <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300">
                                 {t('delete_warning')}
                             </div>
                         </div>
-                        <div className="modalFooter">
+                        <div className="c-modal__footer">
                             <Button type="button" variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>
                                 {t('cancel')}
                             </Button>

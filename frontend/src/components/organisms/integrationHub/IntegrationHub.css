@@ -1,7 +1,6 @@
 @reference "tailwindcss";
 
-/* IntegrationHub.css — Studio Noir Design System (AGENTS.md) */
-.hubWrapper {
+.c-integration-hub {
     flex: 1;
     overflow-y: auto;
     padding: 2rem 2.5rem;
@@ -13,7 +12,7 @@
     gap: 1.5rem;
 }
 
-.hubHeader {
+.c-integration-hub__header {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -21,7 +20,7 @@
     border-bottom: 1px solid var(--border-subtle);
 }
 
-.hubIcon {
+.c-integration-hub__icon {
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 8px;
@@ -35,7 +34,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.hubTitle {
+.c-integration-hub__title {
     font-family: var(--font-display);
     font-size: 1.35rem;
     font-weight: 700;
@@ -43,13 +42,13 @@
     color: var(--text-primary);
 }
 
-.hubDesc {
+.c-integration-hub__desc {
     font-size: 0.8rem;
     color: var(--text-secondary);
     margin-top: 0.25rem;
 }
 
-.hubGrid {
+.c-integration-hub__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -57,16 +56,15 @@
 }
 
 @media (max-width: 768px) {
-    .hubWrapper {
-        padding: 1.25rem 1rem 5.5rem 1rem;
-        padding-top: 3.5rem; /* space for mobile sidebar trigger */
+    .c-integration-hub {
+        padding: 1.25rem 1rem;
     }
+}
 
-    .hubHeader {
-        padding-bottom: 1rem;
-    }
+[data-theme="light"] .c-integration-hub__title {
+    color: #0f172a;
+}
 
-    .hubTitle {
-        font-size: 1.15rem;
-    }
+[data-theme="light"] .c-integration-hub__desc {
+    color: #64748b;
 }

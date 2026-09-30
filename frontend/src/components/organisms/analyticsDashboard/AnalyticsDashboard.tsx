@@ -30,40 +30,40 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ sessions
     const avgLatency = latencyCount > 0 ? (totalLatency / latencyCount).toFixed(2) : '0';
 
     const stats = [
-        { key: 'Convs', icon: <MessageSquare size={17} />, label: t('stat_conversations'), value: totalConvs },
-        { key: 'Msgs', icon: <Database size={17} />, label: t('stat_messages'), value: totalMsgs },
-        { key: 'Latency', icon: <Timer size={17} />, label: t('stat_latency'), value: `${avgLatency}s` },
-        { key: 'Tokens', icon: <Zap size={17} />, label: t('stat_tokens'), value: totalTokens },
+        { key: 'convs', icon: <MessageSquare size={17} />, label: t('stat_conversations'), value: totalConvs },
+        { key: 'msgs', icon: <Database size={17} />, label: t('stat_messages'), value: totalMsgs },
+        { key: 'latency', icon: <Timer size={17} />, label: t('stat_latency'), value: `${avgLatency}s` },
+        { key: 'tokens', icon: <Zap size={17} />, label: t('stat_tokens'), value: totalTokens },
     ] as const;
 
     return (
-        <div className="dashWrapper">
-            <div className="dashHeader">
-                <div className="dashIcon"><BarChart3 size={18} /></div>
+        <div className="c-analytics">
+            <div className="c-analytics__header">
+                <div className="c-analytics__icon"><BarChart3 size={18} /></div>
                 <div>
-                    <h2 className="dashTitle">{t('analytics_title')}</h2>
-                    <p className="dashDesc">{t('analytics_desc')}</p>
+                    <h2 className="c-analytics__title">{t('analytics_title')}</h2>
+                    <p className="c-analytics__desc">{t('analytics_desc')}</p>
                 </div>
             </div>
 
-            <div className="statsGrid">
+            <div className="c-analytics__stats-grid">
                 {stats.map(({ key, icon, label, value }) => (
-                    <div key={key} className="statCard">
-                        <div className={`statIconBase statIconBase${key}`}>{icon}</div>
+                    <div key={key} className="c-analytics__stat-card">
+                        <div className={`c-analytics__stat-icon c-analytics__stat-icon--${key}`}>{icon}</div>
                         <div>
-                            <p className="statLabel">{label}</p>
-                            <p className="statVal">{value}</p>
+                            <p className="c-analytics__stat-label">{label}</p>
+                            <p className="c-analytics__stat-val">{value}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div className="chartCard">
-                <h3 className="chartTitle">{t('usage_by_provider')}</h3>
+            <div className="c-analytics__chart-card">
+                <h3 className="c-analytics__chart-title">{t('usage_by_provider')}</h3>
                 {Object.keys(providerCounts).length === 0 ? (
-                    <p className="chartEmpty">{t('no_analytics_data')}</p>
+                    <p className="c-analytics__chart-empty">{t('no_analytics_data')}</p>
                 ) : (
-                    <div className="chartList">
+                    <div className="c-analytics__chart-list">
                         {Object.entries(providerCounts).map(([provider, count]) => {
                             const percentage = ((count / (latencyCount || 1)) * 100).toFixed(0);
                             const barColor =
@@ -72,13 +72,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ sessions
                                         : 'bg-gradient-to-r from-violet-500 to-purple-400';
 
                             return (
-                                <div key={provider} className="chartItem animate-slide-in">
-                                    <div className="chartItemMeta">
-                                        <span className="chartItemLabel">{provider}</span>
-                                        <span className="chartItemVal">{count} {t('requests_suffix')} ({percentage}%)</span>
+                                <div key={provider} className="c-analytics__chart-item animate-slide-in">
+                                    <div className="c-analytics__chart-item-meta">
+                                        <span className="c-analytics__chart-item-label">{provider}</span>
+                                        <span className="c-analytics__chart-item-val">{count} {t('requests_suffix')} ({percentage}%)</span>
                                     </div>
-                                    <div className="chartBarTrack">
-                                        <div className={`chartBarFill ${barColor}`} style={{ width: `${percentage}%` }} />
+                                    <div className="c-analytics__chart-bar-track">
+                                        <div className={`c-analytics__chart-bar-fill ${barColor}`} style={{ width: `${percentage}%` }} />
                                     </div>
                                 </div>
                             );

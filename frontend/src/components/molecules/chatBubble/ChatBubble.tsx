@@ -45,12 +45,12 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
                 const codeText = lines.slice(1).join('\n').trim();
 
                 return (
-                    <div key={partIdx} className="my-4 border border-white/5 rounded-xl overflow-hidden bg-[#07080e]/90 font-mono text-[11px] max-w-full">
-                        <div className="flex justify-between items-center px-4 py-2 bg-white/[0.02] border-b border-white/5 text-[9px] uppercase font-bold text-zinc-500 tracking-wider">
+                    <div key={partIdx} className="c-chat-bubble__code-card">
+                        <div className="c-chat-bubble__code-header">
                             <span>{language || "code"}</span>
                             <button
                                 onClick={() => handleCopyCode(codeText, partIdx)}
-                                className="flex items-center gap-1 text-[9px] text-zinc-500 hover:text-white transition-colors cursor-pointer"
+                                className="c-chat-bubble__code-copy"
                             >
                                 {copiedBlockIdx === partIdx ? (
                                     <>
@@ -65,7 +65,7 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
                                 )}
                             </button>
                         </div>
-                        <pre className="p-4 overflow-x-auto text-zinc-300 leading-relaxed font-mono">
+                        <pre className="c-chat-bubble__code-pre">
                             <code>{codeText}</code>
                         </pre>
                     </div>
@@ -123,28 +123,28 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
     };
 
     return (
-        <div className={`bubbleWrapper ${isUser ? 'bubbleWrapperUser' : 'bubbleWrapperAssistant'}`}>
-            <div className="flex flex-col gap-1.5 max-w-full w-full">
-                <div className={`paraBase ${isUser ? 'paraUser' : 'paraAssistant'}`}>
+        <div className={`c-chat-bubble ${isUser ? 'c-chat-bubble--user' : 'c-chat-bubble--assistant'}`}>
+            <div className="c-chat-bubble__body">
+                <div className={`c-chat-bubble__message ${isUser ? 'c-chat-bubble__message--user' : 'c-chat-bubble__message--assistant'}`}>
                     {renderMessageContent(message.content)}
                 </div>
 
                 {!isUser && (message.provider || message.latency) && (
-                    <div className="metaRow">
+                    <div className="c-chat-bubble__meta">
                         {message.provider && (
-                            <span className="metaItem">
+                            <span className="c-chat-bubble__meta-item">
                                 <Cpu size={9} className="text-violet-400" />
                                 {message.provider} {message.model_used ? `(${message.model_used})` : ''}
                             </span>
                         )}
                         {message.latency !== undefined && (
-                            <span className="metaItem">
+                            <span className="c-chat-bubble__meta-item">
                                 <Clock size={9} className="text-purple-400" />
                                 {message.latency}s
                             </span>
                         )}
                         {message.tokens_used !== undefined && (
-                            <span className="metaTokens">{message.tokens_used} tks</span>
+                            <span className="c-chat-bubble__meta-tokens">{message.tokens_used} tks</span>
                         )}
                     </div>
                 )}

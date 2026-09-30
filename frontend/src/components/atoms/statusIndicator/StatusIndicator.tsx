@@ -15,12 +15,10 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status }) => {
     else if (status === 'testing') label = t('testing');
     else if (status === 'error') label = t('failed');
 
-    const statusCap = status.charAt(0).toUpperCase() + status.slice(1);
-
     return (
-        <span className={`statusContainer status${statusCap}`}>
-            <span className={`statusDot dot${statusCap}`} />
-            <span className="statusLabel">{label}</span>
+        <span className={`c-status-indicator c-status-indicator--${status}`}>
+            <span className={`c-status-indicator__dot c-status-indicator__dot--${status}`} />
+            <span className="c-status-indicator__label">{label}</span>
         </span>
     );
 };

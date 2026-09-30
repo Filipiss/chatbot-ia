@@ -1,7 +1,6 @@
 @reference "tailwindcss";
 
-/* IntegrationCard.css — Studio Noir Design System (AGENTS.md) */
-.zyriconProviderCard {
+.c-integration-card {
     border-radius: 8px;
     border: 1px solid var(--border-subtle);
     background-color: var(--bg-surface);
@@ -13,16 +12,16 @@
     box-shadow: var(--shadow-glass);
 }
 
-.zyriconProviderCard:hover {
+.c-integration-card:hover {
     border-color: var(--border-default);
 }
 
-.cardActiveGlow {
+.c-integration-card.is-active {
     border-color: var(--border-highlight) !important;
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
 }
 
-.cardHeader {
+.c-integration-card__header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -31,14 +30,14 @@
 }
 
 @media (min-width: 640px) {
-    .cardHeader {
+    .c-integration-card__header {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
     }
 }
 
-.providerBadgeIcon {
+.c-integration-card__badge-icon {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 6px;
@@ -48,7 +47,7 @@
     flex-shrink: 0;
 }
 
-.cardTitle {
+.c-integration-card__title {
     font-family: var(--font-display);
     font-size: 0.95rem;
     font-weight: 700;
@@ -56,7 +55,7 @@
     color: var(--text-primary);
 }
 
-.providerTag {
+.c-integration-card__tag {
     padding: 0.15rem 0.5rem;
     border-radius: 4px;
     background-color: var(--bg-deep);
@@ -69,20 +68,20 @@
     color: var(--text-secondary);
 }
 
-.cardSubtitle {
+.c-integration-card__subtitle {
     font-size: 0.75rem;
     color: var(--text-muted);
     margin-top: 0.15rem;
 }
 
-.cardHeaderActions {
+.c-integration-card__header-actions {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     flex-shrink: 0;
 }
 
-.zyriconToggleBtn {
+.c-integration-card__toggle-btn {
     padding: 0.35rem 0.75rem;
     border-radius: 4px;
     border: 1px solid transparent;
@@ -96,39 +95,39 @@
     transition: all var(--transition-fast);
 }
 
-.zyriconToggleActive {
+.c-integration-card__toggle-btn--active {
     border-color: rgba(244, 63, 94, 0.3);
     background-color: rgba(244, 63, 94, 0.1);
     color: #FB7185;
 }
 
-.zyriconToggleActive:hover {
+.c-integration-card__toggle-btn--active:hover {
     background-color: rgba(244, 63, 94, 0.2);
 }
 
-.zyriconToggleInactive {
+.c-integration-card__toggle-btn--inactive {
     border-color: rgba(16, 185, 129, 0.3);
     background-color: rgba(16, 185, 129, 0.1);
     color: #34D399;
 }
 
-.zyriconToggleInactive:hover {
+.c-integration-card__toggle-btn--inactive:hover {
     background-color: rgba(16, 185, 129, 0.2);
 }
 
-.cardBody {
+.c-integration-card__body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.fieldRow {
+.c-integration-card__field {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
 }
 
-.fieldLabel {
+.c-integration-card__label {
     font-family: var(--font-mono);
     font-size: 0.65rem;
     font-weight: 600;
@@ -137,7 +136,7 @@
     color: var(--text-muted);
 }
 
-.zyriconFieldInput {
+.c-integration-card__input {
     width: 100%;
     border-radius: 6px;
     border: 1px solid var(--border-subtle);
@@ -149,15 +148,15 @@
     transition: border-color var(--transition-fast);
 }
 
-.zyriconFieldInput:focus {
+.c-integration-card__input:focus {
     border-color: var(--border-highlight);
 }
 
-.cardKeyContainer {
+.c-integration-card__key-container {
     position: relative;
 }
 
-.cardEyeBtn {
+.c-integration-card__eye-btn {
     position: absolute;
     right: 0.75rem;
     top: 50%;
@@ -172,11 +171,11 @@
     justify-content: center;
 }
 
-.cardEyeBtn:hover {
+.c-integration-card__eye-btn:hover {
     color: var(--text-primary);
 }
 
-.ozloNotice {
+.c-integration-card__notice {
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -189,7 +188,7 @@
     line-height: 1.5;
 }
 
-.zyriconTextareaField {
+.c-integration-card__textarea {
     width: 100%;
     border-radius: 6px;
     border: 1px solid var(--border-subtle);
@@ -204,11 +203,11 @@
     transition: border-color var(--transition-fast);
 }
 
-.zyriconTextareaField:focus {
+.c-integration-card__textarea:focus {
     border-color: var(--border-highlight);
 }
 
-.cardFooter {
+.c-integration-card__footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -217,32 +216,32 @@
     border-top: 1px solid var(--border-subtle);
 }
 
-.cardMessage {
+.c-integration-card__message {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 0.35rem 0.65rem;
     border-radius: 4px;
 }
 
-.cardMessageSuccess {
+.c-integration-card__message--success {
     background-color: rgba(16, 185, 129, 0.1);
     color: #34D399;
     border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
-.cardMessageError {
+.c-integration-card__message--error {
     background-color: rgba(244, 63, 94, 0.1);
     color: #FB7185;
     border: 1px solid rgba(244, 63, 94, 0.25);
 }
 
-.cardMessageInfo {
+.c-integration-card__message--info {
     background-color: rgba(59, 130, 246, 0.1);
     color: #93C5FD;
     border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
-.zyriconActionBtn {
+.c-integration-card__action-btn {
     padding: 0.45rem 0.85rem;
     border-radius: 6px;
     border: 1px solid var(--border-subtle);
@@ -257,13 +256,13 @@
     transition: all var(--transition-fast);
 }
 
-.zyriconActionBtn:hover {
+.c-integration-card__action-btn:hover {
     border-color: var(--border-highlight);
     background-color: var(--bg-card-hover);
     transform: translateY(-1px);
 }
 
-.zyriconPrimaryActionBtn {
+.c-integration-card__primary-btn {
     padding: 0.45rem 1rem;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -283,41 +282,131 @@
     user-select: none;
 }
 
-.zyriconPrimaryActionBtn:hover:not(:disabled) {
+.c-integration-card__primary-btn:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     box-shadow: 0 0 22px rgba(59, 130, 246, 0.55);
     transform: translateY(-1px);
 }
 
-.zyriconPrimaryActionBtn:active:not(:disabled) {
+.c-integration-card__primary-btn:active:not(:disabled) {
     transform: scale(0.98);
 }
 
-.zyriconPrimaryActionBtn:disabled {
+.c-integration-card__primary-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
 }
 
-.zyriconPrimaryActionBtnSuccess {
+.c-integration-card__primary-btn--success {
     background-color: #10B981 !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
     box-shadow: 0 0 18px rgba(16, 185, 129, 0.45) !important;
 }
 
-/* Light Theme Overrides */
-[data-theme="light"] .zyriconPrimaryActionBtn {
-    background-color: #2563EB !important;
-    color: #FFFFFF !important;
-    border-color: #1D4ED8 !important;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25) !important;
+[data-theme="light"] .c-integration-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
 }
 
-[data-theme="light"] .zyriconPrimaryActionBtn:hover:not(:disabled) {
-    background-color: #1D4ED8 !important;
+[data-theme="light"] .c-integration-card:hover {
+    border-color: #cbd5e1;
 }
 
-[data-theme="light"] .zyriconPrimaryActionBtnSuccess {
-    background-color: #10B981 !important;
-    border-color: #059669 !important;
+[data-theme="light"] .c-integration-card__header {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+[data-theme="light"] .c-integration-card__title {
+    color: #0f172a;
+}
+
+[data-theme="light"] .c-integration-card__subtitle {
+    color: #64748b;
+}
+
+[data-theme="light"] .c-integration-card__tag {
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+
+[data-theme="light"] .c-integration-card__label {
+    color: #475569;
+}
+
+[data-theme="light"] .c-integration-card__input,
+[data-theme="light"] .c-integration-card__textarea {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+}
+
+[data-theme="light"] .c-integration-card__input:focus,
+[data-theme="light"] .c-integration-card__textarea:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="light"] .c-integration-card__eye-btn {
+    color: #64748b;
+}
+
+[data-theme="light"] .c-integration-card__eye-btn:hover {
+    color: #0f172a;
+}
+
+[data-theme="light"] .c-integration-card__notice {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+[data-theme="light"] .c-integration-card__footer {
+    border-top: 1px solid #f1f5f9;
+}
+
+[data-theme="light"] .c-integration-card__action-btn {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+}
+
+[data-theme="light"] .c-integration-card__action-btn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+[data-theme="light"] .c-integration-card__primary-btn {
+    background-color: #2563eb;
+    border: 1px solid #1d4ed8;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+[data-theme="light"] .c-integration-card__primary-btn:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+[data-theme="light"] .c-integration-card__toggle-btn--active {
+    background-color: #fff1f2;
+    border-color: #fecdd3;
+    color: #e11d48;
+}
+
+[data-theme="light"] .c-integration-card__toggle-btn--active:hover {
+    background-color: #ffe4e6;
+}
+
+[data-theme="light"] .c-integration-card__toggle-btn--inactive {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #16a34a;
+}
+
+[data-theme="light"] .c-integration-card__toggle-btn--inactive:hover {
+    background-color: #dcfce7;
 }

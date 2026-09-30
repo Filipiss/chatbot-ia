@@ -21,12 +21,11 @@ export const FloatingControls: React.FC = () => {
 
     return (
         <>
-            <div className="floatingDock" role="region" aria-label="Controles de Acessibilidade e Tema">
-                {/* Theme Toggle Button */}
+            <div className="c-floating-dock" role="region" aria-label="Controles de Acessibilidade e Tema">
                 <button
                     type="button"
                     onClick={toggleTheme}
-                    className="floatingBtn themeBtn"
+                    className="c-floating-dock__btn c-floating-dock__btn--theme"
                     title={isDark ? t('theme_light') : t('theme_dark')}
                     aria-label={isDark ? t('theme_light') : t('theme_dark')}
                 >
@@ -37,13 +36,12 @@ export const FloatingControls: React.FC = () => {
                     )}
                 </button>
 
-                <div className="floatingDivider" />
+                <div className="c-floating-dock__divider" />
 
-                {/* Direct Language Switcher Button (1 Clique) */}
                 <button
                     type="button"
                     onClick={handleCycleLanguage}
-                    className="floatingBtn langBtn"
+                    className="c-floating-dock__btn"
                     title={`${t('language_select')} (${langCode})`}
                     aria-label={`${t('language_select')} (${langCode})`}
                 >
@@ -51,22 +49,23 @@ export const FloatingControls: React.FC = () => {
                     <span className="font-mono text-[10px] font-bold text-sky-400 tracking-wider">{langCode}</span>
                 </button>
 
-                <div className="floatingDivider" />
+                <div className="c-floating-dock__divider" />
 
-                {/* Accessibility Button (Ícone Clássico de Acessibilidade) */}
                 <button
                     type="button"
                     onClick={() => setIsA11yOpen(true)}
-                    className="floatingBtn a11yBtn"
-                    title={t('accessibility')}
-                    aria-label={t('accessibility')}
+                    className="c-floating-dock__btn c-floating-dock__btn--a11y"
+                    title={t('accessibility_panel_title')}
+                    aria-label={t('accessibility_panel_title')}
                 >
-                    <Accessibility size={17} className="text-sky-400 group-hover:scale-110 transition-transform" />
+                    <Accessibility size={17} />
                 </button>
             </div>
 
-            {/* Accessibility & Language Modal */}
-            <AccessibilityMenu isOpen={isA11yOpen} onClose={() => setIsA11yOpen(false)} />
+            <AccessibilityMenu
+                isOpen={isA11yOpen}
+                onClose={() => setIsA11yOpen(false)}
+            />
         </>
     );
 };

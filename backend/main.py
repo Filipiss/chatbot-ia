@@ -11,7 +11,6 @@ from repositories.integration_repository import IntegrationRepository
 from routes.integration import router as integration_router
 from routes.chat import router as chat_router
 
-# Inicializa as tabelas do banco relacional
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -23,7 +22,6 @@ app = FastAPI(
     license_info=API_METADATA["license_info"],
 )
 
-# Configuração de CORS para desenvolvimento local e ambientes de nuvem (Vercel, Render)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -33,15 +31,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Registro de roteadores modulares
 app.include_router(integration_router)
 app.include_router(chat_router)
 
 def seed_default_integrations():
-    """Garante a inicialização dos provedores padrão no banco relacional."""
     db = SessionLocal()
     try:
-        # Limpeza de provedores descontinuados
         IntegrationRepository.delete_by_provider("ollama", db)
 
         if IntegrationRepository.count(db) == 0:
@@ -77,7 +72,6 @@ def seed_default_integrations():
             IntegrationRepository.add_all(defaults, db)
             print("→ Provedores padrão inicializados com sucesso via IntegrationRepository.")
         else:
-            # Atualiza modelos legados para as versões recomendadas
             gemini_row = IntegrationRepository.filter_by_provider("gemini", db)
             if gemini_row and gemini_row.model_name in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-pro"]:
                 gemini_row.model_name = "gemini-3.6-flash"
@@ -107,7 +101,6 @@ def seed_default_integrations():
     finally:
         db.close()
 
-# Executa seed inicial
 seed_default_integrations()
 
 @app.get("/", tags=["Health"])

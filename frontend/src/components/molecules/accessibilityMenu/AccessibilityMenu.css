@@ -1,12 +1,11 @@
 @reference "tailwindcss";
 
-/* AccessibilityMenu.css — Studio Noir Design System (AGENTS.md) */
-.a11yModalContent {
+.c-modal__dialog--a11y {
     max-width: 28rem;
     width: 100%;
 }
 
-.a11yBody {
+.c-a11y {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -16,7 +15,7 @@
     padding-right: 0.25rem;
 }
 
-.a11ySection {
+.c-a11y__section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -26,18 +25,18 @@
     background-color: var(--bg-deep);
 }
 
-[data-theme="light"] .a11ySection {
+[data-theme="light"] .c-a11y__section {
     border-color: var(--border-subtle);
     background-color: #F8F9FA;
 }
 
-.a11ySectionHeader {
+.c-a11y__section-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.a11ySectionTitle {
+.c-a11y__section-title {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 700;
@@ -46,18 +45,18 @@
     letter-spacing: 0.08em;
 }
 
-[data-theme="light"] .a11ySectionTitle {
+[data-theme="light"] .c-a11y__section-title {
     color: #0F172A;
 }
 
-.a11yGrid3 {
+.c-a11y__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
     margin-top: 0.25rem;
 }
 
-.a11yPillBtn {
+.c-a11y__pill-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,26 +71,26 @@
     transition: all var(--transition-fast);
 }
 
-[data-theme="light"] .a11yPillBtn {
+[data-theme="light"] .c-a11y__pill-btn {
     border-color: var(--border-default);
     background-color: #FFFFFF;
     color: #475569;
 }
 
-.a11yPillBtnActive {
+.c-a11y__pill-btn.is-active {
     border-color: var(--border-highlight);
     background-color: var(--bg-card);
     color: var(--color-primary);
     font-weight: 700;
 }
 
-[data-theme="light"] .a11yPillBtnActive {
+[data-theme="light"] .c-a11y__pill-btn.is-active {
     border-color: var(--color-primary);
     background-color: #EFF6FF;
     color: var(--color-primary);
 }
 
-.a11yRow {
+.c-a11y__row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -103,36 +102,35 @@
     transition: all var(--transition-fast);
 }
 
-[data-theme="light"] .a11yRow {
+[data-theme="light"] .c-a11y__row {
     border-color: var(--border-subtle);
     background-color: #F8F9FA;
 }
 
-.a11yRowInfo {
+.c-a11y__row-info {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
 }
 
-.a11yRowTitle {
+.c-a11y__row-title {
     font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--text-primary);
 }
 
-[data-theme="light"] .a11yRowTitle {
+[data-theme="light"] .c-a11y__row-title {
     color: #0F172A;
 }
 
-.a11yRowDesc {
+.c-a11y__row-desc {
     font-size: 0.65rem;
     color: var(--text-muted);
     line-height: 1.4;
 }
 
-/* Custom Switch */
-.a11ySwitch {
+.c-a11y__switch {
     width: 2.25rem;
     height: 1.25rem;
     border-radius: 4px;
@@ -145,17 +143,17 @@
     transition: all var(--transition-fast);
 }
 
-[data-theme="light"] .a11ySwitch {
+[data-theme="light"] .c-a11y__switch {
     background-color: #E2E8F0;
     border-color: #CBD5E1;
 }
 
-.a11ySwitchActive {
+.c-a11y__switch.is-active {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
 }
 
-.a11ySwitchHandle {
+.c-a11y__switch-handle {
     width: 1rem;
     height: 1rem;
     border-radius: 3px;
@@ -165,7 +163,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.a11ySwitchActive .a11ySwitchHandle {
+.c-a11y__switch.is-active .c-a11y__switch-handle {
     transform: translateX(1rem);
     background-color: #FFFFFF;
 }

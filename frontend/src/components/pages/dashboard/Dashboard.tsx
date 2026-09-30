@@ -105,9 +105,9 @@ export const Dashboard: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="loadingWrapper">
-                <div className="loadingSpinner" />
-                <span className="loadingLabel">{t('loading_panel')}</span>
+            <div className="c-dashboard-loader">
+                <div className="c-dashboard-loader__spinner" />
+                <span className="c-dashboard-loader__label">{t('loading_panel')}</span>
             </div>
         );
     }

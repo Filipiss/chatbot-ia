@@ -37,18 +37,18 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ isOpen, on
     if (!isOpen) return null;
 
     return (
-        <div className="modalOverlay" onClick={onClose}>
-            <div className="modalContent a11yModalContent" onClick={(e) => e.stopPropagation()}>
-                <div className="modalHeader">
+        <div className="c-modal" onClick={onClose}>
+            <div className="c-modal__dialog c-modal__dialog--a11y" onClick={(e) => e.stopPropagation()}>
+                <div className="c-modal__header">
                     <div className="flex items-center gap-2.5 text-violet-400">
                         <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
                             <Accessibility size={15} className="text-sky-400" />
                         </div>
-                        <h2 className="modalTitle">{t('accessibility_panel_title')}</h2>
+                        <h2 className="c-modal__title">{t('accessibility_panel_title')}</h2>
                     </div>
                     <button
                         type="button"
-                        className="modalCloseBtn"
+                        className="c-modal__close-btn"
                         onClick={onClose}
                         aria-label={t('close')}
                     >
@@ -56,20 +56,19 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ isOpen, on
                     </button>
                 </div>
 
-                <div className="a11yBody">
-                    {/* Language Selector Section */}
-                    <div className="a11ySection">
-                        <div className="a11ySectionHeader">
+                <div className="c-a11y">
+                    <div className="c-a11y__section">
+                        <div className="c-a11y__section-header">
                             <Globe size={14} className="text-sky-400" />
-                            <span className="a11ySectionTitle">{t('language')}</span>
+                            <span className="c-a11y__section-title">{t('language')}</span>
                         </div>
-                        <div className="a11yGrid3">
+                        <div className="c-a11y__grid">
                             {LANGUAGES.map((l) => (
                                 <button
                                     key={l.id}
                                     type="button"
                                     onClick={() => setLanguage(l.id)}
-                                    className={`a11yPillBtn ${language === l.id ? 'a11yPillBtnActive' : ''}`}
+                                    className={`c-a11y__pill-btn ${language === l.id ? 'is-active' : ''}`}
                                 >
                                     <span className="flex items-center gap-1.5 truncate">
                                         <span className="text-sm">{l.flag}</span>
@@ -81,19 +80,18 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ isOpen, on
                         </div>
                     </div>
 
-                    {/* Font Size Section */}
-                    <div className="a11ySection">
-                        <div className="a11ySectionHeader">
+                    <div className="c-a11y__section">
+                        <div className="c-a11y__section-header">
                             <Type size={14} className="text-violet-400" />
-                            <span className="a11ySectionTitle">{t('font_size')}</span>
+                            <span className="c-a11y__section-title">{t('font_size')}</span>
                         </div>
-                        <div className="a11yGrid3">
+                        <div className="c-a11y__grid">
                             {fontOptions.map((opt) => (
                                 <button
                                     key={opt.id}
                                     type="button"
                                     onClick={() => setFontSize(opt.id)}
-                                    className={`a11yPillBtn ${fontSize === opt.id ? 'a11yPillBtnActive' : ''}`}
+                                    className={`c-a11y__pill-btn ${fontSize === opt.id ? 'is-active' : ''}`}
                                 >
                                     <span className="truncate">{opt.label}</span>
                                     {fontSize === opt.id && <Check size={12} className="shrink-0 text-violet-400" />}
@@ -102,68 +100,65 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ isOpen, on
                         </div>
                     </div>
 
-                    {/* High Contrast */}
-                    <div className="a11yRow">
-                        <div className="a11yRowInfo">
+                    <div className="c-a11y__row">
+                        <div className="c-a11y__row-info">
                             <div className="flex items-center gap-2">
                                 <Contrast size={14} className="text-amber-400" />
-                                <span className="a11yRowTitle">{t('high_contrast')}</span>
+                                <span className="c-a11y__row-title">{t('high_contrast')}</span>
                             </div>
-                            <p className="a11yRowDesc">{t('high_contrast_desc')}</p>
+                            <p className="c-a11y__row-desc">{t('high_contrast_desc')}</p>
                         </div>
                         <button
                             type="button"
                             onClick={toggleHighContrast}
-                            className={`a11ySwitch ${highContrast ? 'a11ySwitchActive' : ''}`}
+                            className={`c-a11y__switch ${highContrast ? 'is-active' : ''}`}
                             aria-checked={highContrast}
                             role="switch"
                         >
-                            <span className="a11ySwitchHandle" />
+                            <span className="c-a11y__switch-handle" />
                         </button>
                     </div>
 
-                    {/* Reduced Motion */}
-                    <div className="a11yRow">
-                        <div className="a11yRowInfo">
+                    <div className="c-a11y__row">
+                        <div className="c-a11y__row-info">
                             <div className="flex items-center gap-2">
                                 <ZapOff size={14} className="text-sky-400" />
-                                <span className="a11yRowTitle">{t('reduced_motion')}</span>
+                                <span className="c-a11y__row-title">{t('reduced_motion')}</span>
                             </div>
-                            <p className="a11yRowDesc">{t('reduced_motion_desc')}</p>
+                            <p className="c-a11y__row-desc">{t('reduced_motion_desc')}</p>
                         </div>
                         <button
                             type="button"
                             onClick={toggleReducedMotion}
-                            className={`a11ySwitch ${reducedMotion ? 'a11ySwitchActive' : ''}`}
+                            className={`c-a11y__switch ${reducedMotion ? 'is-active' : ''}`}
                             aria-checked={reducedMotion}
                             role="switch"
                         >
-                            <span className="a11ySwitchHandle" />
+                            <span className="c-a11y__switch-handle" />
                         </button>
                     </div>
 
-                    {/* Dyslexic / Easy Reading */}
-                    <div className="a11yRow">
-                        <div className="a11yRowInfo">
+                    <div className="c-a11y__row">
+                        <div className="c-a11y__row-info">
                             <div className="flex items-center gap-2">
                                 <BookOpen size={14} className="text-emerald-400" />
-                                <span className="a11yRowTitle">{t('dyslexic_font')}</span>
+                                <span className="c-a11y__row-title">{t('dyslexic_font')}</span>
                             </div>
-                            <p className="a11yRowDesc">{t('dyslexic_font_desc')}</p>
+                            <p className="c-a11y__row-desc">{t('dyslexic_font_desc')}</p>
                         </div>
                         <button
                             type="button"
                             onClick={toggleDyslexicFont}
-                            className={`a11ySwitch ${dyslexicFont ? 'a11ySwitchActive' : ''}`}
+                            className={`c-a11y__switch ${dyslexicFont ? 'is-active' : ''}`}
                             aria-checked={dyslexicFont}
                             role="switch"
                         >
-                            <span className="a11ySwitchHandle" />
+                            <span className="c-a11y__switch-handle" />
                         </button>
                     </div>
                 </div>
 
-                <div className="modalFooter justify-between">
+                <div className="c-modal__footer justify-between">
                     <Button
                         type="button"
                         variant="secondary"

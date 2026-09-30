@@ -1,52 +1,49 @@
 @reference "tailwindcss";
 
-/* StatusIndicator.css - Zyricon Pill Badges */
-.statusContainer {
+.c-status-indicator {
     @apply flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold select-none transition-all duration-200;
 }
 
-.statusDot {
+.c-status-indicator__dot {
     @apply w-1.5 h-1.5 rounded-full shrink-0;
 }
 
-.statusLabel {
+.c-status-indicator__label {
     @apply text-[10px] font-bold uppercase tracking-wider leading-none;
 }
 
-/* Active / Connected */
-.statusActive, .statusSuccess {
+.c-status-indicator--active,
+.c-status-indicator--success {
     @apply bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-sm;
 }
 
-.dotActive, .dotSuccess {
+.c-status-indicator__dot--active,
+.c-status-indicator__dot--success {
     @apply bg-emerald-400;
     box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
 }
 
-/* Inactive */
-.statusInactive {
+.c-status-indicator--inactive {
     @apply bg-white/[0.02] border-white/[0.06] text-zinc-500;
 }
 
-.dotInactive {
+.c-status-indicator__dot--inactive {
     @apply bg-zinc-600;
 }
 
-/* Testing */
-.statusTesting {
+.c-status-indicator--testing {
     @apply bg-violet-500/10 border-violet-500/20 text-violet-400;
 }
 
-.dotTesting {
+.c-status-indicator__dot--testing {
     @apply bg-violet-400 animate-ping;
 }
 
-/* Error */
-.statusError {
+.c-status-indicator--error {
     @apply bg-rose-500/10 border-rose-500/20 text-rose-400;
 }
 
-.dotError {
+.c-status-indicator__dot--error {
     @apply bg-rose-400;
     box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
 }

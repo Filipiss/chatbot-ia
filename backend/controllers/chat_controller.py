@@ -5,8 +5,6 @@ from schemas.chat import ChatSessionCreate
 from repositories.chat_repository import ChatRepository
 
 class ChatController:
-    """Controlador de regras de negócio para gerenciamento de sessões e mensagens de chat."""
-
     @staticmethod
     def create_session(data: ChatSessionCreate, db: Session) -> ChatSession:
         name = data.name.strip() if data.name else ""

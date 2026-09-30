@@ -12,10 +12,10 @@ export const Button: React.FC<ButtonProps> = ({
     className = '',
     ...props
 }) => {
-    const variantClass = variant === 'secondary' ? 'buttonSecondary' : variant === 'danger' ? 'buttonDanger' : 'buttonPrimary';
+    const variantClass = variant === 'secondary' ? 'c-btn--secondary' : variant === 'danger' ? 'c-btn--danger' : 'c-btn--primary';
     return (
         <button
-            className={`buttonBase ${variantClass} ${className}`}
+            className={`c-btn ${variantClass} ${className}`}
             {...props}
         >
             {children}

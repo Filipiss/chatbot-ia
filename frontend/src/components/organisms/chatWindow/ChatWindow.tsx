@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { useI18n } from '../../../context/I18nContext';
 import { Button } from '../../atoms/button/Button';
-import { StudioClock } from '../../atoms/studioClock/StudioClock';
 import { AiOrchestratorHero } from '../../atoms/aiOrchestratorHero/AiOrchestratorHero';
 import './ChatWindow.css';
 
@@ -50,7 +49,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollToBottom(); }, [activeSession?.messages, streamingMessage]);
 
-    // Auto-adjust textarea height
     useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto';
@@ -58,7 +56,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     }, [inputText]);
 
-    // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -71,10 +68,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
     if (!activeSession) {
         return (
-            <div className="emptyState">
-                <div className="zyriconOrbSmall" />
-                <h3 className="emptyTitle">{t('no_chat_selected')}</h3>
-                <p className="emptyDesc">{t('select_or_create_chat')}</p>
+            <div className="c-chat-window__empty">
+                <div className="w-8 h-8 rounded-full border border-blue-500/20 bg-blue-500/10 flex items-center justify-center text-blue-400">
+                    <Sparkles size={16} />
+                </div>
+                <h3 className="c-chat-window__empty-title">{t('no_chat_selected')}</h3>
+                <p className="c-chat-window__empty-desc">{t('select_or_create_chat')}</p>
             </div>
         );
     }
@@ -159,7 +158,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         }
     };
 
-    // Real working file attachment upload
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -235,8 +233,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     };
 
     return (
-        <div className="zyriconWindow">
-            {/* Hidden File Input for Real Attachments */}
+        <div className="c-chat-window">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -245,27 +242,24 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 className="hidden"
             />
 
-            {/* Top Bar Header */}
-            <div className="zyriconTopBar">
-                {/* Active Model Selector Dropdown Pill */}
+            <div className="c-chat-window__topbar">
                 <div className="relative" ref={dropdownRef}>
                     <button
                         type="button"
-                        className="zyriconModelPill"
+                        className="c-chat-window__model-pill"
                         onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
                         title={t('select_model_tooltip')}
                     >
-                        <span className={`zyriconModelDot ${getProviderDotColor(activeIntegration.provider)}`} />
-                        <span className="zyriconModelName">
+                        <span className={`c-chat-window__model-dot ${getProviderDotColor(activeIntegration.provider)}`} />
+                        <span className="c-chat-window__model-name">
                             {activeIntegration.name || activeIntegration.model_name}
                         </span>
                         <ChevronDown size={13} className={`text-zinc-400 transition-transform duration-200 ${isModelDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
 
-                    {/* Model Dropdown Menu */}
                     {isModelDropdownOpen && (
-                        <div className="zyriconDropdownMenu animate-fade-in">
-                            <div className="zyriconDropdownHeader">
+                        <div className="c-chat-window__dropdown">
+                            <div className="c-chat-window__dropdown-header">
                                 <span>{t('available_models')}</span>
                                 <span className="text-[9px] text-sky-400">{t('click_to_activate')}</span>
                             </div>
@@ -274,7 +268,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                     <button
                                         key={item.id}
                                         type="button"
-                                        className={`zyriconDropdownItem ${item.is_active ? 'zyriconDropdownItemActive' : ''}`}
+                                        className={`c-chat-window__dropdown-item ${item.is_active ? 'is-active' : ''}`}
                                         onClick={async () => {
                                             if (onSelectActiveModel) {
                                                 await onSelectActiveModel(item.id);
@@ -305,16 +299,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     )}
                 </div>
 
-                {/* Live Studio Clock Oficial (AGENTS.md) */}
-                <StudioClock />
-
-                {/* Right Action Pills */}
                 <div className="flex items-center gap-2">
                     {onOpenIntegrations && (
                         <button
                             type="button"
                             onClick={onOpenIntegrations}
-                            className="zyriconTopBtn"
+                            className="c-chat-window__top-btn"
                             title={t('tab_integrations')}
                         >
                             <Settings size={12} />
@@ -327,7 +317,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <button
                                 type="button"
                                 onClick={handleExportChat}
-                                className="zyriconTopBtn"
+                                className="c-chat-window__top-btn"
                                 title={t('export_title')}
                             >
                                 <Download size={12} />
@@ -337,7 +327,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsClearModalOpen(true)}
-                                className="zyriconTopBtn hover:!text-amber-400 hover:!border-amber-400/30"
+                                className="c-chat-window__top-btn hover:!text-amber-400 hover:!border-amber-400/30"
                                 title={t('clear_title')}
                             >
                                 <RotateCcw size={12} />
@@ -350,7 +340,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         <button
                             type="button"
                             onClick={() => setIsDeleteModalOpen(true)}
-                            className="zyriconTopBtn hover:!text-rose-400 hover:!border-rose-500/30"
+                            className="c-chat-window__top-btn hover:!text-rose-400 hover:!border-rose-500/30"
                             title={t('delete_title')}
                         >
                             <Trash2 size={12} />
@@ -360,24 +350,20 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 </div>
             </div>
 
-            {/* Main Area: Welcome Hero OR Chat Messages Feed */}
-            <div className="zyriconFeedContainer">
+            <div className="c-chat-window__feed">
                 {!hasMessages ? (
-                    <div className="zyriconHeroSection">
-                        {/* Architectural Multi-Model AI Orchestrator Emblem */}
+                    <div className="c-chat-window__hero">
                         <AiOrchestratorHero />
 
-                        {/* Hero Headline & Subtitle */}
-                        <div className="zyriconHeroTextWrapper">
-                            <h2 className="zyriconHeroHeadline">{t('hero_headline')}</h2>
-                            <p className="zyriconHeroSubheadline">{t('hero_subheadline')}</p>
+                        <div className="c-chat-window__hero-text">
+                            <h2 className="c-chat-window__headline">{t('hero_headline')}</h2>
+                            <p className="c-chat-window__subheadline">{t('hero_subheadline')}</p>
                         </div>
 
-                        {/* Suggestion Action Chips */}
-                        <div className="zyriconChipsWrapper">
+                        <div className="c-chat-window__chips">
                             <button
                                 type="button"
-                                className="zyriconChip group"
+                                className="c-chat-window__chip group"
                                 onClick={() => {
                                     setInputText(t('chip_brainstorm_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
@@ -389,7 +375,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             </button>
                             <button
                                 type="button"
-                                className="zyriconChip group"
+                                className="c-chat-window__chip group"
                                 onClick={() => {
                                     setInputText(t('chip_make_plan_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
@@ -401,7 +387,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             </button>
                             <button
                                 type="button"
-                                className="zyriconChip group"
+                                className="c-chat-window__chip group"
                                 onClick={() => {
                                     setInputText(t('chip_generate_code_prompt'));
                                     if (textareaRef.current) textareaRef.current.focus();
@@ -414,7 +400,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                         </div>
                     </div>
                 ) : (
-                    <div className="zyriconMessagesList">
+                    <div className="c-chat-window__messages">
                         {activeSession.messages.map((msg) => (
                             <ChatBubble key={msg.id} message={msg} />
                         ))}
@@ -424,12 +410,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 )}
             </div>
 
-            {/* Bottom Interactive Area: Clean Zyricon Input Card & 3 Bottom Feature Cards */}
-            <div className="zyriconBottomArea">
-                {/* Zyricon Input Card */}
-                <div className="zyriconInputCard">
-                    {/* Top Row: Sparkle Icon + Expandable Textarea */}
-                    <div className="zyriconInputTopRow">
+            <div className="c-chat-window__bottom">
+                <div className="c-chat-window__input-card">
+                    <div className="c-chat-window__input-top">
                         <Sparkles size={16} className="text-sky-400 shrink-0 mt-1" />
                         <textarea
                             ref={textareaRef}
@@ -439,16 +422,15 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             placeholder={t('ask_anything')}
                             disabled={isSending}
                             rows={1}
-                            className="zyriconTextarea"
+                            className="c-chat-window__textarea"
                         />
                     </div>
 
-                    {/* Bottom Toolbar: Attach Button (Left) & Circular Send Button (Right) */}
-                    <div className="zyriconInputBottomRow">
+                    <div className="c-chat-window__input-bottom">
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
-                                className="zyriconToolBtn"
+                                className="c-chat-window__tool-btn"
                                 title={t('attach_tooltip')}
                                 onClick={() => fileInputRef.current?.click()}
                             >
@@ -462,7 +444,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                 type="button"
                                 onClick={() => handleSend()}
                                 disabled={!inputText.trim() || isSending}
-                                className="zyriconSendBtn"
+                                className="c-chat-window__send-btn"
                                 title={t('send_tooltip')}
                             >
                                 <ArrowUp size={16} />
@@ -471,92 +453,87 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     </div>
                 </div>
 
-                {/* Bottom 3 Feature Cards (Open Explanatory Modal on Click) */}
                 {!hasMessages && (
-                    <div className="zyriconFeatureGrid">
-                        {/* Card 1: Ozlo Orgânico */}
+                    <div className="c-chat-window__feature-grid">
                         <div
-                            className="zyriconFeatureCard group"
+                            className="c-chat-window__feature-card group"
                             onClick={() => setSelectedInfoProvider('ozlo')}
                             title={t('card_ozlo_tooltip')}
                         >
                             <div className="flex items-center justify-between">
-                                <div className="zyriconFeatureIconBox">
+                                <div className="c-chat-window__feature-icon">
                                     <Sparkles size={15} className="text-sky-400" />
                                 </div>
-                                <span className="zyriconFeatureBadge">{t('card_ozlo_badge')}</span>
+                                <span className="c-chat-window__feature-badge">{t('card_ozlo_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">
+                            <h4 className="c-chat-window__feature-title">
                                 <span>{t('card_ozlo_title')}</span>
                                 <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </h4>
-                            <p className="zyriconFeatureDesc">{t('card_ozlo_desc')}</p>
+                            <p className="c-chat-window__feature-desc">{t('card_ozlo_desc')}</p>
                         </div>
 
-                        {/* Card 2: Google Gemini */}
                         <div
-                            className="zyriconFeatureCard group"
+                            className="c-chat-window__feature-card group"
                             onClick={() => setSelectedInfoProvider('gemini')}
                             title={t('card_gemini_tooltip')}
                         >
                             <div className="flex items-center justify-between">
-                                <div className="zyriconFeatureIconBox">
+                                <div className="c-chat-window__feature-icon">
                                     <FileText size={15} className="text-sky-400" />
                                 </div>
-                                <span className="zyriconFeatureBadge">{t('card_gemini_badge')}</span>
+                                <span className="c-chat-window__feature-badge">{t('card_gemini_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">
+                            <h4 className="c-chat-window__feature-title">
                                 <span>{t('card_gemini_title')}</span>
                                 <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </h4>
-                            <p className="zyriconFeatureDesc">{t('card_gemini_desc')}</p>
+                            <p className="c-chat-window__feature-desc">{t('card_gemini_desc')}</p>
                         </div>
 
-                        {/* Card 3: OpenAI & Groq */}
                         <div
-                            className="zyriconFeatureCard group"
+                            className="c-chat-window__feature-card group"
                             onClick={() => setSelectedInfoProvider('openai')}
                             title={t('card_openai_tooltip')}
                         >
                             <div className="flex items-center justify-between">
-                                <div className="zyriconFeatureIconBox">
+                                <div className="c-chat-window__feature-icon">
                                     <Code2 size={15} className="text-emerald-400" />
                                 </div>
-                                <span className="zyriconFeatureBadge">{t('card_openai_badge')}</span>
+                                <span className="c-chat-window__feature-badge">{t('card_openai_badge')}</span>
                             </div>
-                            <h4 className="zyriconFeatureTitle">
+                            <h4 className="c-chat-window__feature-title">
                                 <span>{t('card_openai_title')}</span>
                                 <ArrowUpRight size={13} className="kinetic-arrow text-zinc-500 group-hover:text-blue-400" />
                             </h4>
-                            <p className="zyriconFeatureDesc">{t('card_openai_desc')}</p>
+                            <p className="c-chat-window__feature-desc">{t('card_openai_desc')}</p>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* Modal Explicativo dos Provedores / Modelos */}
             {selectedInfoProvider && (
-                <div className="modalOverlay" onClick={() => setSelectedInfoProvider(null)}>
-                    <div className="modalContent max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader">
+                <div className="c-modal" onClick={() => setSelectedInfoProvider(null)}>
+                    <div className="c-modal__dialog max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header">
                             <div className="flex items-center gap-2.5">
                                 {selectedInfoProvider === 'ozlo' && (
-                                    <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sky-400">
+                                    <div className="w-8 h-8 rounded-md bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sky-400">
                                         <Sparkles size={16} />
                                     </div>
                                 )}
                                 {selectedInfoProvider === 'gemini' && (
-                                    <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                                    <div className="w-8 h-8 rounded-md bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
                                         <FileText size={16} />
                                     </div>
                                 )}
                                 {selectedInfoProvider === 'openai' && (
-                                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                    <div className="w-8 h-8 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
                                         <Cpu size={16} />
                                     </div>
                                 )}
                                 <div>
-                                    <h2 className="modalTitle !text-sm">
+                                    <h2 className="c-modal__title !text-sm">
                                         {selectedInfoProvider === 'ozlo'
                                             ? 'Ozlo Orgânico'
                                             : selectedInfoProvider === 'gemini'
@@ -572,57 +549,55 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                                     </span>
                                 </div>
                             </div>
-                            <button className="modalCloseBtn" onClick={() => setSelectedInfoProvider(null)}>
+                            <button className="c-modal__close-btn" onClick={() => setSelectedInfoProvider(null)}>
                                 <X size={16} />
                             </button>
                         </div>
 
-                        <div className="modalBody gap-4 py-2">
-                            {/* Badges */}
+                        <div className="c-modal__body gap-4 py-2">
                             <div className="flex flex-wrap gap-1.5">
                                 {selectedInfoProvider === 'ozlo' && (
                                     <>
-                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
                                             <ShieldCheck size={12} /> {t('badge_free')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
                                             <Zap size={12} /> {t('badge_no_tokens')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
                                             {t('badge_zero_keys')}
                                         </span>
                                     </>
                                 )}
                                 {selectedInfoProvider === 'gemini' && (
                                     <>
-                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold flex items-center gap-1">
                                             <Zap size={12} /> {t('badge_1m_tokens')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
                                             {t('badge_multimodal')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold">
                                             {t('badge_advanced_reasoning')}
                                         </span>
                                     </>
                                 )}
                                 {selectedInfoProvider === 'openai' && (
                                     <>
-                                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
                                             <Zap size={12} /> {t('badge_tokens_speed')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[11px] font-semibold">
                                             {t('badge_custom_endpoints')}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
+                                        <span className="px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-semibold">
                                             Llama 3 & GPT-4o
                                         </span>
                                     </>
                                 )}
                             </div>
 
-                            {/* Description */}
-                            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-zinc-300 leading-relaxed">
+                            <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] text-xs text-zinc-300 leading-relaxed">
                                 {selectedInfoProvider === 'ozlo' && (
                                     <p>{t('modal_ozlo_desc')}</p>
                                 )}
@@ -635,7 +610,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             </div>
                         </div>
 
-                        <div className="modalFooter justify-between">
+                        <div className="c-modal__footer justify-between">
                             {onOpenIntegrations && selectedInfoProvider !== 'ozlo' ? (
                                 <Button
                                     type="button"
@@ -675,28 +650,27 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 </div>
             )}
 
-            {/* Modal de Limpeza de Mensagens */}
             {isClearModalOpen && (
-                <div className="modalOverlay" onClick={() => setIsClearModalOpen(false)}>
-                    <div className="modalContent border-amber-500/30" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader border-amber-500/20">
+                <div className="c-modal" onClick={() => setIsClearModalOpen(false)}>
+                    <div className="c-modal__dialog border-amber-500/30" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header border-amber-500/20">
                             <div className="flex items-center gap-2 text-amber-400">
                                 <RotateCcw size={16} />
-                                <h2 className="modalTitle text-amber-400">{t('clear_history_title')}</h2>
+                                <h2 className="c-modal__title text-amber-400">{t('clear_history_title')}</h2>
                             </div>
-                            <button className="modalCloseBtn" onClick={() => setIsClearModalOpen(false)}>
+                            <button className="c-modal__close-btn" onClick={() => setIsClearModalOpen(false)}>
                                 <X size={16} />
                             </button>
                         </div>
-                        <div className="modalBody gap-3">
+                        <div className="c-modal__body gap-3">
                             <p className="text-xs text-zinc-300">
                                 {t('clear_history_question', { name: activeSession.name })}
                             </p>
-                            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300">
+                            <div className="p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300">
                                 {t('clear_history_desc')}
                             </div>
                         </div>
-                        <div className="modalFooter">
+                        <div className="c-modal__footer">
                             <Button type="button" variant="secondary" onClick={() => setIsClearModalOpen(false)} disabled={actionLoading}>
                                 {t('cancel')}
                             </Button>
@@ -714,28 +688,27 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 </div>
             )}
 
-            {/* Modal de Exclusão de Conversa */}
             {isDeleteModalOpen && onDeleteSession && (
-                <div className="modalOverlay" onClick={() => setIsDeleteModalOpen(false)}>
-                    <div className="modalContent border-rose-500/30" onClick={(e) => e.stopPropagation()}>
-                        <div className="modalHeader border-rose-500/20">
+                <div className="c-modal" onClick={() => setIsDeleteModalOpen(false)}>
+                    <div className="c-modal__dialog border-rose-500/30" onClick={(e) => e.stopPropagation()}>
+                        <div className="c-modal__header border-rose-500/20">
                             <div className="flex items-center gap-2 text-rose-400">
                                 <Trash2 size={16} />
-                                <h2 className="modalTitle text-rose-400">{t('delete_conversation')}</h2>
+                                <h2 className="c-modal__title text-rose-400">{t('delete_conversation')}</h2>
                             </div>
-                            <button className="modalCloseBtn" onClick={() => setIsDeleteModalOpen(false)}>
+                            <button className="c-modal__close-btn" onClick={() => setIsDeleteModalOpen(false)}>
                                 <X size={16} />
                             </button>
                         </div>
-                        <div className="modalBody gap-3">
+                        <div className="c-modal__body gap-3">
                             <p className="text-xs text-zinc-300">
                                 {t('delete_question', { name: activeSession.name })}
                             </p>
-                            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300">
+                            <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300">
                                 {t('delete_warning')}
                             </div>
                         </div>
-                        <div className="modalFooter">
+                        <div className="c-modal__footer">
                             <Button type="button" variant="secondary" onClick={() => setIsDeleteModalOpen(false)} disabled={actionLoading}>
                                 {t('cancel')}
                             </Button>

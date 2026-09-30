@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Award, ShieldCheck, Heart } from 'lucide-react';
+import { X, Award } from 'lucide-react';
 import './ChicoWagnerModal.css';
 
 interface ChicoWagnerModalProps {
@@ -11,65 +11,61 @@ export const ChicoWagnerModal: React.FC<ChicoWagnerModalProps> = ({ isOpen, onCl
     if (!isOpen) return null;
 
     return (
-        <div className="chicoOverlay" onClick={onClose}>
-            <div className="chicoModal" onClick={(e) => e.stopPropagation()}>
-                <div className="chicoHeader">
-                    <div className="chicoBadge">
+        <div className="c-chico-modal" onClick={onClose}>
+            <div className="c-chico-modal__dialog" onClick={(e) => e.stopPropagation()}>
+                <div className="c-chico-modal__header">
+                    <div className="c-chico-modal__badge">
                         <Award size={12} className="text-amber-400" />
                         <span>STUDIO BOARD & EASTER EGG</span>
                     </div>
-                    <button className="chicoCloseBtn" onClick={onClose} aria-label="Fechar">
+                    <button className="c-chico-modal__close-btn" onClick={onClose} aria-label="Fechar">
                         <X size={15} />
                     </button>
                 </div>
 
-                <div className="chicoBody">
-                    <div className="chicoAvatarBox">
-                        <span className="chicoCatEmoji">🐱</span>
-                        <div className="chicoStatusBadge">
-                            <span className="chicoStatusDot" />
+                <div className="c-chico-modal__body">
+                    <div className="c-chico-modal__avatar-box">
+                        <span className="c-chico-modal__cat-emoji">🐱</span>
+                        <div className="c-chico-modal__status-badge">
+                            <span className="c-chico-modal__status-dot" />
                             <span>ON DUTY</span>
                         </div>
                     </div>
 
-                    <div className="chicoMeta">
-                        <h2 className="chicoName">Chico Wagner</h2>
-                        <span className="chicoRole">
+                    <div className="c-chico-modal__meta">
+                        <h2 className="c-chico-modal__name">Chico Wagner</h2>
+                        <span className="c-chico-modal__role">
                             CEO — Chief Executive Officer of Meowing
                         </span>
-                        <span className="chicoSubRole">
+                        <span className="c-chico-modal__sub-role">
                             Diretoria de Qualidade & Bem-Estar do Estúdio
                         </span>
                     </div>
 
-                    <p className="chicoBio">
+                    <p className="c-chico-modal__bio">
                         Responsável oficial pelas pausas estratégicas, auditoria de bugs sonoros e aprovação tátil de todos os designs e releases desenvolvidos por <strong>Filipi Soares</strong> (@filipidios).
                     </p>
 
-                    <div className="chicoStudioTrack">
-                        <div className="trackItem">
-                            <span className="trackLabel">ESTÚDIO</span>
-                            <span className="trackValue">Designer-Minded Developer</span>
+                    <div className="c-chico-modal__studio-track">
+                        <div className="c-chico-modal__track-item">
+                            <span className="c-chico-modal__track-label">ESTÚDIO</span>
+                            <span className="c-chico-modal__track-value">Designer-Minded Developer</span>
                         </div>
-                        <div className="trackItem">
-                            <span className="trackLabel">EXPERIÊNCIA</span>
-                            <span className="trackValue">Loco (Dublin) • Eitree</span>
+                        <div className="c-chico-modal__track-item">
+                            <span className="c-chico-modal__track-label">EXPERIÊNCIA</span>
+                            <span className="c-chico-modal__track-value">Loco (Dublin) • Eitree</span>
                         </div>
-                        <div className="trackItem">
-                            <span className="trackLabel">ECOSSISTEMA</span>
-                            <span className="trackValue">Time Trackerígena • Solpra Enterprise</span>
+                        <div className="c-chico-modal__track-item">
+                            <span className="c-chico-modal__track-label">ECOSSISTEMA</span>
+                            <span className="c-chico-modal__track-value">Time Trackerígena • Solpra Enterprise</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="chicoFooter">
-                    <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-                        <ShieldCheck size={13} className="text-blue-400" />
-                        <span>Design System Studio Noir v2.0</span>
-                    </div>
-                    <button className="chicoConfirmBtn" onClick={onClose}>
-                        <span>Miau Aprovado</span>
-                        <Heart size={12} className="text-rose-400 fill-rose-400/20" />
+                <div className="c-chico-modal__footer">
+                    <span className="font-mono text-[11px] text-zinc-500">FLN, BR [CHICO-ONLINE]</span>
+                    <button className="c-chico-modal__confirm-btn" onClick={onClose}>
+                        Confirmar Reunião
                     </button>
                 </div>
             </div>

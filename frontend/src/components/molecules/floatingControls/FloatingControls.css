@@ -1,7 +1,6 @@
 @reference "tailwindcss";
 
-/* FloatingControls.css — Studio Noir Design System (AGENTS.md) */
-.floatingDock {
+.c-floating-dock {
     position: fixed;
     bottom: 1.25rem;
     right: 1.25rem;
@@ -17,18 +16,18 @@
     transition: all var(--transition-fast);
 }
 
-.floatingDock:hover {
+.c-floating-dock:hover {
     border-color: var(--border-highlight);
     transform: translateY(-1px);
 }
 
-[data-theme="light"] .floatingDock {
+[data-theme="light"] .c-floating-dock {
     border-color: var(--border-default);
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.floatingBtn {
+.c-floating-dock__btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,40 +42,40 @@
     transition: all var(--transition-fast);
 }
 
-.floatingBtn:hover {
+.c-floating-dock__btn:hover {
     color: var(--text-primary);
     background-color: var(--bg-card-hover);
 }
 
-[data-theme="light"] .floatingBtn {
+[data-theme="light"] .c-floating-dock__btn {
     color: var(--text-secondary);
 }
 
-[data-theme="light"] .floatingBtn:hover {
+[data-theme="light"] .c-floating-dock__btn:hover {
     color: var(--text-primary);
     background-color: #F1F5F9;
 }
 
-.themeBtn:hover {
+.c-floating-dock__btn--theme:hover {
     color: #FBBF24;
     background-color: rgba(245, 158, 11, 0.1);
     border-color: rgba(245, 158, 11, 0.25);
 }
 
-.a11yBtn:hover {
+.c-floating-dock__btn--a11y:hover {
     color: #60A5FA;
     background-color: rgba(59, 130, 246, 0.1);
     border-color: rgba(59, 130, 246, 0.25);
 }
 
-.floatingDivider {
+.c-floating-dock__divider {
     width: 1px;
     height: 1.25rem;
     background-color: var(--border-subtle);
     margin: auto 0.15rem;
 }
 
-.floatingLangBadge {
+.c-floating-dock__lang-badge {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 600;
@@ -85,18 +84,18 @@
 }
 
 @media (max-width: 480px) {
-    .floatingDock {
+    .c-floating-dock {
         bottom: 0.75rem;
         right: 0.75rem;
         padding: 0.2rem;
         gap: 0.2rem;
     }
 
-    .floatingBtn {
+    .c-floating-dock__btn {
         padding: 0.4rem;
     }
 
-    .floatingDivider {
+    .c-floating-dock__divider {
         height: 1rem;
     }
 }

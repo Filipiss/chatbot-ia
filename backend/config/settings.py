@@ -5,23 +5,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings:
-    """Configurações globais da aplicação."""
     PROJECT_NAME: str = "Integrador de IA e Chatbot Orgânico API"
     VERSION: str = "1.0.0"
     DESCRIPTION: str = "Backend assíncrono para orquestração de múltiplos provedores de LLM e chats em tempo real."
     
-    # Segurança
     SECRET_KEY: str = os.getenv("SECRET_KEY", "antigravity-chatbot-integrator-secret-key-2026")
     
-    # Banco de Dados
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
     
-    # Provedores de IA
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
     
-    # CORS
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "")
     
     @property

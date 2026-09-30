@@ -19,12 +19,10 @@ router = APIRouter(prefix="/api/chats", tags=["Chats"])
 
 @router.get("", response_model=List[ChatSessionResponse])
 def get_all_sessions(db: Session = Depends(get_db)):
-    """Retorna todas as sessões de chat ordenadas pela data de criação decrescente."""
     return ChatController.get_sessions(db)
 
 @router.get("/{session_id}", response_model=ChatSessionResponse)
 def get_session(session_id: int, db: Session = Depends(get_db)):
-    """Retorna detalhes de uma sessão e seu histórico completo de mensagens."""
     session = ChatController.get_session(session_id, db)
     if not session:
         raise HTTPException(status_code=404, detail="Sessão de chat não encontrada.")
@@ -32,12 +30,10 @@ def get_session(session_id: int, db: Session = Depends(get_db)):
 
 @router.post("", response_model=ChatSessionResponse, status_code=status.HTTP_201_CREATED)
 def create_session(data: ChatSessionCreate, db: Session = Depends(get_db)):
-    """Cria uma nova sessão de conversa vazia."""
     return ChatController.create_session(data, db)
 
 @router.put("/{session_id}", response_model=ChatSessionResponse)
 def update_session(session_id: int, data: ChatSessionUpdate, db: Session = Depends(get_db)):
-    """Atualiza o nome/título da sessão de conversa."""
     session = ChatController.update_session_name(session_id, data.name, db)
     if not session:
         raise HTTPException(status_code=404, detail="Sessão de chat não encontrada.")
@@ -45,7 +41,6 @@ def update_session(session_id: int, data: ChatSessionUpdate, db: Session = Depen
 
 @router.delete("/{session_id}")
 def delete_session(session_id: int, db: Session = Depends(get_db)):
-    """Remove permanentemente a sessão e todas as suas mensagens em cascata."""
     success = ChatController.delete_session(session_id, db)
     if not success:
         raise HTTPException(status_code=404, detail="Sessão de chat não encontrada.")
@@ -53,7 +48,6 @@ def delete_session(session_id: int, db: Session = Depends(get_db)):
 
 @router.post("/{session_id}/clear")
 def clear_session(session_id: int, db: Session = Depends(get_db)):
-    """Limpa todas as mensagens da sessão, preservando o registro da conversa ativo."""
     success = ChatController.clear_session_messages(session_id, db)
     if not success:
         raise HTTPException(status_code=404, detail="Sessão de chat não encontrada.")
@@ -65,14 +59,10 @@ async def send_message_stream(
     data: ChatMessageCreate, 
     db: Session = Depends(get_db)
 ):
-    """
-    Envia uma mensagem do usuário, salva no DB e inicia o stream da resposta do assistente via SSE.
-    """
     session = ChatController.get_session(session_id, db)
     if not session:
         raise HTTPException(status_code=404, detail="Sessão de chat não encontrada.")
 
-    # Salva a mensagem do usuário imediatamente
     user_msg = ChatController.add_message(
         session_id=session_id,
         role="user",
@@ -80,7 +70,6 @@ async def send_message_stream(
         db=db
     )
 
-    # Constrói o histórico da conversa para dar contexto ao modelo
     history = []
     for msg in session.messages:
         if msg.id != user_msg.id:
@@ -98,7 +87,6 @@ async def send_message_stream(
                 meta = chunk
                 yield f"data: {json.dumps(chunk)}\n\n"
 
-        # Salva a resposta completa do assistente com as métricas capturadas
         if assistant_full_reply.strip():
             ChatController.add_message(
                 session_id=session_id,

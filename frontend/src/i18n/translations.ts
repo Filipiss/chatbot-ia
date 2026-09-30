@@ -3,7 +3,6 @@ export type TranslationKey = keyof typeof translations.pt;
 
 export const translations = {
     pt: {
-        // Brand & Navigation
         brand_title: 'Chatbot Integrador de IA',
         brand_subtitle: 'Painel Inteligente',
         tab_chat: 'Chat',
@@ -33,7 +32,6 @@ export const translations = {
         upgrade_btn: 'Ver Status',
         collapse_sidebar: 'Alternar Barra Lateral',
 
-        // Chat Window & Hero
         no_chat_selected: 'Nenhuma conversa selecionada',
         select_or_create_chat: 'Selecione uma conversa ou clique em "Nova Conversa" para começar.',
         conversation_number: 'Sessão #{id}',
@@ -57,18 +55,15 @@ export const translations = {
         deleting: 'Excluindo...',
         active_model: 'Modelo Ativo',
 
-        // Zyricon Action Chips
         chip_create_image: 'Criar Imagem',
         chip_brainstorm: 'Brainstorm',
         chip_make_plan: 'Fazer um Plano',
         chip_generate_code: 'Gerar Código',
 
-        // Zyricon Toolbar Actions
         attach_btn: 'Anexar',
         system_settings_btn: 'Instruções',
         options_btn: 'Provedor',
 
-        // Bottom Feature Cards
         card_ozlo_badge: 'Simulador Local',
         card_ozlo_title: 'Ozlo Orgânico',
         card_ozlo_desc: 'Respostas rápidas e inteligentes sem gastar tokens de API.',
@@ -83,7 +78,6 @@ export const translations = {
         model_currently_active: 'Modelo Atualmente Ativo',
         configure_credentials: 'Configurar Credenciais',
 
-        // Integrations / Settings
         integrations_hub_title: 'Integrador de Provedores',
         integrations_hub_desc: 'Credenciais, endpoints de API e modelos para os provedores ativos.',
         provider: 'Provedor',
@@ -106,7 +100,6 @@ export const translations = {
         key_encrypted_subnotice: 'A chave opera protegida no servidor e nunca é enviada ao navegador.',
         key_missing_notice: 'Nenhuma chave configurada',
 
-        // Analytics
         analytics_title: 'Estatísticas do Chatbot',
         analytics_desc: 'Métricas de consumo de tokens, latência média e requisições.',
         stat_conversations: 'Conversas',
@@ -117,7 +110,6 @@ export const translations = {
         no_analytics_data: 'Nenhum dado analítico registrado nas conversas ativas no momento.',
         requests_suffix: 'reqs',
 
-        // Accessibility & Themes
         accessibility: 'Acessibilidade',
         accessibility_panel_title: 'Painel de Acessibilidade',
         theme_toggle: 'Alternar Tema',
@@ -139,7 +131,6 @@ export const translations = {
         language: 'Idioma',
         language_select: 'Selecionar Idioma',
 
-        // Global & Dynamic Keys
         author_prefix: 'Criado & Desenvolvido por',
         select_model_tooltip: 'Clique para selecionar e ativar um modelo',
         available_models: 'Modelos Disponíveis',
@@ -181,7 +172,6 @@ export const translations = {
         copied: 'Copiado',
     },
     en: {
-        // Brand & Navigation
         brand_title: 'Chatbot Integrador de IA',
         brand_subtitle: 'Smart Dashboard',
         tab_chat: 'Chat',
@@ -211,7 +201,6 @@ export const translations = {
         upgrade_btn: 'View Status',
         collapse_sidebar: 'Toggle Sidebar',
 
-        // Chat Window & Hero
         no_chat_selected: 'No conversation selected',
         select_or_create_chat: 'Select an existing conversation or click "New Chat" to start.',
         conversation_number: 'Session #{id}',
@@ -235,18 +224,15 @@ export const translations = {
         deleting: 'Deleting...',
         active_model: 'Active Model',
 
-        // Zyricon Action Chips
         chip_create_image: 'Create Image',
         chip_brainstorm: 'Brainstorm',
         chip_make_plan: 'Make a Plan',
         chip_generate_code: 'Generate Code',
 
-        // Zyricon Toolbar Actions
         attach_btn: 'Attach',
         system_settings_btn: 'Settings',
         options_btn: 'Provider',
 
-        // Bottom Feature Cards
         card_ozlo_badge: 'Local Simulator',
         card_ozlo_title: 'Ozlo Organic',
         card_ozlo_desc: 'Instant, intelligent replies without spending any API tokens.',
@@ -261,7 +247,6 @@ export const translations = {
         model_currently_active: 'Currently Active Model',
         configure_credentials: 'Configure Credentials',
 
-        // Integrations / Settings
         integrations_hub_title: 'Providers Hub',
         integrations_hub_desc: 'API credentials, endpoints, and model configurations for active providers.',
         provider: 'Provider',
@@ -284,7 +269,6 @@ export const translations = {
         key_encrypted_subnotice: 'The key operates securely on the server and is never sent to the browser.',
         key_missing_notice: 'No API key configured',
 
-        // Analytics
         analytics_title: 'Chatbot Analytics',
         analytics_desc: 'Token consumption metrics, average latency, and requests breakdown.',
         stat_conversations: 'Conversations',
@@ -295,7 +279,6 @@ export const translations = {
         no_analytics_data: 'No analytics data recorded in active conversations yet.',
         requests_suffix: 'reqs',
 
-        // Accessibility & Themes
         accessibility: 'Accessibility',
         accessibility_panel_title: 'Accessibility Panel',
         theme_toggle: 'Toggle Theme',
@@ -317,7 +300,6 @@ export const translations = {
         language: 'Language',
         language_select: 'Select Language',
 
-        // Global & Dynamic Keys
         author_prefix: 'Created & Developed by',
         select_model_tooltip: 'Click to select and activate a model',
         available_models: 'Available Models',
@@ -359,7 +341,6 @@ export const translations = {
         copied: 'Copied',
     },
     es: {
-        // Brand & Navigation
         brand_title: 'Chatbot Integrador de IA',
         brand_subtitle: 'Panel Inteligente',
         tab_chat: 'Chat',
@@ -389,7 +370,6 @@ export const translations = {
         upgrade_btn: 'Ver Estado',
         collapse_sidebar: 'Alternar Barra Lateral',
 
-        // Chat Window & Hero
         no_chat_selected: 'Ningún chat seleccionado',
         select_or_create_chat: 'Selecciona una conversación o haz clic en "Nueva Conversación" para comenzar.',
         conversation_number: 'Sesión #{id}',
@@ -413,18 +393,15 @@ export const translations = {
         deleting: 'Eliminando...',
         active_model: 'Modelo Activo',
 
-        // Zyricon Action Chips
         chip_create_image: 'Crear Imagen',
         chip_brainstorm: 'Lluvia de Ideas',
         chip_make_plan: 'Hacer un Plan',
         chip_generate_code: 'Generar Código',
 
-        // Zyricon Toolbar Actions
         attach_btn: 'Adjuntar',
         system_settings_btn: 'Ajustes',
         options_btn: 'Proveedor',
 
-        // Bottom Feature Cards
         card_ozlo_badge: 'Simulador Local',
         card_ozlo_title: 'Ozlo Orgánico',
         card_ozlo_desc: 'Respuestas rápidas e inteligentes sin gastar tokens de API.',
@@ -439,7 +416,6 @@ export const translations = {
         model_currently_active: 'Modelo Actualmente Activo',
         configure_credentials: 'Configurar Credenciales',
 
-        // Integrations / Settings
         integrations_hub_title: 'Centro de Proveedores',
         integrations_hub_desc: 'Credenciales, endpoints de API y configuración de modelos activos.',
         provider: 'Proveedor',
@@ -462,7 +438,6 @@ export const translations = {
         key_encrypted_subnotice: 'La clave opera protegida en el servidor y nunca se envía al navegador.',
         key_missing_notice: 'Ninguna clave configurada',
 
-        // Analytics
         analytics_title: 'Estadísticas del Chatbot',
         analytics_desc: 'Métricas de consumo de tokens, latencia promedio y distribución de peticiones.',
         stat_conversations: 'Conversaciones',
@@ -473,7 +448,6 @@ export const translations = {
         no_analytics_data: 'No hay datos analíticos registrados en las conversaciones activas.',
         requests_suffix: 'peticiones',
 
-        // Accessibility & Themes
         accessibility: 'Accesibilidad',
         accessibility_panel_title: 'Panel de Accesibilidad',
         theme_toggle: 'Alternar Tema',
@@ -495,7 +469,6 @@ export const translations = {
         language: 'Idioma',
         language_select: 'Seleccionar Idioma',
 
-        // Global & Dynamic Keys
         author_prefix: 'Creado y Desarrollado por',
         select_model_tooltip: 'Haz clic para seleccionar y activar un modelo',
         available_models: 'Modelos Disponibles',

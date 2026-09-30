@@ -41,7 +41,6 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
             model_name: modelName.trim(),
             system_instruction: systemInstruction.trim(),
         };
-        // Envia api_key SOMENTE se o usuário digitou uma nova chave e não deixou a máscara
         if (isDirtyKey && apiKey.trim() && !apiKey.trim().startsWith('*') && !apiKey.trim().startsWith('•')) {
             payload.api_key = apiKey.trim();
         }
@@ -108,40 +107,43 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
     const providerIcon = () => {
         if (integration.provider === 'gemini') {
             return (
-                <div className="providerBadgeIcon bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                <div className="c-integration-card__badge-icon bg-sky-500/10 text-sky-400 border border-sky-500/20">
                     <Sparkles size={16} />
                 </div>
             );
         }
         if (integration.provider === 'openai') {
             return (
-                <div className="providerBadgeIcon bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <div className="c-integration-card__badge-icon bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     <Sparkles size={16} />
                 </div>
             );
         }
         return (
-            <div className="providerBadgeIcon bg-violet-500/10 text-violet-400 border border-violet-500/20">
+            <div className="c-integration-card__badge-icon bg-violet-500/10 text-violet-400 border border-violet-500/20">
                 <Sparkles size={16} />
             </div>
         );
     };
 
     const msgClass =
-        testStatus === 'success' ? 'cardMessageSuccess' : testStatus === 'error' ? 'cardMessageError' : 'cardMessageInfo';
+        testStatus === 'success'
+            ? 'c-integration-card__message--success'
+            : testStatus === 'error'
+            ? 'c-integration-card__message--error'
+            : 'c-integration-card__message--info';
 
     return (
-        <div className={`zyriconProviderCard ${integration.is_active ? 'cardActiveGlow' : ''}`}>
-            {/* Header */}
-            <div className="cardHeader">
+        <div className={`c-integration-card ${integration.is_active ? 'is-active' : ''}`}>
+            <div className="c-integration-card__header">
                 <div className="flex items-center gap-3">
                     {providerIcon()}
                     <div>
                         <div className="flex items-center gap-2">
-                            <h3 className="cardTitle">{integration.name}</h3>
-                            <span className="providerTag">{integration.provider.toUpperCase()}</span>
+                            <h3 className="c-integration-card__title">{integration.name}</h3>
+                            <span className="c-integration-card__tag">{integration.provider.toUpperCase()}</span>
                         </div>
-                        <p className="cardSubtitle">
+                        <p className="c-integration-card__subtitle">
                             {integration.provider === 'ozlo'
                                 ? t('card_sub_ozlo')
                                 : integration.provider === 'gemini'
@@ -151,51 +153,51 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                     </div>
                 </div>
 
-                <div className="cardHeaderActions">
+                <div className="c-integration-card__header-actions">
                     <StatusIndicator status={integration.is_active ? 'active' : testStatus} />
                     <button
                         type="button"
                         onClick={handleToggleActive}
-                        className={`zyriconToggleBtn ${integration.is_active ? 'zyriconToggleActive' : 'zyriconToggleInactive'}`}
+                        className={`c-integration-card__toggle-btn ${
+                            integration.is_active
+                                ? 'c-integration-card__toggle-btn--active'
+                                : 'c-integration-card__toggle-btn--inactive'
+                        }`}
                     >
                         {integration.is_active ? t('deactivate') : t('activate')}
                     </button>
                 </div>
             </div>
 
-            {/* Body */}
-            <div className="cardBody">
-                {/* Model Name */}
-                <div className="fieldRow">
-                    <label className="fieldLabel">{t('llm_model')}</label>
+            <div className="c-integration-card__body">
+                <div className="c-integration-card__field">
+                    <label className="c-integration-card__label">{t('llm_model')}</label>
                     <input
                         type="text"
                         value={modelName}
                         onChange={(e) => setModelName(e.target.value)}
-                        className="zyriconFieldInput"
+                        className="c-integration-card__input"
                         placeholder="Ex: gemini-1.5-flash, gpt-4o, llama-3.3-70b-versatile..."
                     />
                 </div>
 
-                {/* Custom API URL (for OpenAI / Groq) */}
                 {integration.provider === 'openai' && (
-                    <div className="fieldRow">
-                        <label className="fieldLabel">{t('custom_endpoint_label')}</label>
+                    <div className="c-integration-card__field">
+                        <label className="c-integration-card__label">{t('custom_endpoint_label')}</label>
                         <input
                             type="text"
                             value={apiUrl}
                             onChange={(e) => setApiUrl(e.target.value)}
                             placeholder="https://api.groq.com/openai/v1"
-                            className="zyriconFieldInput"
+                            className="c-integration-card__input"
                         />
                     </div>
                 )}
 
-                {/* API Key (Secure & Masked) */}
                 {integration.provider !== 'ozlo' ? (
-                    <div className="fieldRow">
+                    <div className="c-integration-card__field">
                         <div className="flex items-center justify-between">
-                            <label className="fieldLabel flex items-center gap-1.5">
+                            <label className="c-integration-card__label flex items-center gap-1.5">
                                 <Lock size={11} className="text-zinc-500" />
                                 {t('api_key_label')}
                             </label>
@@ -212,7 +214,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                             )}
                         </div>
 
-                        <div className="cardKeyContainer">
+                        <div className="c-integration-card__key-container">
                             <input
                                 type={showKey ? 'text' : 'password'}
                                 value={apiKey}
@@ -221,12 +223,12 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                                     setIsDirtyKey(true);
                                 }}
                                 placeholder={t('api_key_placeholder')}
-                                className="zyriconFieldInput !pr-10 font-mono text-xs"
+                                className="c-integration-card__input !pr-10 font-mono text-xs"
                                 autoComplete="new-password"
                             />
                             <button
                                 type="button"
-                                className="cardEyeBtn"
+                                className="c-integration-card__eye-btn"
                                 onClick={() => setShowKey(!showKey)}
                                 title={showKey ? t('hide_key') : t('show_key')}
                             >
@@ -239,17 +241,16 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                         </p>
                     </div>
                 ) : (
-                    <div className="ozloNotice">
+                    <div className="c-integration-card__notice">
                         <Sparkles size={14} className="text-violet-400 shrink-0" />
                         <span>{t('ozlo_resident_notice')}</span>
                     </div>
                 )}
 
-                {/* System Prompt / Base Instructions */}
-                <div className="fieldRow">
-                    <label className="fieldLabel">{t('instructions_label')}</label>
+                <div className="c-integration-card__field">
+                    <label className="c-integration-card__label">{t('instructions_label')}</label>
                     <textarea
-                        className="zyriconTextareaField"
+                        className="c-integration-card__textarea"
                         value={systemInstruction}
                         onChange={(e) => setSystemInstruction(e.target.value)}
                         placeholder={t('instructions_placeholder')}
@@ -258,10 +259,9 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="cardFooter">
+            <div className="c-integration-card__footer">
                 {testMsg && (
-                    <div className={`cardMessage ${msgClass} truncate max-w-xs md:max-w-md`}>
+                    <div className={`c-integration-card__message ${msgClass} truncate max-w-xs md:max-w-md`}>
                         {testMsg}
                     </div>
                 )}
@@ -270,7 +270,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                         type="button"
                         onClick={handleTestConnection}
                         disabled={testStatus === 'testing'}
-                        className="zyriconActionBtn"
+                        className="c-integration-card__action-btn"
                     >
                         <Play size={11} className="text-violet-400" />
                         <span>{t('test')}</span>
@@ -279,7 +279,9 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({ integration, o
                         type="button"
                         onClick={handleSave}
                         disabled={saving}
-                        className={`zyriconPrimaryActionBtn ${saveSuccess ? 'zyriconPrimaryActionBtnSuccess' : ''}`}
+                        className={`c-integration-card__primary-btn ${
+                            saveSuccess ? 'c-integration-card__primary-btn--success' : ''
+                        }`}
                         title={t('save_tooltip')}
                     >
                         {saving ? (

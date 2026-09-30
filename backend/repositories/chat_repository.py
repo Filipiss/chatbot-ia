@@ -3,8 +3,6 @@ from sqlalchemy.orm import Session
 from models.chat import ChatSession, ChatMessage
 
 class ChatRepository:
-    """Repositório de acesso e persistência a sessões e mensagens de chat."""
-
     @staticmethod
     def count_sessions(db: Session) -> int:
         return db.query(ChatSession).count()

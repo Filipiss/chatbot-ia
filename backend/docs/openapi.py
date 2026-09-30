@@ -1,7 +1,3 @@
-"""
-Metadados e documentação técnica da API OpenAPI / Swagger.
-"""
-
 TAGS_METADATA = [
     {
         "name": "Chats",

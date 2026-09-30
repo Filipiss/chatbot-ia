@@ -18,7 +18,7 @@ class ChatMessage(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(Integer, ForeignKey("chat_sessions.id", ondelete="CASCADE"), nullable=False)
-    role = Column(String(20), nullable=False)  # 'user', 'assistant', 'system'
+    role = Column(String(20), nullable=False)
     content = Column(Text, nullable=False)
     provider = Column(String(50), nullable=True)
     model_used = Column(String(100), nullable=True)

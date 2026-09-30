@@ -8,14 +8,10 @@ from utils.crypto import CryptoUtils
 from config.settings import settings
 
 class IntegrationController:
-    """Controlador de regras de negócio para provedores de Inteligência Artificial."""
-
     @staticmethod
     def to_response(db_obj: Integration) -> IntegrationResponse:
-        """Converte o objeto do banco para a resposta protegida para o cliente."""
         provider = (db_obj.provider or "").lower()
 
-        # Verifica se o servidor possui chave de ambiente configurada
         env_key = None
         if provider == "gemini":
             env_key = settings.GEMINI_API_KEY
@@ -26,7 +22,6 @@ class IntegrationController:
         has_db_key = bool(db_obj.api_key and db_obj.api_key.strip() and not CryptoUtils.is_masked(db_obj.api_key))
         has_key = has_server_env or has_db_key or provider == "ozlo"
 
-        # NUNCA envia a chave real nem token decifrável para o cliente/navegador
         masked_key = CryptoUtils.MASK_STRING if (has_key and provider != "ozlo") else ""
 
         return IntegrationResponse(
@@ -58,7 +53,6 @@ class IntegrationController:
 
     @staticmethod
     def get_db_model(integration_id: int, db: Session) -> Optional[Integration]:
-        """Retorna o modelo SQLAlchemy direto com a chave real para operações internas do backend."""
         return IntegrationRepository.get_by_id(integration_id, db)
 
     @staticmethod
@@ -85,7 +79,6 @@ class IntegrationController:
 
         update_data = data.model_dump(exclude_unset=True)
 
-        # Proteção da API Key: se for máscara ou vazio, não altera a chave existente
         if "api_key" in update_data:
             incoming_key = update_data["api_key"]
             if (

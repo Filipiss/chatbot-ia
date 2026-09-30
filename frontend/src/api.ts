@@ -139,7 +139,6 @@ export async function sendMessageStream(
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n\n");
 
-      // Mantém a última linha incompleta no buffer
       buffer = lines.pop() || "";
 
       for (const line of lines) {
